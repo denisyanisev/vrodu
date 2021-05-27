@@ -13,6 +13,7 @@ function flashFields(){
         $("#input_block textarea").text('');
         $('#parent').prop('checked', true);
         $('#is_alive').prop('checked', true);
+        $('#death_block').hide();
     }
 
 $(document).ready(function () {

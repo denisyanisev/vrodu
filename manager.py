@@ -59,7 +59,7 @@ def add_person():
     elif relative == 'parent':
         parents = collection.find_one({'_id': int(parent)})['parents']
         if ',' in parents:
-            return jsonify({'Error': 'More than 2 parents', 'persons': -1})
+            return jsonify({'Error': 'Больше двух родителей', 'persons': -1})
         parent = ''
     elif relative == 'new_person':
         parent = ''
@@ -111,7 +111,9 @@ def link():
     if relative == 'child':
         parents = collection.find_one({'_id': int(link_id)})['parents']
         if ',' in parents:
-            return jsonify({'Error': 'more than 2 parents', 'persons': -1})
+            return jsonify({'Error': 'Больше двух родителей', 'persons': -1})
+        elif person_id in parents:
+            return jsonify({'Error': 'Нельзя связать ребенка дважды', 'persons': -1})
         elif not parents:
             new_parents = str(person_id)
         else:
@@ -121,14 +123,16 @@ def link():
     elif relative == 'parent':
         parents = collection.find_one({'_id': int(person_id)})['parents']
         if ',' in parents:
-            return jsonify({'Error': 'more than 2 parents', 'persons': -1})
+            return jsonify({'Error': 'Больше двух родителей', 'persons': -1})
+        elif link_id in parents:
+            return jsonify({'Error': 'Нельзя связать родителя дважды', 'persons': -1})
         elif not parents:
             new_parents = str(link_id)
         else:
             new_parents = parents + ',' + link_id
         collection.update_one({'_id': int(person_id)}, {'$set': {'parents': new_parents}})
     else:
-        return jsonify({'Failed': 'cannot link', 'persons': -1})
+        return jsonify({'Failed': 'Нельзя связать', 'persons': -1})
 
     return jsonify({'Status': 'ok', 'persons': make_persons()})
 

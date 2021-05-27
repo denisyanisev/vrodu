@@ -103,7 +103,7 @@ function add_person_js(a){
               open_input_block();
               }},
             {
-            text: "Связать существующую",
+            text: "Связать существующего",
             click: function() {
               $( this ).dialog( "close" );
                 window.link = 'listening';

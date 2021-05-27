@@ -1,0 +1,111 @@
+label {
+    font-weight: normal
+}
+
+.tree_container {
+    overflow: hidden;
+}
+
+#draggable{
+    overflow: hidden;
+    width: 4200px!important;
+}
+
+.placeholder {
+    width: 4200px!important;
+    height: 1500px!important;
+}
+
+#input_block {
+    display: none;
+}
+
+.bp-plus {
+    margin-left: -2px;
+    cursor: pointer;
+	border: 2px solid lightgrey;
+	background-color: #fff;
+	font-size: 19px;
+	border-radius: 999px;
+    z-index: 11;
+    line-height: 16px;
+}
+
+.bp-remove {
+    cursor: pointer;
+	border-radius: 13px;
+	font-size: 13px;
+	z-index: 11;
+	margin-left: 30px;
+}
+
+.bp-remove:hover {
+    color: red;
+}
+
+.years{
+    bottom: 4px;
+}
+
+#death_block{
+    display: none;
+}
+
+.death_belt {
+    display: block;
+    width: 27px;
+    height: 1px;
+    background: black;
+    right: 82px;
+    bottom: 41px;
+    z-index: 1;
+    -moz-transform: rotate(315deg);
+    -ms-transform: rotate(315deg);
+    -webkit-transform: rotate(
+        315deg
+        );
+            -o-transform: rotate(15deg);
+            transform: rotate(
+        315deg
+        );
+    border: 2px black solid;
+    border-radius: 59px;
+}
+
+.bp-title-frame{
+    margin-top: 2px;
+}
+
+#dialog-confirm {
+    display: none;
+}
+
+#add-person{
+    display: none;
+}
+
+#add-person .span_button{
+    display: inline-block;
+}
+
+#link-tip{
+    position: absolute;
+    top: 10px;
+    left: 50px;
+    display: none;
+}
+
+#add_single{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    border: 1px solid;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+}
+
+#new_person{
+    display: none;
+}

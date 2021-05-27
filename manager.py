@@ -145,7 +145,8 @@ def remove():
     person_id = query_args.get('person_id')
     try:
         collection.delete_one({'_id': int(person_id)})
-        found_persons = collection.find({'parents': {'$regex': person_id}})
+        person_id_regex = r'(^|,)' + person_id + r'(,|$)'
+        found_persons = collection.find({'parents': {'$regex': person_id_regex }})
         for person in found_persons:
             person['parents'] = person['parents'].replace(person_id, '').replace(',', '')
             collection.update_one({'_id': person['_id']}, {'$set': {'parents': person['parents']}})

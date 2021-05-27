@@ -4,8 +4,10 @@
 {% block head %}
 {{ super() }}
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="//vk.com/js/api/xd_connection.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='jquery-1.9.1.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='jquery-ui-1.10.2.custom.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='vk_scripts.js') }}"></script>
     <script  type="text/javascript" src="{{ url_for('static', filename='primitives.min.js') }}"></script>
 	<script src="{{ url_for('static', filename='jquery.ui.touch-punch.min.js') }}"></script>
     <script src="{{ url_for('static', filename='tree-scripts.js') }}"></script>
@@ -41,6 +43,7 @@
         });
     </script>
     <script type="text/javascript" src="{{ url_for('static', filename='scripts.js') }}"></script>
+
 {% endblock %}
 <body>
 
@@ -50,6 +53,12 @@
         <div id="diagram"></div>
 	</div>
 </div>
+
+<!--<a href="#" onclick="VK.External.showInviteBox();" class="right-link">Пригласить друзей</a>-->
+<!--<a href="#" onclick="SentNotification()" class="right-link">Отправить уведомление</a>-->
+<!--<a href="#" onclick="GetFriends()" class="right-link">Получить список друзей</a>-->
+<!--<a href="#" onclick="GetAppFriends()" class="right-link">Друзья в приложении</a>-->
+<!--<a href="#" onclick="SendRequest()" class="right-link">Отправить запрос</a>-->
 
 <!-- Modals -->
 <div id="input_block" title="Добавить новую персону">

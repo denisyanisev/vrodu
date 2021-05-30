@@ -87,31 +87,33 @@ $('#input_block').dialog({
 
 }
 
-function add_person_js(a){
-	person_id = $(a).parent().find("[name=person_id]").val();
-	$("#person_id").val(person_id);
-	$("#add-person").dialog({
-	    minWidth: 420,
-	    minHeight: 20,
-	    modal: true,
-	    closeOnEscape: true,
-	    buttons: [{
+function add_person_js(a) {
+    root = $(a).parentsUntil(".bt-item-frame").parent()
+    person_id = root.find("[name=person_id]").val();
+    $("#person_id").val(person_id);
+    $("#add-person").dialog({
+        minWidth: 420,
+        minHeight: 20,
+        modal: true,
+        closeOnEscape: true,
+        buttons: [{
             text: "Добавить нового",
             id: 'add_person_button',
-            click: function() {
-              $( this ).dialog( "close" );
-              open_input_block();
-              }},
-            {
+            click: function () {
+                $(this).dialog("close");
+                open_input_block();
+            }
+        },
+        {
             text: "Связать существующего",
-            click: function() {
-              $( this ).dialog( "close" );
+            click: function () {
+                $(this).dialog("close");
                 window.link = 'listening';
                 $('#link-tip').show();
-                }
-             }]
-          });
-        }
+            }
+        }]
+    });
+}
 
 function add_link_js(a){
     $('#link-tip').hide();
@@ -151,8 +153,9 @@ function add_link_js(a){
 }
 
 function remove_person_js(a){
-    person_id = $(a).parent().find("[name=person_id]").val();
-    title = $(a).parent().find("[name=title]").text();
+    root = $(a).parentsUntil(".bt-item-frame").parent()
+    person_id = root.find("[name=person_id]").val();
+    title = root.find("[name=title]").text();
     $('#deleted_item').text(title);
     $( function() {
         $( "#dialog-confirm" ).dialog({

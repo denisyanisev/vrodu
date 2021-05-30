@@ -1,15 +1,17 @@
-PREPARE STEPS for Ubuntu: 
-> pip3 install -r requirements 
+Preparation for Linux: 
+> python3 -m pip install -r requirements 
 
-MONGO preparation:
+Mongodb preparation:
 > sudo apt-get install mongodb
 > mongo
 > use family
-> db.createUser({user:'vrodu', pwd:'vrodu123', roles:[{role:'readWrite', db:'family'}, {role:'dbOwner', db:'family'}]})
-check db connection: 
+> db.createUser({user:'vrodu', pwd:'vrodu123', roles:['readWrite', 'dbOwner']})
+
+Check db connection: 
 > mongo mongodb://vrodu:vrodu123@localhost:27017/family
 
-start application: 
+Start application: 
 > python3 manager.py
-check application
+
+Check application:
 > curl localhost:5000

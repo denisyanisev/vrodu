@@ -10,6 +10,6 @@ check db connection:
 > mongo mongodb://vrodu:vrodu123@localhost:27017/family
 
 start application: 
-> python manager.py
+> python3 manager.py
 check application
 > curl localhost:5000

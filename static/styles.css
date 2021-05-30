@@ -20,27 +20,22 @@ label {
     display: none;
 }
 
-.bp-plus {
-    margin-left: -2px;
+.bp-button, .bp-plus {
     cursor: pointer;
+	font-size: 13px;
+	z-index: 11;
+}
+
+.bp-button:hover {
+    color: red;
+}
+
+.bp-plus {
 	border: 2px solid lightgrey;
 	background-color: #fff;
 	font-size: 19px;
 	border-radius: 999px;
-    z-index: 11;
     line-height: 16px;
-}
-
-.bp-remove {
-    cursor: pointer;
-	border-radius: 13px;
-	font-size: 13px;
-	z-index: 11;
-	margin-left: 30px;
-}
-
-.bp-remove:hover {
-    color: red;
 }
 
 .years{
@@ -108,4 +103,25 @@ label {
 
 #new_person{
     display: none;
+}
+
+/* Create three equal columns that floats next to each other */
+.column {
+    float: left;
+    width: 33.3%;
+    font-size: 15px;
+
+    /* padding: 10px; */
+    /* height: 100px; Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.row {
+    margin-right: 0px;
+    margin-left: 0px;
 }

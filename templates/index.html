@@ -9,6 +9,7 @@
     <script type="text/javascript" src="{{ url_for('static', filename='jquery-ui-1.10.2.custom.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='vk_scripts.js') }}"></script>
     <script  type="text/javascript" src="{{ url_for('static', filename='primitives.min.js') }}"></script>
+    <script  type="text/javascript" src="{{ url_for('static', filename='custom_primitives.min.js') }}"></script>
 	<script src="{{ url_for('static', filename='jquery.ui.touch-punch.min.js') }}"></script>
     <script src="{{ url_for('static', filename='tree-scripts.js') }}"></script>
     <link href="{{ url_for('static', filename='primitives.latest.css') }}" media="screen" rel="stylesheet" type="text/css" />
@@ -46,6 +47,17 @@
 
 {% endblock %}
 <body>
+
+<!-- <div class="row">
+    <div class="column" style="background-color:#aaa;">
+        <h2>Column 1</h2>
+        <p>Some text..</p>
+    </div>
+    <div class="column" style="background-color:#bbb;">
+        <h2>Column 2</h2>
+        <p>Some text..</p>
+    </div>
+</div> -->
 
 {% block content %}
 <div class="tree_container">

@@ -7,6 +7,8 @@ import random
 app = Flask(__name__)
 Bootstrap(app)
 
+relative_type_str = "relative_type"
+from_id_str = 'from_id'
 
 def make_persons():
     db = DBClient()['family']
@@ -33,6 +35,7 @@ def make_persons():
 def index():
     persons = make_persons()
     return render_template('index.html', persons=persons)
+    #return render_template('access.html')
 
 
 @app.route('/add')
@@ -49,19 +52,19 @@ def add_person():
     is_alive = query_args.get('is_alive') == 'true'
     death = query_args.get('death')
     sex = query_args.get('sex')
-    parent = query_args.get('parent', '')
+    from_id = query_args.get(from_id_str, '')
     image = 'abc'[int(random.random()*3)] if sex == 'M' else 'fpt'[int(random.random()*3)]
     location = query_args.get('location')
-    relative = query_args.get('relative')
+    relative_type = query_args.get(relative_type_str) #кого мы добавляем
     vk_id = query_args.get('vk_id')
-    if relative == 'child':
-        parent = str(parent)
-    elif relative == 'parent':
-        parents = collection.find_one({'_id': int(parent)})['parents']
+    if relative_type == 'child':
+        parent = str(from_id)
+    elif relative_type == 'parent':
+        parents = collection.find_one({'_id': int(from_id)})['parents']
         if ',' in parents:
             return jsonify({'Error': 'Больше двух родителей', 'persons': -1})
         parent = ''
-    elif relative == 'new_person':
+    elif relative_type == 'new_person':
         parent = ''
 
     collection.insert_one({'_id': new_id,
@@ -84,8 +87,7 @@ def add_person():
 @app.route('/change')
 def change_person():
     query_args = request.args
-    db = DBClient()['family']
-    collection = db['persons']
+    collection = DBClient()['family']['persons']
     person_id = query_args.get('id')
     parents = collection.find_one({'_id': int(person_id)})['parents']
     new_id = query_args.get('new_id')
@@ -103,12 +105,11 @@ def change_person():
 @app.route('/link')
 def link():
     query_args = request.args
-    db = DBClient()['family']
-    collection = db['persons']
+    collection = DBClient()['family']['persons']
     person_id = query_args.get('person_id')
     link_id = query_args.get('link_id')
-    relative = query_args.get('relative')
-    if relative == 'child':
+    relative_type = query_args.get(relative_type_str)
+    if relative_type == 'child':
         parents = collection.find_one({'_id': int(link_id)})['parents']
         if ',' in parents:
             return jsonify({'Error': 'Больше двух родителей', 'persons': -1})
@@ -120,7 +121,7 @@ def link():
             new_parents = parents + ',' + person_id
         collection.update_one({'_id': int(link_id)}, {'$set': {'parents': new_parents}})
 
-    elif relative == 'parent':
+    elif relative_type == 'parent':
         parents = collection.find_one({'_id': int(person_id)})['parents']
         if ',' in parents:
             return jsonify({'Error': 'Больше двух родителей', 'persons': -1})
@@ -157,3 +158,4 @@ def remove():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    #app.run(debug=True, host="0.0.0.0")

@@ -8,7 +8,7 @@ function draw_belts() {
     });
 }
 
-function flashFields(){
+function flushFields(){
         $("#input_block input.flushable").val('');
         $("#input_block textarea").text('');
         $('#parent').prop('checked', true);

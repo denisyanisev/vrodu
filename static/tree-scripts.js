@@ -23,7 +23,7 @@ $('#input_block').dialog({
         var death = $("#death").val();
         var sex = $("input[name=sex]:checked").val();
         var location = $("#location").val();
-        var relative = $("input[name=relative]:checked").val();
+        var relative_type = $("input[name=relative_type]:checked").val();
         var vk_id = $("#vk_id").val();
         $( this ).dialog( "close" );
         if (first_name == ''){
@@ -42,20 +42,20 @@ $('#input_block').dialog({
             death: death,
             sex: sex,
             location: location,
-            relative: relative,
-            parent: id,
+            relative_type: relative_type,
+            from_id: id,
             vk_id: vk_id
         },  function(data) {
                 flushFields();
                 if (data['persons'] == -1){
                     $('#failed_message').text(data['Error']);
-                    $( "#dialog-message" ).dialog();
+                    $("#dialog-message").dialog();
                     console.log(data);
                     return '';
                 }
                 var cache = data
                 var options = window.diagramSettings;
-                if (id && (relative == 'parent')) {
+                if (id && relative_type == 'parent') {
                     $.get('/change', {
                         id: id,
                         new_id: data['new_id']
@@ -76,7 +76,7 @@ $('#input_block').dialog({
                  });
                 }
                 else {
-                    options.items = cache['persons'];
+                options.items = cache['persons'];
                     $("#diagram").famDiagram(options);
                     $("#diagram").famDiagram("update");
                     draw_belts();
@@ -87,6 +87,9 @@ $('#input_block').dialog({
   }]
   });
 
+}
+
+function edit_person_js(a) {
 }
 
 function add_person_js(a) {
@@ -123,7 +126,7 @@ function add_link_js(a){
     if ( window.link == 'listening' ){
         var person_id = $("#person_id").val();
         var link_id = $('#link_id').val();
-        var relative = $("input[name=relative]:checked").val()
+        var relative_type = $("input[name=relative_type]:checked").val()
         link_id = $(item).find("[name=person_id]").val();
         if (link_id == person_id) {
             $('#failed_message').text('Привязка той же персоны!');
@@ -134,7 +137,7 @@ function add_link_js(a){
             $.get('/link', {
                 person_id: person_id,
                 link_id: link_id,
-                relative: relative
+                relative_type: relative_type
                 },
                 function(data){
                     flushFields()

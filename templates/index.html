@@ -65,7 +65,7 @@
 <!-- Modals -->
 <div id="input_block" title="Добавить новую персону">
     <label id="new_person_label">Добавить отдельную персону</label>
-    <input type="radio" id="new_person" name="relative" value="new_person">
+    <input type="radio" id="new_person" name="relative_type" value="new_person">
     <input id="person_id" value="" class="flushable" type="text" hidden />
     <input id="link_id" value="" class="inactive flushable" type="text" hidden /><br/>
     <label>Имя</label><br />
@@ -96,9 +96,9 @@
 
 <div id="add-person" title="Добавить родителя">
     <label>Родителя</label>
-    <input type="radio" id="parent"  name="relative" value="parent" checked>
+    <input type="radio" id="parent"  name="relative_type" value="parent" checked>
     <label>Ребенка</label>
-    <input type="radio" id="child" name="relative" value="child">
+    <input type="radio" id="child" name="relative_type" value="child">
 </div>
 
 <div id="dialog-confirm" title="Удалить персону?">

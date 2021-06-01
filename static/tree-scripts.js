@@ -4,14 +4,15 @@ function open_input_block(){
 
 $('#input_block').dialog({
     modal: true,
+    width: 300,
+    closeOnEscape: true,
     close: function(){
         $('#new_person_label').hide();
-        //$('#parent').prop('checked', true);
+        flushFields();
     },
     buttons: [{
         text: "Добавить",
         click: function(){
-        $( this ).dialog( "close" );
         var id = $("#person_id").val();
         var first_name = $("#first_name").val();
         var middle_name = $("#middle_name").val();
@@ -24,6 +25,7 @@ $('#input_block').dialog({
         var location = $("#location").val();
         var relative_type = $("input[name=relative_type]:checked").val();
         var vk_id = $("#vk_id").val();
+        $( this ).dialog( "close" );
         if (first_name == ''){
             $(this).dialog( "close" );
             $('#failed_message').text('Не указано имя!');
@@ -235,3 +237,8 @@ function remove_person_js(a){
         });
     });
 }
+
+ymaps.ready(init);
+function init() {
+    var suggestView1 = new ymaps.SuggestView('location', {results: 4});
+    }

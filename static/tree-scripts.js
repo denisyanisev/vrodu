@@ -153,6 +153,52 @@ function add_link_js(a){
                     window.link = 'inactive';
                 });
         }
+
+        // Show full info and edit person
+        $('#full_info_block').show();
+        var target_id = $(a).find('[name=person_id]').val();
+        var photo = $(a).find('[name=photo]').attr('src');
+        $.get('/pull', {
+                target_id: target_id,
+                },
+                function(data){
+                    var result = data['result'][0];
+                    console.log(result);
+                    $('#full_photo').attr('src', photo);
+                    console.log(result['alive']);
+                    if (result['alive'] == false) {
+                        $('#full_death_belt').show();
+                        var years = '...';
+                        if (result['birth'])
+                            years = result['birth'];
+                        if (result['death'])
+                            years += ' - ' + result['death'];
+                        else
+                            years += result['birth'] + ' - ...'
+                        $('#full_birth_death').text(years);
+                        }
+                    else {
+                        var years = result['birth'];
+                        $('#full_birth_death').text(years);
+                        $('#full_death_belt').hide();
+                    }
+                    if (result['sex'] == 'F')
+                        $('#full_info_block').css({'background': '#ffb1c7'});
+                    else
+                        $('#full_info_block').css({'background': '#88aae9'});
+                    $('#full_name').text(result['first_name']);
+                    $('#full_middle_name').text(result['middle_name']);
+                    $('#full_last_name').text(result['last_name']);
+                    $('#full_description').text(result['description']);
+                    if (result['location'])
+                        $('#full_location').text('Место рождения: ' + result['location']);
+                    else
+                        $('#full_location').text('');
+                });
+
+        $('#full_close').click(function(){
+            $('#full_info_block').hide();
+        });
 }
 
 function remove_person_js(a){

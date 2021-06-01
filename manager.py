@@ -10,6 +10,7 @@ Bootstrap(app)
 relative_type_str = "relative_type"
 from_id_str = 'from_id'
 
+
 def make_persons():
     db = DBClient()['family']
     collection = db['persons']
@@ -35,7 +36,6 @@ def make_persons():
 def index():
     persons = make_persons()
     return render_template('index.html', persons=persons)
-    #return render_template('access.html')
 
 
 @app.route('/add')
@@ -152,6 +152,18 @@ def remove():
             person['parents'] = person['parents'].replace(person_id, '').replace(',', '')
             collection.update_one({'_id': person['_id']}, {'$set': {'parents': person['parents']}})
         return jsonify({'Status': 'Person removed', 'persons': make_persons()})
+    except (ValueError, TypeError):
+        return jsonify({'Error': 'Remove failed', 'persons': -1})
+
+
+@app.route('/pull')
+def pull_info():
+    query_args = request.args
+    db = DBClient()['family']
+    collection = db['persons']
+    target_id = query_args.get('target_id')
+    try:
+        return jsonify({'result': list(collection.find({'_id': int(target_id)}))})
     except (ValueError, TypeError):
         return jsonify({'Error': 'Remove failed', 'persons': -1})
 

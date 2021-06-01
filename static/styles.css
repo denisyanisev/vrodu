@@ -8,11 +8,11 @@ label {
 
 #draggable{
     overflow: hidden;
-    width: 4200px!important;
+    width: 10000px!important;
 }
 
 .placeholder {
-    width: 4200px!important;
+    width: 10000px!important;
     height: 1500px!important;
 }
 
@@ -124,4 +124,90 @@ label {
 .row {
     margin-right: 0px;
     margin-left: 0px;
+}
+
+.vk_block{
+position: absolute;
+top: 10px;
+left: 500px;
+}
+
+#surname_list {
+  position: absolute;
+  right: 200px;
+  top: 20px;
+}
+
+#full_info_block {
+    display: none;
+    right: 14px;
+    width: 366px;
+    height: 445px;
+    background: #88aae9;
+    top: 26px;
+    position: fixed;
+    padding: 15px;
+}
+
+#full_photo{
+    width: 100px;
+    height: 100px;
+    float: left;
+    margin-right: 20px;
+}
+
+
+#full_edit {
+    position: absolute;
+    right: 50px;
+    top: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#full_edit:hover {
+    color: red;
+}
+
+#full_close {
+    width: 15px;
+    position: absolute;
+    top: 14px;
+    right: 15px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+#full_close:hover {
+    color: red;
+}
+
+#full_name_block {
+    font-weight: bold;
+}
+
+#full_description {
+    display: block;
+    margin-top: 10px;
+}
+
+#full_death_belt{
+    position: absolute;
+    display: none;
+    right: 11px!important;
+    bottom: 15px!important;
+    width: 57px;
+    height: 8px;
+    top: 76px;
+    left: 51px;
+}
+
+#full_photo_block {
+    position: relative;
+}
+
+#full_birth_death {
+    margin-top: 10px;
+    display: block;
 }

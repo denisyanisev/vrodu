@@ -46,6 +46,10 @@ label {
     display: none;
 }
 
+#location{
+    width: 100%;
+}
+
 .death_belt {
     display: block;
     width: 27px;

@@ -8,9 +8,9 @@ function draw_belts() {
     });
 }
 
-function flashFields(){
+function flushFields(){
         $("#input_block input.flushable").val('');
-        $("#input_block textarea").text('');
+        $("#input_block textarea").val('');
         $('#parent').prop('checked', true);
         $('#is_alive').prop('checked', true);
         $('#death_block').hide();

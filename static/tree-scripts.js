@@ -4,14 +4,15 @@ function open_input_block(){
 
 $('#input_block').dialog({
     modal: true,
+    width: 300,
+    closeOnEscape: true,
     close: function(){
         $('#new_person_label').hide();
-        //$('#parent').prop('checked', true);
+        flushFields();
     },
     buttons: [{
         text: "Добавить",
         click: function(){
-        $( this ).dialog( "close" );
         var id = $("#person_id").val();
         var first_name = $("#first_name").val();
         var middle_name = $("#middle_name").val();
@@ -24,6 +25,7 @@ $('#input_block').dialog({
         var location = $("#location").val();
         var relative = $("input[name=relative]:checked").val();
         var vk_id = $("#vk_id").val();
+        $( this ).dialog( "close" );
         if (first_name == ''){
             $(this).dialog( "close" );
             $('#failed_message').text('Не указано имя!');
@@ -44,7 +46,7 @@ $('#input_block').dialog({
             parent: id,
             vk_id: vk_id
         },  function(data) {
-                flashFields();
+                flushFields();
                 if (data['persons'] == -1){
                     $('#failed_message').text(data['Error']);
                     $( "#dialog-message" ).dialog();
@@ -58,7 +60,7 @@ $('#input_block').dialog({
                         id: id,
                         new_id: data['new_id']
                     }, function(data) {
-                       flashFields();
+                       flushFields();
                        if (data['persons'] != -1){
                             options.items = data['persons'];
                             $("#diagram").famDiagram(options);
@@ -135,7 +137,7 @@ function add_link_js(a){
                 relative: relative
                 },
                 function(data){
-                    flashFields()
+                    flushFields()
                     if (data['persons'] != -1){
                         var options = window.diagramSettings;
                         options.items = data['persons'];
@@ -186,3 +188,8 @@ function remove_person_js(a){
         });
     });
 }
+
+ymaps.ready(init);
+function init() {
+    var suggestView1 = new ymaps.SuggestView('location', {results: 4});
+    }

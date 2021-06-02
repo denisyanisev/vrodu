@@ -161,9 +161,9 @@ def pull_info():
     query_args = request.args
     db = DBClient()['family']
     collection = db['persons']
-    target_id = query_args.get('target_id')
+    person_id = query_args.get('person_id')
     try:
-        return jsonify({'result': list(collection.find({'_id': int(target_id)}))})
+        return jsonify({'result': list(collection.find({'_id': int(person_id)}))})
     except (ValueError, TypeError):
         return jsonify({'Error': 'Remove failed', 'persons': -1})
 

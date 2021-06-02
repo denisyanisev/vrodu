@@ -94,13 +94,6 @@
     <input type="text" id="vk_id" value="" class="flushable" ><br />
 </div>
 
-<div id="add-person" title="Добавить родителя">
-    <label>Родителя</label>
-    <input type="radio" id="parent"  name="relative_type" value="parent" checked>
-    <label>Ребенка</label>
-    <input type="radio" id="child" name="relative_type" value="child">
-</div>
-
 <div id="dialog-confirm" title="Удалить персону?">
     <span id="deleted_item"></span>
 </div>
@@ -115,6 +108,7 @@
 <!-- Modals -->
 
 <div id="full_info_block">
+    <input id="full_id" value="" type="text" hidden/>
     <div id="full_photo_block">
         <img id="full_photo" src=""/>
         <div id="full_death_belt" class="death_belt"></div>
@@ -128,8 +122,21 @@
     <span id="full_birth_death"></span>
     <span id="full_description"></span>
     <span id="full_location"></span>
+    <br /><br />
+    <button id="full_add_relation">Добавить связь</button>
+    <div id="full_relations">
+        <div id="add-person" title="Добавить родителя">
+            <label>Родителя</label>
+            <input type="radio" id="parent"  name="relative_type" value="parent" checked>
+            <label>Ребенка</label>
+            <input type="radio" id="child" name="relative_type" value="child"> <br />
+            <button id="add_person_button" onclick="open_input_block()">Добавить нового</button>
+            <button id="link_person_button">Связать существуещего</button>
+        </div>
+    </div>
     <div id="full_edit" >✎</div>
     <div id="full_close" >X</div>
+    <div id="full_delete">Удалить персону</div>
 </div>
 
 {% endblock %}

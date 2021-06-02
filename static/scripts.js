@@ -38,4 +38,20 @@ $(document).ready(function () {
         $('#new_person').prop('checked', true);
         open_input_block();
     });
+
+    $('#full_delete').click(function(){
+        var person_id = $('#full_id').val();
+        var title = $('#full_name').text();
+        remove_person_js(person_id, title);
+    });
+
+    $('#full_add_relation').click(function(){
+        $('#full_relations_block').show();
+    });
+
+    $('#link_person_button').click(function(){
+        window.link = 'listening';
+        $('#full_info_block').hide();
+        $('#link-tip').show()
+    });
 });

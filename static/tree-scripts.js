@@ -46,6 +46,7 @@ $('#input_block').dialog({
             from_id: id,
             vk_id: vk_id
         },  function(data) {
+                $('#full_info_block').hide();
                 flushFields();
                 if (data['persons'] == -1){
                     $('#failed_message').text(data['Error']);
@@ -93,31 +94,8 @@ function edit_person_js(a) {
 }
 
 function add_person_js(a) {
-    root = $(a).parentsUntil(".bt-item-frame").parent()
-    person_id = root.find("[name=person_id]").val();
+    person_id = $(a).parent().find("[name=person_id]").val();
     $("#person_id").val(person_id);
-    $("#add-person").dialog({
-        minWidth: 420,
-        minHeight: 20,
-        modal: true,
-        closeOnEscape: true,
-        buttons: [{
-            text: "Добавить нового",
-            id: 'add_person_button',
-            click: function () {
-                $(this).dialog("close");
-                open_input_block();
-            }
-        },
-        {
-            text: "Связать существующего",
-            click: function () {
-                $(this).dialog("close");
-                window.link = 'listening';
-                $('#link-tip').show();
-            }
-        }]
-    });
 }
 
 function add_link_js(a){
@@ -157,17 +135,16 @@ function add_link_js(a){
         }
 
         // Show full info and edit person
-        $('#full_info_block').show();
-        var target_id = $(a).find('[name=person_id]').val();
+        $('#full_id').val($(a).find("[name=person_id]").val());
+        var person_id = $(a).find('[name=person_id]').val();
+        $("#person_id").val(person_id);
         var photo = $(a).find('[name=photo]').attr('src');
         $.get('/pull', {
-                target_id: target_id,
+                person_id: person_id,
                 },
                 function(data){
                     var result = data['result'][0];
-                    console.log(result);
                     $('#full_photo').attr('src', photo);
-                    console.log(result['alive']);
                     if (result['alive'] == false) {
                         $('#full_death_belt').show();
                         var years = '...';
@@ -176,7 +153,7 @@ function add_link_js(a){
                         if (result['death'])
                             years += ' - ' + result['death'];
                         else
-                            years += result['birth'] + ' - ...'
+                            years += ' - ...'
                         $('#full_birth_death').text(years);
                         }
                     else {
@@ -197,16 +174,14 @@ function add_link_js(a){
                     else
                         $('#full_location').text('');
                 });
+        $('#full_info_block').show();
 
         $('#full_close').click(function(){
             $('#full_info_block').hide();
         });
 }
 
-function remove_person_js(a){
-    root = $(a).parentsUntil(".bt-item-frame").parent()
-    person_id = root.find("[name=person_id]").val();
-    title = root.find("[name=title]").text();
+function remove_person_js(person_id, title){
     $('#deleted_item').text(title);
     $( function() {
         $( "#dialog-confirm" ).dialog({
@@ -229,6 +204,7 @@ function remove_person_js(a){
                     }
                 });
               $( this ).dialog( "close" );
+              $('#full_info_block').hide();
             },
             Cancel: function() {
               $( this ).dialog( "close" );

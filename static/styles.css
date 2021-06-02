@@ -31,6 +31,11 @@ label {
 }
 
 .bp-plus {
+    width: 21px;
+    bottom: 2px;
+    right: 4px;
+    position: absolute;
+    z-index: 1;
 	border: 2px solid lightgrey;
 	background-color: #fff;
 	font-size: 19px;
@@ -76,10 +81,6 @@ label {
 }
 
 #dialog-confirm {
-    display: none;
-}
-
-#add-person{
     display: none;
 }
 
@@ -214,4 +215,16 @@ left: 500px;
 #full_birth_death {
     margin-top: 10px;
     display: block;
+}
+
+#full_delete {
+    position: absolute;
+    bottom: 14px;
+    right: 24px;
+    color:#b82626;
+    cursor: pointer;
+}
+
+#full_delete:hover {
+    text-decoration: underline;
 }

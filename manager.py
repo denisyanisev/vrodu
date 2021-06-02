@@ -63,13 +63,13 @@ def add_person():
     vk_id = query_args.get('vk_id')
     parent_m = ''
     parent_f = ''
+    person = collection.find_one({'_id': int(from_id)})
     if relative_type == 'child':
-        if sex == 'M':
+        if person['sex'] == 'M':
             parent_m = from_id
         else:
             parent_f = from_id
     elif relative_type == 'parent':
-        person = collection.find_one({'_id': int(from_id)})
         person_name = ' '.join((person['first_name'], person['middle_name'], person['last_name']))
         if person[parent_m_str] and sex == 'M':
             return jsonify({'Error': f'У {person_name} уже есть отец.', 'persons': -1})
@@ -147,11 +147,11 @@ def remove():
     db = DBClient()['family']
     collection = db['persons']
     person_id = query_args.get('person_id')
-    sex = collection.find_one({'_id': int(query_args.get('person_id'))})['sex']
+    sex = collection.find_one({'_id': int(person_id)})['sex']
     parent_str = parent_m_str if sex == 'M' else parent_f_str
     try:
         collection.delete_one({'_id': int(person_id)})
-        collection.update({parent_str: person_id}, {'$set': {parent_str: ''}})
+        collection.update_many({parent_str: person_id}, {'$set': {parent_str: ''}})
         return jsonify({'Status': 'Персона удалена.', 'persons': make_persons()})
     except (ValueError, TypeError):
         return jsonify({'Error': 'Удаление персоны неуспешно.', 'persons': -1})

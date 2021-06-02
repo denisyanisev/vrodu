@@ -15,3 +15,8 @@ Start application:
 
 Check application:
 > curl localhost:5000
+
+Deploying on server:
+> cd /var/www/scriptina.ru/vrodu
+> sudo -u www-data git pull
+> sudo service apache2 restart

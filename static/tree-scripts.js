@@ -50,7 +50,6 @@ $('#input_block').dialog({
                 if (data['persons'] == -1){
                     $('#failed_message').text(data['Error']);
                     $("#dialog-message").dialog();
-                    console.log(data);
                     return '';
                 }
                 var cache = data
@@ -165,9 +164,7 @@ function add_link_js(a){
                 },
                 function(data){
                     var result = data['result'][0];
-                    console.log(result);
                     $('#full_photo').attr('src', photo);
-                    console.log(result['alive']);
                     if (result['alive'] == false) {
                         $('#full_death_belt').show();
                         var years = '...';

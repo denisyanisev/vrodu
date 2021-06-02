@@ -58,7 +58,8 @@ $('#input_block').dialog({
                 if (id && relative_type == 'parent') {
                     $.get('/change', {
                         id: id,
-                        new_id: data['new_id']
+                        new_id: data['new_id'],
+                        sex: sex
                     }, function(data) {
                        flushFields();
                        if (data['persons'] != -1){

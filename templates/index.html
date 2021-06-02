@@ -14,96 +14,96 @@
 {% endblock styles %}
 
 {% block content %}
-<div class="tree_container">
-	<div id="draggable" class="ui-widget-content ui-draggable">
-        <div id="diagram"></div>
-	</div>
-</div>
-
-<div class="vk_block">
-    <a href="#" onclick="VK.External.showInviteBox();" class="right-link">Пригласить друзей</a>
-    <a href="#" onclick="SentNotification()" class="right-link">Отправить уведомление</a>
-    <a href="#" onclick="GetFriends()" class="right-link">Получить список друзей</a>
-    <a href="#" onclick="GetAppFriends()" class="right-link">Друзья в приложении</a>
-    <a href="#" onclick="SendRequest()" class="right-link">Отправить запрос</a>
-</div>
-
-<!-- Modals -->
-<div id="input_block" title="Добавить новую персону">
-    <label id="new_person_label">Добавить отдельную персону</label>
-    <input type="radio" id="new_person" name="relative_type" value="new_person">
-    <input id="person_id" value="" class="flushable" type="text" hidden />
-    <input id="link_id" value="" class="inactive flushable" type="text" hidden /><br/>
-    <label>Имя</label><br />
-    <input id="first_name" value="" class="flushable" type="text"/><br />
-    <label>Фамилия</label><br />
-    <input id="last_name" value="" class="flushable" type="text"/><br />
-    <label>Отчество</label><br />
-    <input id="middle_name" value="" class="flushable" type="text"/><br />
-    <label>Биография</label><br />
-    <textarea id="description" class="flushable"></textarea><br />
-    <label>Год рождения</label><br />
-    <input id="birth" value="" class="flushable" type="text"/><br />
-    <label>Жив(а)?</label><input type="checkbox" id="is_alive" checked><br />
-    <div id="death_block">
-        <label>Год смерти</label><br />
-        <input id="death" value="" class="flushable" type="text"/><br />
-    </div>
-    <label>Место жительства</label><br />
-    <input id="location" value="" class="flushable" type="text"/><br />
-    <label>Пол:</label><br />
-    <label>Мужской</label>
-    <input type="radio" id="male" name="sex" value="M" checked>
-    <label>Женский</label>
-    <input type="radio" id="female" name="sex" value="F"><br />
-    <label>VK ID</label><br />
-    <input type="text" id="vk_id" value="" class="flushable" ><br />
-</div>
-
-<div id="dialog-confirm" title="Удалить персону?">
-    <span id="deleted_item"></span>
-</div>
-<div id="dialog-message" title="Ошибка!">
-    <span id="failed_message"></span>
-</div>
-<div id="link-tip">
-    <span>Нажмите на персону, которую хотите связать</span>
-</div>
-
-<div id="add_single">+</div>
-<!-- Modals -->
-
-<div id="full_info_block">
-    <input id="full_id" value="" type="text" hidden/>
-    <div id="full_photo_block">
-        <img id="full_photo" src=""/>
-        <div id="full_death_belt" class="death_belt"></div>
-    </div>
-    <div id="full_name_block">
-        <div id="full_last_name"></div>
-        <div id="full_name"></div>
-        <div id="full_middle_name"></div>
-    </div>
-    <div style="clear: both"></div>
-    <span id="full_birth_death"></span>
-    <span id="full_description"></span>
-    <span id="full_location"></span>
-    <br /><br />
-    <button id="full_add_relation">Добавить связь</button>
-    <div id="full_relations">
-        <div id="add-person" title="Добавить родителя">
-            <label>Родителя</label>
-            <input type="radio" id="parent"  name="relative_type" value="parent" checked>
-            <label>Ребенка</label>
-            <input type="radio" id="child" name="relative_type" value="child"> <br />
-            <button id="add_person_button" onclick="open_input_block()">Добавить нового</button>
-            <button id="link_person_button">Связать существуещего</button>
+    <div class="tree_container">
+        <div id="draggable" class="ui-widget-content ui-draggable">
+            <div id="diagram"></div>
         </div>
     </div>
-    <div id="full_edit" >✎</div>
-    <div id="full_close" >X</div>
-    <div id="full_delete">Удалить персону</div>
-</div>
+
+    <div class="vk_block">
+        <a href="#" onclick="VK.External.showInviteBox();" class="right-link">Пригласить друзей</a>
+        <a href="#" onclick="SentNotification()" class="right-link">Отправить уведомление</a>
+        <a href="#" onclick="GetFriends()" class="right-link">Получить список друзей</a>
+        <a href="#" onclick="GetAppFriends()" class="right-link">Друзья в приложении</a>
+        <a href="#" onclick="SendRequest()" class="right-link">Отправить запрос</a>
+    </div>
+
+    <!-- Modals -->
+    <div id="input_block" title="Добавить новую персону">
+        <label id="new_person_label">Добавить отдельную персону</label>
+        <input type="radio" id="new_person" name="relative_type" value="new_person">
+        <input id="person_id" value="" class="flushable" type="text" hidden />
+        <input id="link_id" value="" class="inactive flushable" type="text" hidden /><br/>
+        <label>Имя</label><br />
+        <input id="first_name" value="" class="flushable" type="text"/><br />
+        <label>Фамилия</label><br />
+        <input id="last_name" value="" class="flushable" type="text"/><br />
+        <label>Отчество</label><br />
+        <input id="middle_name" value="" class="flushable" type="text"/><br />
+        <label>Биография</label><br />
+        <textarea id="description" class="flushable"></textarea><br />
+        <label>Год рождения</label><br />
+        <input id="birth" value="" class="flushable" type="text"/><br />
+        <label>Жив(а)?</label><input type="checkbox" id="is_alive" checked><br />
+        <div id="death_block">
+            <label>Год смерти</label><br />
+            <input id="death" value="" class="flushable" type="text"/><br />
+        </div>
+        <label>Место жительства</label><br />
+        <input id="location" value="" class="flushable" type="text"/><br />
+        <label>Пол:</label><br />
+        <label>Мужской</label>
+        <input type="radio" id="male" name="sex" value="M" checked>
+        <label>Женский</label>
+        <input type="radio" id="female" name="sex" value="F"><br />
+        <label>VK ID</label><br />
+        <input type="text" id="vk_id" value="" class="flushable" ><br />
+    </div>
+
+    <div id="dialog-confirm" title="Удалить персону?">
+        <span id="deleted_item"></span>
+    </div>
+    <div id="dialog-message" title="Ошибка!">
+        <span id="failed_message"></span>
+    </div>
+    <div id="link-tip">
+        <span>Нажмите на персону, которую хотите связать</span>
+    </div>
+
+    <div id="add_single">+</div>
+    <!-- Modals -->
+
+    <div id="full_info_block">
+        <input id="full_id" value="" type="text" hidden/>
+        <div id="full_photo_block">
+            <img id="full_photo" src=""/>
+            <div id="full_death_belt" class="death_belt"></div>
+        </div>
+        <div id="full_name_block">
+            <div id="full_last_name"></div>
+            <div id="full_name"></div>
+            <div id="full_middle_name"></div>
+        </div>
+        <div style="clear: both"></div>
+        <span id="full_birth_death"></span>
+        <span id="full_description"></span>
+        <span id="full_location"></span>
+        <br /><br />
+        <button id="full_add_relation">Добавить связь</button>
+        <div id="full_relations">
+            <div id="add-person" title="Добавить родителя">
+                <label>Родителя</label>
+                <input type="radio" id="parent"  name="relative_type" value="parent" checked>
+                <label>Ребенка</label>
+                <input type="radio" id="child" name="relative_type" value="child"> <br />
+                <button id="add_person_button" onclick="open_input_block()">Добавить нового</button>
+                <button id="link_person_button">Связать существуещего</button>
+            </div>
+        </div>
+        <div id="full_edit" >✎</div>
+        <div id="full_close" >X</div>
+        <div id="full_delete">Удалить персону</div>
+    </div>
 {% endblock content %}
 
 {% block scripts %}

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from flask_bootstrap import Bootstrap
-from loguru import logger
+# from loguru import logger
 from db import DBClient
 import random
 
@@ -9,6 +9,8 @@ Bootstrap(app)
 
 relative_type_str = "relative_type"
 from_id_str = 'from_id'
+parent_m_str = 'parent_m'
+parent_f_str = 'parent_f'
 
 
 def make_persons():
@@ -18,7 +20,9 @@ def make_persons():
     for person in collection.find():
         person['id'] = person.pop('_id')
         person['title'] = ' '.join([person['first_name'], person['middle_name'], person['last_name']])
-        person['parents'] = person['parents'].split(',') if person['parents'] else ''
+        person['parents'] = ','.join((person[parent_m_str], person[parent_f_str]))
+        if person['parents'] == ',':
+            person['parents'] = ''
         person['itemTitleColor'] = "#88aae9" if person['sex'] == 'M' else "#ffb1c7"
         if not person['alive'] and person['death']:
             years = (person['birth'] if person['birth'] else '...') + ' - ' + person['death']
@@ -55,23 +59,29 @@ def add_person():
     from_id = query_args.get(from_id_str, '')
     image = 'abc'[int(random.random()*3)] if sex == 'M' else 'fpt'[int(random.random()*3)]
     location = query_args.get('location')
-    relative_type = query_args.get(relative_type_str) #кого мы добавляем
+    relative_type = query_args.get(relative_type_str)  # кого мы добавляем
     vk_id = query_args.get('vk_id')
+    parent_m = ''
+    parent_f = ''
     if relative_type == 'child':
-        parent = str(from_id)
+        if sex == 'M':
+            parent_m = from_id
+        else:
+            parent_f = from_id
     elif relative_type == 'parent':
-        parents = collection.find_one({'_id': int(from_id)})['parents']
-        if ',' in parents:
-            return jsonify({'Error': 'Больше двух родителей', 'persons': -1})
-        parent = ''
-    elif relative_type == 'new_person':
-        parent = ''
+        person = collection.find_one({'_id': int(from_id)})
+        person_name = ' '.join((person['first_name'], person['middle_name'], person['last_name']))
+        if person[parent_m_str] and sex == 'M':
+            return jsonify({'Error': f'У {person_name} уже есть отец.', 'persons': -1})
+        elif person[parent_f_str] and sex == 'F':
+            return jsonify({'Error': f'У {person_name} уже есть мать.', 'persons': -1})
 
     collection.insert_one({'_id': new_id,
                            'first_name': first_name,
                            'middle_name': middle_name,
                            'last_name': last_name,
-                           'parents': parent,
+                           parent_m_str: parent_m,
+                           parent_f_str: parent_f,
                            'image': f'/static/photos/{image}.png',
                            'description': description,
                            'sex': sex,
@@ -89,16 +99,11 @@ def change_person():
     query_args = request.args
     collection = DBClient()['family']['persons']
     person_id = query_args.get('id')
-    parents = collection.find_one({'_id': int(person_id)})['parents']
     new_id = query_args.get('new_id')
-    if ',' in parents:
-        return jsonify({'Error': 'more than 2 parents', 'persons': -1})
-    elif not parents:
-        new_parents = str(new_id)
-    else:
-        new_parents = parents + ',' + new_id
+    sex = query_args.get('sex')
+    parent_str = parent_m_str if sex == 'M' else parent_f_str
 
-    collection.update_one({'_id': int(person_id)}, {'$set': {'parents': new_parents}})
+    collection.update_one({'_id': int(person_id)}, {'$set': {parent_str: new_id}})
     return jsonify({'Status': 'ok', 'persons': make_persons()})
 
 
@@ -106,34 +111,32 @@ def change_person():
 def link():
     query_args = request.args
     collection = DBClient()['family']['persons']
-    person_id = query_args.get('person_id')
-    link_id = query_args.get('link_id')
+    from_id = query_args.get('person_id')
+    target_id = query_args.get('link_id')
     relative_type = query_args.get(relative_type_str)
-    if relative_type == 'child':
-        parents = collection.find_one({'_id': int(link_id)})['parents']
-        if ',' in parents:
-            return jsonify({'Error': 'Больше двух родителей', 'persons': -1})
-        elif person_id in parents:
-            return jsonify({'Error': 'Нельзя связать ребенка дважды', 'persons': -1})
-        elif not parents:
-            new_parents = str(person_id)
+    target_person = collection.find_one({'_id': int(query_args.get('link_id'))})
+    from_person = collection.find_one({'_id': int(query_args.get('person_id'))})
+    target_name = ' '.join((target_person['first_name'], target_person['middle_name'], target_person['last_name']))
+    from_name = ' '.join((from_person['first_name'], from_person['middle_name'], from_person['last_name']))
+    if relative_type == 'parent':
+        from_name, target_name = target_name, from_name
+        from_id, target_id = target_id, from_id
+        from_person, target_person = target_person, from_person
+    try:
+        if from_person['sex'] == 'M':
+            if from_id == target_person[parent_m_str]:
+                return jsonify({'Error': f'{from_name} уже является отцом {target_name}.', 'persons': -1})
+            elif target_person[parent_m_str]:
+                return jsonify({'Error': f'У {target_name} уже есть отец.', 'persons': -1})
+            collection.update_one({'_id': int(target_id)}, {'$set': {parent_m_str: from_id}})
         else:
-            new_parents = parents + ',' + person_id
-        collection.update_one({'_id': int(link_id)}, {'$set': {'parents': new_parents}})
-
-    elif relative_type == 'parent':
-        parents = collection.find_one({'_id': int(person_id)})['parents']
-        if ',' in parents:
-            return jsonify({'Error': 'Больше двух родителей', 'persons': -1})
-        elif link_id in parents:
-            return jsonify({'Error': 'Нельзя связать родителя дважды', 'persons': -1})
-        elif not parents:
-            new_parents = str(link_id)
-        else:
-            new_parents = parents + ',' + link_id
-        collection.update_one({'_id': int(person_id)}, {'$set': {'parents': new_parents}})
-    else:
-        return jsonify({'Failed': 'Нельзя связать', 'persons': -1})
+            if from_id == target_person[parent_f_str]:
+                return jsonify({'Error': f'{from_name} уже является матерью {target_name}.', 'persons': -1})
+            elif target_person[parent_f_str]:
+                return jsonify({'Error': f'У {target_name} уже есть мать.', 'persons': -1})
+            collection.update_one({'_id': int(target_id)}, {'$set': {parent_f_str: from_id}})
+    except (ValueError, TypeError):
+        return jsonify({'Failed': 'Не удалось связать персоны.', 'persons': -1})
 
     return jsonify({'Status': 'ok', 'persons': make_persons()})
 
@@ -144,16 +147,14 @@ def remove():
     db = DBClient()['family']
     collection = db['persons']
     person_id = query_args.get('person_id')
+    sex = collection.find_one({'_id': int(query_args.get('person_id'))})['sex']
+    parent_str = parent_m_str if sex == 'M' else parent_f_str
     try:
         collection.delete_one({'_id': int(person_id)})
-        person_id_regex = r'(^|,)' + person_id + r'(,|$)'
-        found_persons = collection.find({'parents': {'$regex': person_id_regex }})
-        for person in found_persons:
-            person['parents'] = person['parents'].replace(person_id, '').replace(',', '')
-            collection.update_one({'_id': person['_id']}, {'$set': {'parents': person['parents']}})
-        return jsonify({'Status': 'Person removed', 'persons': make_persons()})
+        collection.update({parent_str: person_id}, {'$set': {parent_str: ''}})
+        return jsonify({'Status': 'Персона удалена.', 'persons': make_persons()})
     except (ValueError, TypeError):
-        return jsonify({'Error': 'Remove failed', 'persons': -1})
+        return jsonify({'Error': 'Удаление персоны неуспешно.', 'persons': -1})
 
 
 @app.route('/pull')
@@ -165,9 +166,9 @@ def pull_info():
     try:
         return jsonify({'result': list(collection.find({'_id': int(person_id)}))})
     except (ValueError, TypeError):
-        return jsonify({'Error': 'Remove failed', 'persons': -1})
+        return jsonify({'Error': 'Ошибка запроса.', 'persons': -1})
 
 
 if __name__ == '__main__':
     app.run(debug=True)
-    #app.run(debug=True, host="0.0.0.0")
+    # app.run(debug=True, host="0.0.0.0")

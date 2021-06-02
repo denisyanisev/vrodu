@@ -94,8 +94,7 @@ function edit_person_js(a) {
 }
 
 function add_person_js(a) {
-    person_id = $(a).parent().find("[name=person_id]").val();
-    $("#person_id").val(person_id);
+
 }
 
 function add_link_js(a){

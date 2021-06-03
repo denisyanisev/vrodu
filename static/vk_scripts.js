@@ -29,10 +29,14 @@ var sendRequest = function(){
 		VK.callMethod("showRequestBox", 549396892, "Hello!", "myRequestKey");
 	}
 
-var getFriends = function(){
-	VK.api('friends.get', {'user_id': '549396892', 'count': '3', 'offset': '5', 'v': '5.130', 'fields': 'city,domain'}, function(data){
+var getFriends = function(q){
+	VK.api("users.get", {'fields': 'photo_50'}, function(data) {
+        	VK.api('friends.search', {'user_id': data.response[0].id, 'q': q, 'count': '3', 'offset': '5', 'v': '5.130', 'fields': 'city,domain'},function(data){console.log(data);});	
+	});
+	VK.api('friends.get', {'user_id': '549396892', 'count': '3', 'offset': '5', 'v': '5.130', 'fields': 'city,domain'}, 			function(data){
 		console.log(data);
 		});
+
 	}
 
 var getAppFriends = function(){

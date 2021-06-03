@@ -63,13 +63,14 @@ def add_person():
     vk_id = query_args.get('vk_id')
     parent_m = ''
     parent_f = ''
-    person = collection.find_one({'_id': int(from_id)})
     if relative_type == 'child':
+        person = collection.find_one({'_id': int(from_id)})
         if person['sex'] == 'M':
             parent_m = from_id
         else:
             parent_f = from_id
     elif relative_type == 'parent':
+        person = collection.find_one({'_id': int(from_id)})
         person_name = ' '.join((person['first_name'], person['middle_name'], person['last_name']))
         if person[parent_m_str] and sex == 'M':
             return jsonify({'Error': f'У {person_name} уже есть отец.', 'persons': -1})

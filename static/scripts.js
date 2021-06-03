@@ -57,8 +57,6 @@ $(document).ready(function () {
 
     $('#search_friend').click(function(){
         var q = $('#vk_id').val();
-        console.log('Req:');
-        console.log(q);
         getFriends(q);
     });
 });

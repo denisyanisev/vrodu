@@ -7,7 +7,6 @@ var getUser = function(callback){
 var sentNotification = function(){
 	VK.api('utils.getServerTime', function(data){
 		var timestamp = data.response
-
 		//console.log(timestamp);
 		//https://oauth.vk.com/access_token?client_id=7851891&client_secret=g85lXmVscKkmsQyTpQ0b&v=5.130&scope=friends,notify,photos,wall,email,mail,groups,stats,offline&grant_type=client_credentials
 		//{"access_token":"49489d1c49489d1c491a4d6d95493f526f4494849489d1c29d30ee21a141b8205a0aab9","expires_in":0}
@@ -31,13 +30,23 @@ var sendRequest = function(){
 
 var getFriends = function(q){
 	VK.api("users.get", {'fields': 'photo_50'}, function(data) {
-        	VK.api('friends.search', {'user_id': data.response[0].id, 'q': q, 'count': '3', 'offset': '5', 'v': '5.130', 'fields': 'city,domain'},function(data){console.log(data);});	
-	});
-	VK.api('friends.get', {'user_id': '549396892', 'count': '3', 'offset': '5', 'v': '5.130', 'fields': 'city,domain'}, 			function(data){
-		console.log(data);
-		});
+        	VK.api('friends.search', {'user_id': data.response[0].id, 'q': q, 'count': '3', 'v': '5.130', 'fields': 'city,domain'},
+        	function(data){
+        	    console.log(data);
+        	    var items = data.response.items
+        	    items.forEach((element) => {
+                  console.log(element.first_name);
+                  $('#full_search_results').append('<div></div>');
+                });
+        	    //console.log(data.response.items[0].first_name)
 
-	}
+        	});
+	});
+	VK.api('friends.get', {'user_id': '549396892', 'count': '3', 'v': '5.130', 'fields': 'city,domain'},
+	    function(data){
+		console.log(data);
+	});
+}
 
 var getAppFriends = function(){
 	VK.api('friends.getAppUsers', function(data){

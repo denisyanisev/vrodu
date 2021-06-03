@@ -20,3 +20,9 @@ Deploying on server:
 > cd /var/www/scriptina.ru/vrodu
 > sudo -u www-data git pull
 > sudo service apache2 restart
+
+Wiping a collection:
+> mongo
+> use family
+> db.auth('vrodu', 'vrodu123)
+> db.persons.remove({})

@@ -44,7 +44,8 @@ $('#input_block').dialog({
             location: location,
             relative_type: relative_type,
             from_id: id,
-            vk_id: vk_id
+            vk_id: vk_id,
+            user_id: window.user.id
         },  function(data) {
                 $('#full_info_block').hide();
                 flushFields();
@@ -59,7 +60,8 @@ $('#input_block').dialog({
                     $.get('/change', {
                         id: id,
                         new_id: data['new_id'],
-                        sex: sex
+                        sex: sex,
+                        user_id: window.user.id
                     }, function(data) {
                        flushFields();
                        if (data['persons'] != -1){
@@ -114,7 +116,8 @@ function add_link_js(a){
             $.get('/link', {
                 person_id: person_id,
                 link_id: link_id,
-                relative_type: relative_type
+                relative_type: relative_type,
+                user_id: window.user.id
                 },
                 function(data){
                     flushFields()
@@ -139,7 +142,7 @@ function add_link_js(a){
         $("#person_id").val(person_id);
         var photo = $(a).find('[name=photo]').attr('src');
         $.get('/pull', {
-                person_id: person_id,
+                person_id: person_id
                 },
                 function(data){
                     var result = data['result'][0];
@@ -192,6 +195,7 @@ function remove_person_js(person_id, title){
             "Удалить": function() {
                 $.get('/remove', {
                 person_id: person_id,
+                user_id: window.user.id
                 },
                 function(data){
                     if (data['persons'] != -1){
@@ -211,6 +215,31 @@ function remove_person_js(person_id, title){
           }
         });
     });
+}
+
+var setDiagramOptions = function(){
+    var options = new primitives.orgdiagram.Config();
+    options.cursorItem = null;
+    options.hasSelectorCheckbox = primitives.common.Enabled.False;
+    options.hasButtons = primitives.common.Enabled.False;
+    options.pageFitMode = primitives.common.PageFitMode.PrintPreview;
+    options.elbowType = primitives.common.ElbowType.Round;
+    options.normalLevelShift = 20;
+    options.dotLevelShift = 20;
+    options.lineLevelShift = 24;
+    options.normalItemsInterval = 10;
+    options.dotItemsInterval = 1;
+    options.lineItemsInterval = 1;
+    options.linesWidth = 1;
+    options.linesColor = "#7C8993";
+    $("#diagram").famDiagram(options);
+    var placeholder = $(".placeholder");
+    $("#diagram").css({
+        width: placeholder.width(),
+        height: placeholder.height(),
+    });
+
+    window.diagramSettings = options;
 }
 
 ymaps.ready(init);

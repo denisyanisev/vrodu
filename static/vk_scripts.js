@@ -1,19 +1,10 @@
-var getId = function(){
+var getUser = function(callback){
 		VK.api("users.get", {'fields': 'photo_50'}, function(data) {
-			console.log(data.response);
-			//user_fam = data.response[0].last_name;
-			//user_name = data.response[0].first_name;
-			person_id = data.response[0].id;
-			$('.person_id').each(function(i,elem){
-				if ($(this).val() == person_id) {
-					$(this).parent().css('background', '#c8e4f8');
-				}
+			callback(data.response[0]);
 			})
-		});
-
 	}
 
-var SentNotification = function(){
+var sentNotification = function(){
 	VK.api('utils.getServerTime', function(data){
 		var timestamp = data.response
 
@@ -34,28 +25,20 @@ var SentNotification = function(){
 		});
 		};
 
-var SendRequest = function(){
+var sendRequest = function(){
 		VK.callMethod("showRequestBox", 549396892, "Hello!", "myRequestKey");
 	}
 
-var GetFriends = function(){
+var getFriends = function(){
 	VK.api('friends.get', {'user_id': '549396892', 'count': '3', 'offset': '5', 'v': '5.130', 'fields': 'city,domain'}, function(data){
 		console.log(data);
 		});
 	}
 
-var GetAppFriends = function(){
+var getAppFriends = function(){
 	VK.api('friends.getAppUsers', function(data){
 		console.log(data);
 		});
 	}
 
-VK.init(function(){
 
-    status = true;
-    console.log("vk init");
-    var id = getId();
-	console.log(id);
-	}, function(){
-		console.log("error");
-	}, '5.75');

@@ -13,11 +13,11 @@ parent_m_str = 'parent_m'
 parent_f_str = 'parent_f'
 
 
-def make_persons():
+def make_persons(tree_owner: str = '0'):
     db = DBClient()['family']
     collection = db['persons']
     persons = list()
-    for person in collection.find():
+    for person in collection.find({'tree_owner': tree_owner}):
         person['id'] = person.pop('_id')
         person['title'] = ' '.join([person['first_name'], person['middle_name'], person['last_name']])
         person['parents'] = ','.join((person[parent_m_str], person[parent_f_str]))
@@ -38,15 +38,16 @@ def make_persons():
 
 @app.route('/')
 def index():
-    persons = make_persons()
-    return render_template('index.html', persons=persons)
+    return render_template('index.html')
 
+@app.route('/update')
+def fetch_persons():
+    return jsonify({'persons': make_persons(request.args.get('user_id'))})
 
 @app.route('/add')
 def add_person():
     query_args = request.args
-    db = DBClient()['family']
-    collection = db['persons']
+    collection = DBClient()['family']['persons']
     new_id = collection.find_one({}, sort=[('_id', -1)])['_id'] + 1 if collection.count() else 0
     first_name = query_args.get('first_name')
     middle_name = query_args.get('middle_name')
@@ -61,6 +62,7 @@ def add_person():
     location = query_args.get('location')
     relative_type = query_args.get(relative_type_str)  # кого мы добавляем
     vk_id = query_args.get('vk_id')
+    user_id = query_args.get('user_id')
     parent_m = ''
     parent_f = ''
     if relative_type == 'child':
@@ -90,9 +92,10 @@ def add_person():
                            'death': death,
                            'alive': is_alive,
                            'location': location,
-                           'vk_id': vk_id
+                           'vk_id': vk_id,
+                           'tree_owner': user_id
                            })
-    return jsonify({'new_id': new_id, 'persons': make_persons()})
+    return jsonify({'new_id': new_id, 'persons': make_persons(user_id)})
 
 
 @app.route('/change')
@@ -102,16 +105,17 @@ def change_person():
     person_id = query_args.get('id')
     new_id = query_args.get('new_id')
     sex = query_args.get('sex')
+    user_id = query_args.get('user_id')
     parent_str = parent_m_str if sex == 'M' else parent_f_str
-
     collection.update_one({'_id': int(person_id)}, {'$set': {parent_str: new_id}})
-    return jsonify({'Status': 'ok', 'persons': make_persons()})
+    return jsonify({'Status': 'ok', 'persons': make_persons(user_id)})
 
 
 @app.route('/link')
 def link():
     query_args = request.args
     collection = DBClient()['family']['persons']
+    user_id = query_args.get('user_id')
     from_id = query_args.get('person_id')
     target_id = query_args.get('link_id')
     relative_type = query_args.get(relative_type_str)
@@ -139,21 +143,21 @@ def link():
     except (ValueError, TypeError):
         return jsonify({'Failed': 'Не удалось связать персоны.', 'persons': -1})
 
-    return jsonify({'Status': 'ok', 'persons': make_persons()})
+    return jsonify({'Status': 'ok', 'persons': make_persons(user_id)})
 
 
 @app.route('/remove')
 def remove():
     query_args = request.args
-    db = DBClient()['family']
-    collection = db['persons']
+    collection = DBClient()['family']['persons']
+    user_id = query_args.get('user_id')
     person_id = query_args.get('person_id')
     sex = collection.find_one({'_id': int(person_id)})['sex']
     parent_str = parent_m_str if sex == 'M' else parent_f_str
     try:
         collection.delete_one({'_id': int(person_id)})
         collection.update_many({parent_str: person_id}, {'$set': {parent_str: ''}})
-        return jsonify({'Status': 'Персона удалена.', 'persons': make_persons()})
+        return jsonify({'Status': 'Персона удалена.', 'persons': make_persons(user_id)})
     except (ValueError, TypeError):
         return jsonify({'Error': 'Удаление персоны неуспешно.', 'persons': -1})
 
@@ -161,8 +165,7 @@ def remove():
 @app.route('/pull')
 def pull_info():
     query_args = request.args
-    db = DBClient()['family']
-    collection = db['persons']
+    collection = DBClient()['family']['persons']
     person_id = query_args.get('person_id')
     try:
         return jsonify({'result': list(collection.find({'_id': int(person_id)}))})

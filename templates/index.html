@@ -22,10 +22,10 @@
 
     <div class="vk_block">
         <a href="#" onclick="VK.External.showInviteBox();" class="right-link">Пригласить друзей</a>
-        <a href="#" onclick="SentNotification()" class="right-link">Отправить уведомление</a>
-        <a href="#" onclick="GetFriends()" class="right-link">Получить список друзей</a>
-        <a href="#" onclick="GetAppFriends()" class="right-link">Друзья в приложении</a>
-        <a href="#" onclick="SendRequest()" class="right-link">Отправить запрос</a>
+        <a href="#" onclick="sentNotification()" class="right-link">Отправить уведомление</a>
+        <a href="#" onclick="getFriends()" class="right-link">Получить список друзей</a>
+        <a href="#" onclick="getAppFriends()" class="right-link">Друзья в приложении</a>
+        <a href="#" onclick="sendRequest()" class="right-link">Отправить запрос</a>
     </div>
 
     <!-- Modals -->
@@ -111,38 +111,11 @@
     <script type="text/javascript" src="//vk.com/js/api/xd_connection.js"></script>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=3e171cbb-7d54-47b4-98e5-21877d7eeb70&lang=ru_RU" type="text/javascript"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='jquery-ui-1.10.2.custom.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='vk_scripts.js') }}"></script>
-    <script  type="text/javascript" src="{{ url_for('static', filename='primitives.min.js') }}"></script>
-    <script  type="text/javascript" src="{{ url_for('static', filename='custom_primitives.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='jquery.ui.touch-punch.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='tree-scripts.js') }}"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            var options = new primitives.orgdiagram.Config();
-            options.cursorItem = null;
-            options.hasSelectorCheckbox = primitives.common.Enabled.False;
-            options.hasButtons = primitives.common.Enabled.False;
-            options.pageFitMode = primitives.common.PageFitMode.PrintPreview;
-            options.elbowType = primitives.common.ElbowType.Round;
-            options.normalLevelShift = 20;
-            options.dotLevelShift = 20;
-            options.lineLevelShift = 24;
-            options.normalItemsInterval = 10;
-            options.dotItemsInterval = 1;
-            options.lineItemsInterval = 1;
-            options.linesWidth = 1;
-            options.linesColor = "#7C8993";
-            window.diagramSettings = options;
-            options.items = {{ persons | safe }};
-            $("#diagram").famDiagram(options);
-
-            var placeholder = $(".placeholder");
-            $("#diagram").css({
-                width: placeholder.width() + 10,
-                height: placeholder.height() + 10,
-            })
-            $("#diagram").famDiagram("update");
-        });
-    </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='primitives.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='custom_primitives.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='jquery.ui.touch-punch.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='tree-scripts.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='scripts.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='vk_scripts.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='app_start.js') }}"></script>
 {% endblock scripts %}

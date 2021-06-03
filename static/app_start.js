@@ -15,7 +15,7 @@ $(window).on("load", function(){
     try {
         VK.init(function(){
             console.log("vk init");
-            getUser(startApp(user));
+            getUser(startApp);
         }, function(){
             console.log("error");
             var user = new Object();

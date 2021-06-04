@@ -146,8 +146,8 @@ left: 500px;
 #full_info_block {
     display: none;
     right: 14px;
-    width: 366px;
-    height: 445px;
+    width: 385px;
+    height: 380px;
     background: #88aae9;
     top: 26px;
     position: fixed;
@@ -164,8 +164,8 @@ left: 500px;
 
 #full_edit {
     position: absolute;
-    right: 50px;
-    top: 10px;
+    right: 150px;
+    bottom: 10px;
     font-size: 20px;
     cursor: pointer;
 }
@@ -177,8 +177,8 @@ left: 500px;
 #full_close {
     width: 15px;
     position: absolute;
-    top: 14px;
-    right: 15px;
+    top: 2px;
+    right: 3px;
     cursor: pointer;
     font-weight: bold;
     font-size: 15px;
@@ -235,6 +235,7 @@ left: 500px;
     background: #dedad3;
     margin-left: 2px;
     margin-top: 3px;
+    display: none;
 }
 
 .result_item {
@@ -244,4 +245,9 @@ left: 500px;
 
 .result_item:hover {
     text-decoration: underline;
+}
+
+#full_info_block ul {
+    background: transparent!important;
+    border: none;
 }

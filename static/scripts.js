@@ -57,6 +57,9 @@ $(document).ready(function () {
 
     $('#search_friend').click(function(){
         var q = $('#vk_id').val();
+        $('#full_search_results').show();
         getFriends(q);
     });
+
+    $( "#full_info_block" ).tabs();
 });

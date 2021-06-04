@@ -96,7 +96,7 @@ function edit_person_js(a) {
 }
 
 function add_person_js(a) {
-
+    $('#full_info_block').tabs( "option", "active", 1 );
 }
 
 function add_link_js(a){
@@ -112,7 +112,6 @@ function add_link_js(a){
             $( "#dialog-message" ).dialog();
         }
         else
-            $('#link_id').val(link_id);
             $.get('/link', {
                 person_id: person_id,
                 link_id: link_id,
@@ -177,7 +176,7 @@ function add_link_js(a){
                         $('#full_location').text('');
                 });
         $('#full_info_block').show();
-
+        $( '#full_info_block').tabs( "option", "active", 0 );
         $('#full_close').click(function(){
             $('#full_info_block').hide();
         });

@@ -73,21 +73,29 @@
 
     <div id="full_info_block">
         <input id="full_id" value="" type="text" hidden/>
-        <div id="full_photo_block">
-            <img id="full_photo" src=""/>
-            <div id="full_death_belt" class="death_belt"></div>
+        <ul>
+            <li><a href="#full_info_tab">Полная информация</a></li>
+            <li><a href="#full_adding_tab">Добавить персону</a></li>
+        </ul>
+        <div id="full_info_tab">
+            <div id="full_photo_block">
+                <img id="full_photo" src=""/>
+                <div id="full_death_belt" class="death_belt"></div>
+            </div>
+            <div id="full_name_block">
+                <div id="full_last_name"></div>
+                <div id="full_name"></div>
+                <div id="full_middle_name"></div>
+            </div>
+            <div style="clear: both"></div>
+            <span id="full_birth_death"></span>
+            <span id="full_description"></span>
+            <span id="full_location"></span>
+                <div id="full_edit" >✎</div>
+                <div id="full_delete">Удалить персону</div>
+            <br /><br />
         </div>
-        <div id="full_name_block">
-            <div id="full_last_name"></div>
-            <div id="full_name"></div>
-            <div id="full_middle_name"></div>
-        </div>
-        <div style="clear: both"></div>
-        <span id="full_birth_death"></span>
-        <span id="full_description"></span>
-        <span id="full_location"></span>
-        <br /><br />
-        <!--<button id="full_add_relation">Добавить связь</button>-->
+    <div id="full_adding_tab">
         <div id="full_relations">
             <div id="add-person" title="Добавить родителя">
                 <label>Родителя</label>
@@ -95,16 +103,15 @@
                 <label>Ребенка</label>
                 <input type="radio" id="child" name="relative_type" value="child"> <br />
                 <button id="add_person_button" onclick="open_input_block()">Добавить нового</button>
-                <button id="link_person_button">Связать существуещего</button>
+                <button id="link_person_button">Связать существуещего</button><br /><br />
                 <label>Добавить из ВК</label><br />
                 <input type="text" id="vk_id" value="" class="flushable"><br />
                 <button id="search_friend">Искать друзей</button>
                 <div id="full_search_results"></div>
             </div>
         </div>
-        <div id="full_edit" >✎</div>
+    </div>
         <div id="full_close" >X</div>
-        <div id="full_delete">Удалить персону</div>
     </div>
 {% endblock content %}
 

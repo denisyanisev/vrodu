@@ -4,7 +4,7 @@ function add_vk_person(vk_id, first_name, last_name, vk_sex, photo){
         var id = $("#person_id").val();
         var first_name = first_name;
         var middle_name = '';
-        var last_name = 'last_name';
+        var last_name = last_name;
         var description = '';
         var birth = '';
         var is_alive = true;
@@ -31,6 +31,7 @@ function add_vk_person(vk_id, first_name, last_name, vk_sex, photo){
             vk_id: vk_id,
             user_id: window.user.id
         },  function(data) {
+                alert('Персона добавлена из ВК');
                 $('#full_info_block').hide();
                 flushFields();
                 if (data['persons'] == -1){

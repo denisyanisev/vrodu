@@ -1,5 +1,76 @@
 $(function() {$( "#draggable" ).draggable(); });
 
+function add_vk_person(vk_id, first_name, last_name, vk_sex, photo){
+        var id = $("#person_id").val();
+        var first_name = first_name;
+        var middle_name = '';
+        var last_name = 'last_name';
+        var description = '';
+        var birth = '';
+        var is_alive = true;
+        var death = '';
+        if (vk_sex == 2)
+            sex = 'M';
+        else
+            sex = 'W';
+        var location = '';
+        var relative_type = $("input[name=relative_type]:checked").val();
+        var vk_id = vk_id;
+        $.get('/add', {
+            first_name: first_name,
+            middle_name: middle_name,
+            last_name: last_name,
+            description: description,
+            birth: birth,
+            is_alive: is_alive,
+            death: death,
+            sex: sex,
+            location: location,
+            relative_type: relative_type,
+            from_id: id,
+            vk_id: vk_id,
+            user_id: window.user.id
+        },  function(data) {
+                $('#full_info_block').hide();
+                flushFields();
+                if (data['persons'] == -1){
+                    $('#failed_message').text(data['Error']);
+                    $("#dialog-message").dialog();
+                    return '';
+                }
+                var cache = data
+                var options = window.diagramSettings;
+                if (id && relative_type == 'parent') {
+                    $.get('/change', {
+                        id: id,
+                        new_id: data['new_id'],
+                        sex: sex,
+                        user_id: window.user.id
+                    }, function(data) {
+                       flushFields();
+                       if (data['persons'] != -1){
+                            options.items = data['persons'];
+                            $("#diagram").famDiagram(options);
+                            $("#diagram").famDiagram("update");
+                            draw_belts();
+                       }
+                       else {
+                            options.items = cache['persons'];
+                            $("#diagram").famDiagram(options);
+                            $("#diagram").famDiagram("update");
+                            draw_belts();
+                       }
+                 });
+                }
+                else {
+                options.items = cache['persons'];
+                    $("#diagram").famDiagram(options);
+                    $("#diagram").famDiagram("update");
+                    draw_belts();
+                }
+        });
+    }
+
 function open_input_block(){
 
 $('#input_block').dialog({

@@ -228,3 +228,20 @@ left: 500px;
 #full_delete:hover {
     text-decoration: underline;
 }
+
+#full_search_results{
+    height: 99px;
+    overflow: auto;
+    background: #dedad3;
+    margin-left: 2px;
+    margin-top: 3px;
+}
+
+.result_item {
+    cursor: pointer;
+    border-bottom: 1px solid var(--steel_gray_80);
+}
+
+.result_item:hover {
+    text-decoration: underline;
+}

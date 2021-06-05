@@ -231,12 +231,21 @@ display: none;
 }
 
 #full_search_results{
+    border-radius: 3px;
+    padding: 5px;
     height: 99px;
     overflow: auto;
-    background: #dedad3;
+    background: #faf9f9;
     margin-left: 2px;
     margin-top: 3px;
     display: none;
+}
+
+#full_search_results img{
+    float: left;
+    height: 25px;
+    margin: 10px;
+    margin-top: 2px;
 }
 
 .result_item {

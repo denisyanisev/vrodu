@@ -14,6 +14,7 @@ function flushFields(){
         $('#parent').prop('checked', true);
         $('#is_alive').prop('checked', true);
         $('#death_block').hide();
+        $('#full_search_results').html('');
     }
 
 $(document).ready(function () {
@@ -55,8 +56,8 @@ $(document).ready(function () {
         $('#link-tip').show()
     });
 
-    $('#search_friend').click(function(){
-        var q = $('#vk_id').val();
+    $('#vk_id').change(function(){
+        var q = $(this).val();
         $('#full_search_results').show();
         getFriends(q);
     });

@@ -247,6 +247,8 @@ function add_link_js(a){
                     else
                         $('#full_location').text('');
                 });
+        $('#full_search_results').hide();
+        $('#vk_id').val('');
         $('#full_info_block').show();
         $( '#full_info_block').tabs( "option", "active", 0 );
         $('#full_close').click(function(){

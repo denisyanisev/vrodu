@@ -30,13 +30,14 @@ var sendRequest = function(){
 
 var getFriends = function(q){
 	VK.api("users.get", {'fields': 'photo_50'}, function(data) {
-        	VK.api('friends.search', {'user_id': data.response[0].id, 'q': q, 'count': '10', 'v': '5.130', 'fields': 'city,domain'},
+        	VK.api('friends.search', {'user_id': data.response[0].id, 'q': q, 'count': '10', 'v': '5.130', 'fields': 'city,domain,photo_50,sex'},
         	function(data){
         	    console.log(data);
         	    $('#full_search_results').html('');
         	    var items = data.response.items
         	    items.forEach((element) => {
-                    var result_item = `<div class="result_item" id=${element.id} onclick="VK.callMethod('showRequestBox', ${element.id}, 'Hello!');">` + element.first_name + ' ' + element.last_name + '</div>';
+        	    var add_vk = `add_vk_person('${element.id}','${element.first_name}','${element.last_name}','${element.sex}','${element.photo_50}')`;
+                    var result_item = `<div class="result_item" id=${element.id} onclick="${add_vk}; alert('Added!'); VK.callMethod('showRequestBox', ${element.id}, 'You have been invited to Family tree! Please join');">` + element.first_name + ' ' + element.last_name + '</div><img style="float:left; height:25px" src=' + element.photo_50 + '><div style="clear:both"></div>';
                   $('#full_search_results').append(result_item);
                 });
         	});

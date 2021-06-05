@@ -135,6 +135,7 @@ label {
 position: absolute;
 top: 10px;
 left: 500px;
+display: none;
 }
 
 #surname_list {

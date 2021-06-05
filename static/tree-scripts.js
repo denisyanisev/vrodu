@@ -29,9 +29,9 @@ function add_vk_person(vk_id, first_name, last_name, vk_sex, photo){
             relative_type: relative_type,
             from_id: id,
             vk_id: vk_id,
-            user_id: window.user.id
+            user_id: window.user.id,
+            photo: photo
         },  function(data) {
-                alert('Персона добавлена из ВК');
                 $('#full_info_block').hide();
                 flushFields();
                 if (data['persons'] == -1){

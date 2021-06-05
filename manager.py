@@ -63,6 +63,7 @@ def add_person():
     relative_type = query_args.get(relative_type_str)  # кого мы добавляем
     vk_id = query_args.get('vk_id')
     user_id = query_args.get('user_id')
+    photo = query_args.get('photo')
     parent_m = ''
     parent_f = ''
     if relative_type == 'child':
@@ -85,7 +86,7 @@ def add_person():
                            'last_name': last_name,
                            parent_m_str: parent_m,
                            parent_f_str: parent_f,
-                           'image': f'/static/photos/{image}.png',
+                           'image': photo or f'/static/photos/{image}.png',
                            'description': description,
                            'sex': sex,
                            'birth': birth,
@@ -93,7 +94,7 @@ def add_person():
                            'alive': is_alive,
                            'location': location,
                            'vk_id': vk_id,
-                           'tree_owner': user_id
+                           'tree_owner': user_id,
                            })
     return jsonify({'new_id': new_id, 'persons': make_persons(user_id)})
 

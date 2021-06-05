@@ -19,10 +19,9 @@ def make_persons(tree_owner: str = '0'):
     persons = list()
     for person in collection.find({'tree_owner': tree_owner}):
         person['id'] = person.pop('_id')
-        person['title'] = ' '.join([person['first_name'], person['middle_name'], person['last_name']])
-        person['parents'] = [person[parent_m_str], person[parent_f_str]]
-        if person['parents'] == ',':
-            person['parents'] = ''
+        person['title'] = ' '.join([person.pop('first_name'), person.pop('middle_name'),
+                                    person.pop('last_name')]).strip()
+        person['parents'] = [person.pop(parent_m_str), person.pop(parent_f_str)]
         person['itemTitleColor'] = "#88aae9" if person['sex'] == 'M' else "#ffb1c7"
         if not person['alive'] and person['death']:
             years = (person['birth'] if person['birth'] else '...') + ' - ' + person['death']
@@ -32,6 +31,7 @@ def make_persons(tree_owner: str = '0'):
             years = person['birth']
         person['years'] = years
         person['alive'] = str(person['alive'])
+        person.pop('tree_owner')
         persons.append(person)
     return persons
 
@@ -49,10 +49,10 @@ def add_person():
     query_args = request.args
     collection = DBClient()['family']['persons']
     new_id = collection.find_one({}, sort=[('_id', -1)])['_id'] + 1 if collection.count() else 0
-    first_name = query_args.get('first_name')
-    middle_name = query_args.get('middle_name')
-    last_name = query_args.get('last_name')
-    description = query_args.get('description')
+    first_name = query_args.get('first_name').strip()
+    middle_name = query_args.get('middle_name').strip()
+    last_name = query_args.get('last_name').strip()
+    description = query_args.get('description').strip()
     birth = query_args.get('birth')
     is_alive = query_args.get('is_alive') == 'true'
     death = query_args.get('death')
@@ -60,6 +60,8 @@ def add_person():
     from_id = query_args.get(from_id_str, '')
     image = 'abc'[int(random.random()*3)] if sex == 'M' else 'fpt'[int(random.random()*3)]
     location = query_args.get('location')
+    coordinate0 = query_args.get('coordinate0')
+    coordinate1 = query_args.get('coordinate1')
     relative_type = query_args.get(relative_type_str)  # кого мы добавляем
     vk_id = query_args.get('vk_id')
     user_id = query_args.get('user_id')
@@ -74,7 +76,7 @@ def add_person():
             parent_f = from_id
     elif relative_type == 'parent':
         person = collection.find_one({'_id': int(from_id)})
-        person_name = ' '.join((person['first_name'], person['middle_name'], person['last_name']))
+        person_name = ' '.join((person['first_name'], person['middle_name'], person['last_name'])).strip()
         if person[parent_m_str] and sex == 'M':
             return jsonify({'Error': f'У {person_name} уже есть отец.', 'persons': -1})
         elif person[parent_f_str] and sex == 'F':
@@ -93,6 +95,8 @@ def add_person():
                            'death': death,
                            'alive': is_alive,
                            'location': location,
+                           'coordinate0': coordinate0,
+                           'coordinate1': coordinate1,
                            'vk_id': vk_id,
                            'tree_owner': user_id,
                            })
@@ -172,6 +176,20 @@ def pull_info():
         return jsonify({'result': list(collection.find({'_id': int(person_id)}))})
     except (ValueError, TypeError):
         return jsonify({'Error': 'Ошибка запроса.', 'persons': -1})
+
+
+@app.route('/map')
+def get_map():
+    query_args = request.args
+    user_id = query_args.get('user_id')
+    if not user_id:
+        user_id = '0'
+    collection = DBClient()['family']['persons']
+    locations = []
+    for person in collection.find({'tree_owner': user_id}):
+        person_name = ' '.join((person['first_name'], person['middle_name'], person['last_name'])).strip()
+        locations.append({'person': person_name, 'coordinates': [person['coordinate0'], person['coordinate1']]})
+    return render_template('map.html', locations=locations)
 
 
 if __name__ == '__main__':

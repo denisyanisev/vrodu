@@ -1,79 +1,67 @@
-$(function() {$( "#draggable" ).draggable(); });
+$(function() {$( "#draggable" ).draggable();});
 
 function add_vk_person(vk_id, first_name, last_name, vk_sex, photo){
-        var id = $("#person_id").val();
-        var first_name = first_name;
-        var middle_name = '';
-        var last_name = last_name;
-        var description = '';
-        var birth = '';
-        var is_alive = true;
-        var death = '';
-        if (vk_sex == 2)
-            sex = 'M';
-        else
-            sex = 'W';
-        var location = '';
-        var relative_type = $("input[name=relative_type]:checked").val();
-        var vk_id = vk_id;
-        $.get('/add', {
-            first_name: first_name,
-            middle_name: middle_name,
-            last_name: last_name,
-            description: description,
-            birth: birth,
-            is_alive: is_alive,
-            death: death,
-            sex: sex,
-            location: location,
-            relative_type: relative_type,
-            from_id: id,
-            vk_id: vk_id,
-            user_id: window.user.id,
-            photo: photo
-        },  function(data) {
-                $('#full_info_block').hide();
-                flushFields();
-                if (data['persons'] == -1){
-                    $('#failed_message').text(data['Error']);
-                    $("#dialog-message").dialog();
-                    return '';
-                }
-                var cache = data
-                var options = window.diagramSettings;
-                if (id && relative_type == 'parent') {
-                    $.get('/change', {
-                        id: id,
-                        new_id: data['new_id'],
-                        sex: sex,
-                        user_id: window.user.id
-                    }, function(data) {
-                       flushFields();
-                       if (data['persons'] != -1){
-                            options.items = data['persons'];
-                            $("#diagram").famDiagram(options);
-                            $("#diagram").famDiagram("update");
-                            draw_belts();
-                       }
-                       else {
-                            options.items = cache['persons'];
-                            $("#diagram").famDiagram(options);
-                            $("#diagram").famDiagram("update");
-                            draw_belts();
-                       }
-                 });
-                }
-                else {
-                options.items = cache['persons'];
-                    $("#diagram").famDiagram(options);
-                    $("#diagram").famDiagram("update");
-                    draw_belts();
-                }
-        });
+        var Request = {
+        id: $("#person_id").val(),
+        first_name: first_name,
+        middle_name: '',
+        last_name: last_name,
+        description: '',
+        birth: '',
+        is_alive: true,
+        death: '',
+        sex: (vk_sex == 2) ? 'M' : 'F',
+        location: '',
+        relative_type: $("input[name=relative_type]:checked").val(),
+        vk_id: vk_id,
+        photo: photo,
+        user_id: window.user.id
+        };
+        add_person_base(Request);
     }
 
-function open_input_block(){
+function add_person_base(Request){
+    $.get('/add', Request,  function(data) {
+            $('#full_info_block').hide();
+            if (data['persons'] == -1){
+                $('#failed_message').text(data['Ошибка сервера при добавлении персоны']);
+                $("#dialog-message").dialog();
+                return;
+            }
+            var cache = data
+            var options = window.diagramSettings;
+            if (Request.from_id && Request.relative_type == 'parent') {
+                $.get('/change', {
+                    id: Request.from_id,
+                    new_id: data['new_id'],
+                    sex: Request.sex,
+                    user_id: window.user.id
+                }, function(data) {
+                   if (data['persons'] != -1){
+                        options.items = data['persons'];
+                        $("#diagram").famDiagram(options);
+                        $("#diagram").famDiagram("update");
+                        draw_belts();
+                   }
+                   else {
+                        options.items = cache['persons'];
+                        $("#diagram").famDiagram(options);
+                        $("#diagram").famDiagram("update");
+                        draw_belts();
+                   }
+             });
+            }
+            else {
+            options.items = cache['persons'];
+                $("#diagram").famDiagram(options);
+                $("#diagram").famDiagram("update");
+                draw_belts();
+            }
+    });
+}
 
+
+function open_input_block(){
 $('#input_block').dialog({
     modal: true,
     width: 300,
@@ -85,78 +73,44 @@ $('#input_block').dialog({
     buttons: [{
         text: "Добавить",
         click: function(){
-        var id = $("#person_id").val();
-        var first_name = $("#first_name").val();
-        var middle_name = $("#middle_name").val();
-        var last_name = $("#last_name").val();
-        var description = $("#description").val();
-        var birth = $("#birth").val();
-        var is_alive = $("#is_alive").prop('checked');
-        var death = $("#death").val();
-        var sex = $("input[name=sex]:checked").val();
-        var location = $("#location").val();
-        var relative_type = $("input[name=relative_type]:checked").val();
-        var vk_id = $("#vk_id").val();
-        $( this ).dialog( "close" );
-        if (first_name == ''){
-            $(this).dialog( "close" );
-            $('#failed_message').text('Не указано имя!');
-            $( "#dialog-message" ).dialog();
-        }
-        else
-        $.get('/add', {
-            first_name: first_name,
-            middle_name: middle_name,
-            last_name: last_name,
-            description: description,
-            birth: birth,
-            is_alive: is_alive,
-            death: death,
-            sex: sex,
-            location: location,
-            relative_type: relative_type,
-            from_id: id,
-            vk_id: vk_id,
+        var Request = {
+            first_name: $("#first_name").val(),
+            middle_name: $("#middle_name").val(),
+            last_name: $("#last_name").val(),
+            description: $("#description").val(),
+            birth: $("#birth").val(),
+            is_alive: $("#is_alive").prop('checked'),
+            death: $("#death").val(),
+            sex: $("input[name=sex]:checked").val(),
+            location: $("#location").val(),
+            coordinate0: '',
+            coordinate1: '',
+            relative_type: $("input[name=relative_type]:checked").val(),
+            from_id: $("#person_id").val(),
+            vk_id: $("#vk_id").val(),
             user_id: window.user.id
-        },  function(data) {
-                $('#full_info_block').hide();
-                flushFields();
-                if (data['persons'] == -1){
-                    $('#failed_message').text(data['Error']);
-                    $("#dialog-message").dialog();
-                    return '';
-                }
-                var cache = data
-                var options = window.diagramSettings;
-                if (id && relative_type == 'parent') {
-                    $.get('/change', {
-                        id: id,
-                        new_id: data['new_id'],
-                        sex: sex,
-                        user_id: window.user.id
-                    }, function(data) {
-                       flushFields();
-                       if (data['persons'] != -1){
-                            options.items = data['persons'];
-                            $("#diagram").famDiagram(options);
-                            $("#diagram").famDiagram("update");
-                            draw_belts();
-                       }
-                       else {
-                            options.items = cache['persons'];
-                            $("#diagram").famDiagram(options);
-                            $("#diagram").famDiagram("update");
-                            draw_belts();
-                       }
-                 });
-                }
-                else {
-                options.items = cache['persons'];
-                    $("#diagram").famDiagram(options);
-                    $("#diagram").famDiagram("update");
-                    draw_belts();
-                }
-        });
+            };
+        if (Request.first_name == ''){
+            $(this).dialog("close");
+            $('#failed_message').text('Не указано имя!');
+            $("#dialog-message").dialog();
+            return;
+        }
+        $(this).dialog("close");
+        if (Request.location != '') {
+            var myGeocoder = ymaps.geocode(Request.location);
+            myGeocoder.then(function(data){
+                var coordinates = data.geoObjects.get(0).geometry.getCoordinates();
+                Request.coordinate0 = coordinates[0];
+                Request.coordinate1 = coordinates[1];
+                add_person_base(Request);
+                return;
+            });
+       }
+        else {
+            add_person_base(Request);
+            return;
+        }
     },
         id: "add_person"
   }]

@@ -20,7 +20,7 @@ def make_persons(tree_owner: str = '0'):
     for person in collection.find({'tree_owner': tree_owner}):
         person['id'] = person.pop('_id')
         person['title'] = ' '.join([person['first_name'], person['middle_name'], person['last_name']])
-        person['parents'] = ','.join((person[parent_m_str], person[parent_f_str]))
+        person['parents'] = [person[parent_m_str], person[parent_f_str]]
         if person['parents'] == ',':
             person['parents'] = ''
         person['itemTitleColor'] = "#88aae9" if person['sex'] == 'M' else "#ffb1c7"

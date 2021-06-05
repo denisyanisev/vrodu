@@ -63,16 +63,5 @@ $(document).ready(function () {
         getFriends(q);
     });
 
-    $('.result_item').click(function(){
-        var q_id = $(this).find('[name=q_id]');
-        var q_first_name = $(this).find('[name=q_first_name]');
-        var q_last_name = $(this).find('[name=q_last_name]');
-        var q_sex = $(this).find('[name=q_sex]');
-        var q_photo = $(this).find('[name=q_photo]');
-        add_vk_person(q_id, q_first_name, q_last_name, q_sex, q_photo);
-        alert('Персона добавлена!');
-        VK.callMethod('showRequestBox', q_id, 'Вас добавили в родослувную. Присоединяйтесь!');
-    });
-
     $( "#full_info_block" ).tabs();
 });

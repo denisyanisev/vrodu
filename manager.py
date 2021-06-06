@@ -186,7 +186,7 @@ def get_map():
         user_id = '0'
     collection = DBClient()['family']['persons']
     locations = []
-    for person in collection.find({'tree_owner': user_id}):
+    for person in collection.find({'tree_owner': user_id, 'coordinate0': {'$exists': True, '$ne': ''}}):
         person_name = ' '.join((person['first_name'], person['middle_name'], person['last_name'])).strip()
         locations.append({'person': person_name, 'coordinates': [person['coordinate0'], person['coordinate1']]})
     return render_template('map.html', locations=locations)

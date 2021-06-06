@@ -22,17 +22,27 @@
     function init(){
         var myMap = new ymaps.Map("map", {
             center: [55.76, 37.64],
-            zoom: 7
+            zoom: 7,
+            controls: ['fullscreenControl', 'typeSelector', 'zoomControl']
+        }),
+        objectManager = new ymaps.ObjectManager({
+            clusterize: true,
+            gridSize: 32,
+            clusterDisableClickZoom: true
         });
+        myMap.geoObjects.add(objectManager);
         locations = {{ locations | safe }};
-        console.log(locations);
-        addLocations(myMap, locations);
+        var myBounds = addLocations(myMap, locations);
+        myMap.setBounds(ymaps.util.bounds.fromPoints(myBounds));
     }
     function addLocations(map, locations){
+        var A = [];
         for (a in locations){
             var myPlacemark = new ymaps.Placemark(locations[a].coordinates, {iconCaption: locations[a].person});
             map.geoObjects.add(myPlacemark);
+            A.push(locations[a].coordinates);
         }
+        return A;
     }
     </script>
 {% endblock scripts %}

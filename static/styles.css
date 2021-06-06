@@ -9,6 +9,7 @@ label {
 #draggable{
     overflow: hidden;
     width: 10000px!important;
+    border: 0px;
 }
 
 .placeholder {

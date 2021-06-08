@@ -52,6 +52,14 @@ $(document).ready(function () {
 
     $('#link_person_button').click(function(){
         window.link = 'listening';
+        window.type_of_link = 'parentship';
+        $('#full_info_block').hide();
+        $('#link-tip').show()
+    });
+
+    $('#link_marriage_button').click(function(){
+        window.link = 'listening';
+        window.type_of_link = 'marriage';
         $('#full_info_block').hide();
         $('#link-tip').show()
     });

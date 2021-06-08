@@ -88,6 +88,7 @@ def add_person():
                            'last_name': last_name,
                            parent_m_str: parent_m,
                            parent_f_str: parent_f,
+                           'spouses': [],
                            'image': photo or f'/static/photos/{image}.png',
                            'description': description,
                            'sex': sex,
@@ -121,34 +122,41 @@ def link():
     query_args = request.args
     collection = DBClient()['family']['persons']
     user_id = query_args.get('user_id')
+    relative_type = query_args.get(relative_type_str)
+    type_of_link = query_args.get('type_of_link')
     from_id = query_args.get('person_id')
     target_id = query_args.get('link_id')
-    relative_type = query_args.get(relative_type_str)
     target_person = collection.find_one({'_id': int(query_args.get('link_id'))})
     from_person = collection.find_one({'_id': int(query_args.get('person_id'))})
     target_name = ' '.join((target_person['first_name'], target_person['middle_name'], target_person['last_name']))
     from_name = ' '.join((from_person['first_name'], from_person['middle_name'], from_person['last_name']))
-    if relative_type == 'parent':
-        from_name, target_name = target_name, from_name
-        from_id, target_id = target_id, from_id
-        from_person, target_person = target_person, from_person
-    try:
-        if from_person['sex'] == 'M':
-            if from_id == target_person[parent_m_str]:
-                return jsonify({'Error': f'{from_name} уже является отцом {target_name}.', 'persons': -1})
-            elif target_person[parent_m_str]:
-                return jsonify({'Error': f'У {target_name} уже есть отец.', 'persons': -1})
-            collection.update_one({'_id': int(target_id)}, {'$set': {parent_m_str: from_id}})
-        else:
-            if from_id == target_person[parent_f_str]:
-                return jsonify({'Error': f'{from_name} уже является матерью {target_name}.', 'persons': -1})
-            elif target_person[parent_f_str]:
-                return jsonify({'Error': f'У {target_name} уже есть мать.', 'persons': -1})
-            collection.update_one({'_id': int(target_id)}, {'$set': {parent_f_str: from_id}})
-    except (ValueError, TypeError):
-        return jsonify({'Failed': 'Не удалось связать персоны.', 'persons': -1})
-
-    return jsonify({'Status': 'ok', 'persons': make_persons(user_id)})
+    if type_of_link == 'parentship':
+        if relative_type == 'parent':
+            from_name, target_name = target_name, from_name
+            from_id, target_id = target_id, from_id
+            from_person, target_person = target_person, from_person
+        try:
+            if from_person['sex'] == 'M':
+                if from_id == target_person[parent_m_str]:
+                    return jsonify({'Error': f'{from_name} уже является отцом {target_name}.', 'persons': -1})
+                elif target_person[parent_m_str]:
+                    return jsonify({'Error': f'У {target_name} уже есть отец.', 'persons': -1})
+                collection.update_one({'_id': int(target_id)}, {'$set': {parent_m_str: from_id}})
+            else:
+                if from_id == target_person[parent_f_str]:
+                    return jsonify({'Error': f'{from_name} уже является матерью {target_name}.', 'persons': -1})
+                elif target_person[parent_f_str]:
+                    return jsonify({'Error': f'У {target_name} уже есть мать.', 'persons': -1})
+                collection.update_one({'_id': int(target_id)}, {'$set': {parent_f_str: from_id}})
+        except (ValueError, TypeError):
+            return jsonify({'Failed': 'Не удалось связать персоны.', 'persons': -1})
+        return jsonify({'Status': 'ok', 'persons': make_persons(user_id)})
+    elif type_of_link == 'marriage':
+        if target_person['sex'] == from_person['sex']:
+            return jsonify({'Error': 'Запрещено создавать однополные браки.', 'persons': -1})
+        collection.update_one({'_id': int(target_id)}, {'$push': {'spouses': from_id}})
+        collection.update_one({'_id': int(from_id)}, {'$push': {'spouses': target_id}})
+        return jsonify({'Status': 'ok', 'persons': make_persons(user_id)})
 
 
 @app.route('/remove')

@@ -126,10 +126,11 @@ function add_person_js(a) {
 }
 
 function add_link_js(a){
-    $('#link-tip').hide();
-    var item = a
     if ( window.link == 'listening' ){
+        $('#link-tip').hide();
+        var item = a
         var person_id = $("#person_id").val();
+        var type_of_link = window.type_of_link;
         var link_id = $('#link_id').val();
         var relative_type = $("input[name=relative_type]:checked").val()
         link_id = $(item).find("[name=person_id]").val();
@@ -142,7 +143,8 @@ function add_link_js(a){
                 person_id: person_id,
                 link_id: link_id,
                 relative_type: relative_type,
-                user_id: window.user.id
+                user_id: window.user.id,
+                type_of_link: type_of_link
                 },
                 function(data){
                     flushFields()

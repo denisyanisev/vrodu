@@ -40,9 +40,11 @@ def make_persons(tree_owner: str = '0'):
 def index():
     return render_template('index.html')
 
+
 @app.route('/update')
 def fetch_persons():
     return jsonify({'persons': make_persons(request.args.get('user_id'))})
+
 
 @app.route('/add')
 def add_person():
@@ -149,7 +151,7 @@ def link():
                     return jsonify({'Error': f'У {target_name} уже есть мать.', 'persons': -1})
                 collection.update_one({'_id': int(target_id)}, {'$set': {parent_f_str: from_id}})
         except (ValueError, TypeError):
-            return jsonify({'Failed': 'Не удалось связать персоны.', 'persons': -1})
+            return jsonify({'Error': 'Не удалось связать персоны.', 'persons': -1})
         return jsonify({'Status': 'ok', 'persons': make_persons(user_id)})
     elif type_of_link == 'marriage':
         if target_person['sex'] == from_person['sex']:
@@ -165,7 +167,10 @@ def remove():
     collection = DBClient()['family']['persons']
     user_id = query_args.get('user_id')
     person_id = query_args.get('person_id')
-    sex = collection.find_one({'_id': int(person_id)})['sex']
+    person = collection.find_one({'_id': int(person_id), 'tree_owner': user_id})
+    if not person:
+        return jsonify({'Error': 'Не найдена персона для удаления', 'persons': -1})
+    sex = person['sex']
     parent_str = parent_m_str if sex == 'M' else parent_f_str
     try:
         collection.delete_one({'_id': int(person_id)})

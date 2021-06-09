@@ -24,7 +24,7 @@ function add_person_base(Request){
     $.get('/add', Request,  function(data) {
             $('#full_info_block').hide();
             if (data['persons'] == -1){
-                $('#failed_message').text(data['Ошибка сервера при добавлении персоны']);
+                $('#failed_message').text(data['Error']);
                 $("#dialog-message").dialog();
                 return;
             }
@@ -128,17 +128,16 @@ function add_person_js(a) {
 function add_link_js(a){
     if ( window.link == 'listening' ){
         $('#link-tip').hide();
-        var item = a
         var person_id = $("#person_id").val();
         var type_of_link = window.type_of_link;
-        var link_id = $('#link_id').val();
+        var link_id = $(a).find("[name=person_id]").val();
         var relative_type = $("input[name=relative_type]:checked").val()
-        link_id = $(item).find("[name=person_id]").val();
         if (link_id == person_id) {
             $('#failed_message').text('Привязка той же персоны!');
             $( "#dialog-message" ).dialog();
         }
-        else
+        else {
+            flushFields();
             $.get('/link', {
                 person_id: person_id,
                 link_id: link_id,
@@ -147,7 +146,6 @@ function add_link_js(a){
                 type_of_link: type_of_link
                 },
                 function(data){
-                    flushFields()
                     if (data['persons'] != -1){
                         var options = window.diagramSettings;
                         options.items = data['persons'];
@@ -161,55 +159,55 @@ function add_link_js(a){
                     }
                     window.link = 'inactive';
                 });
-        }
-
-        // Show full info and edit person
-        $('#full_id').val($(a).find("[name=person_id]").val());
-        var person_id = $(a).find('[name=person_id]').val();
-        $("#person_id").val(person_id);
-        var photo = $(a).find('[name=photo]').attr('src');
-        $.get('/pull', {
-                person_id: person_id
-                },
-                function(data){
-                    var result = data['result'][0];
-                    $('#full_photo').attr('src', photo);
-                    if (result['alive'] == false) {
-                        $('#full_death_belt').show();
-                        var years = '...';
-                        if (result['birth'])
-                            years = result['birth'];
-                        if (result['death'])
-                            years += ' - ' + result['death'];
-                        else
-                            years += ' - ...'
-                        $('#full_birth_death').text(years);
-                        }
-                    else {
-                        var years = result['birth'];
-                        $('#full_birth_death').text(years);
-                        $('#full_death_belt').hide();
+            }
+    }
+    // Show full info and edit person
+    var person_id = $(a).find('[name=person_id]').val();
+    $('#full_id').val(person_id);
+    $("#person_id").val(person_id);
+    var photo = $(a).find('[name=photo]').attr('src');
+    $.get('/pull', {
+            person_id: person_id
+            },
+            function(data){
+                var result = data['result'][0];
+                $('#full_photo').attr('src', photo);
+                if (result['alive'] == false) {
+                    $('#full_death_belt').show();
+                    var years = '...';
+                    if (result['birth'])
+                        years = result['birth'];
+                    if (result['death'])
+                        years += ' - ' + result['death'];
+                    else
+                        years += ' - ...'
+                    $('#full_birth_death').text(years);
                     }
-                    if (result['sex'] == 'F')
-                        $('#full_info_block').css({'background': '#ffb1c7'});
-                    else
-                        $('#full_info_block').css({'background': '#88aae9'});
-                    $('#full_name').text(result['first_name']);
-                    $('#full_middle_name').text(result['middle_name']);
-                    $('#full_last_name').text(result['last_name']);
-                    $('#full_description').text(result['description']);
-                    if (result['location'])
-                        $('#full_location').text('Место рождения: ' + result['location']);
-                    else
-                        $('#full_location').text('');
-                });
-        $('#full_search_results').hide();
-        $('#vk_id').val('');
-        $('#full_info_block').show();
-        $( '#full_info_block').tabs( "option", "active", 0 );
-        $('#full_close').click(function(){
-            $('#full_info_block').hide();
-        });
+                else {
+                    var years = result['birth'];
+                    $('#full_birth_death').text(years);
+                    $('#full_death_belt').hide();
+                }
+                if (result['sex'] == 'F')
+                    $('#full_info_block').css({'background': '#ffb1c7'});
+                else
+                    $('#full_info_block').css({'background': '#88aae9'});
+                $('#full_name').text(result['first_name']);
+                $('#full_middle_name').text(result['middle_name']);
+                $('#full_last_name').text(result['last_name']);
+                $('#full_description').text(result['description']);
+                if (result['location'])
+                    $('#full_location').text('Место рождения: ' + result['location']);
+                else
+                    $('#full_location').text('');
+            });
+    $('#full_search_results').hide();
+    $('#vk_id').val('');
+    $('#full_info_block').show();
+    $( '#full_info_block').tabs( "option", "active", 0 );
+    $('#full_close').click(function(){
+        $('#full_info_block').hide();
+    });
 }
 
 function remove_person_js(person_id, title){

@@ -2,7 +2,7 @@ $(function() {$( "#draggable" ).draggable();});
 
 function add_vk_person(vk_id, first_name, last_name, vk_sex, photo){
         var Request = {
-        id: $("#person_id").val(),
+        from_id: $("#person_id").val(),
         first_name: first_name,
         middle_name: '',
         last_name: last_name,

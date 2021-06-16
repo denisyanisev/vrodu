@@ -166,13 +166,8 @@ display: none;
 
 #full_edit {
     position: absolute;
-    right: 158px;
-    bottom: 14px;
-    cursor: pointer;
-}
-
-#full_edit:hover {
-    color: red;
+    right: 144px;
+    bottom: 6px;
 }
 
 #full_close {
@@ -220,9 +215,8 @@ display: none;
 
 #full_delete {
     position: absolute;
-    bottom: 14px;
-    right: 24px;
-    color:#b82626;
+    bottom: 6px;
+    right: 4px;
     cursor: pointer;
 }
 
@@ -289,22 +283,22 @@ display: none;
 #full_edit_cancel {
     display: none;
     position: absolute;
-    bottom: 14px;
-    right: 155px;
-    color: #1b5153;
-    cursor: pointer;
+    bottom: 6px;
+    right: 144px;
 }
 
 #full_edit_save {
     display: none;
     position: absolute;
-    bottom: 14px;
-    right: 241px;
-    color: #1b5153;
-    cursor: pointer;
+    bottom: 6px;
+    right: 239px;
 }
 
 #bd_edit {
     display: none;
 }
 
+#link_marriage_button {
+    margin-top : 10px;
+    margin-bottom: 16px;
+}

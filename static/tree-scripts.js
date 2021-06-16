@@ -155,6 +155,7 @@ function add_person_js(a) {
 }
 
 function add_link_js(a){
+    closeEdit();
     if ( window.link == 'listening' ){
         $('#link-tip').hide();
         var person_id = $("#person_id").val();
@@ -191,6 +192,7 @@ function add_link_js(a){
             }
     }
     // Show full info and edit person
+
     var person_id = $(a).find('[name=person_id]').val();
     $('#full_id').val(person_id);
     $("#person_id").val(person_id);
@@ -201,10 +203,10 @@ function add_link_js(a){
             function(data){
                 var result = data['result'][0];
                 $('#full_photo').attr('src', photo);
-                $('#full_death_edit').prop('disabled', false);
                 $('#full_birth_edit').val(result['birth']);
                 $('#full_death_edit').val(result['death']);
                 if (result['alive'] == false) {
+                    $('#full_death_edit').show();
                     $('#full_is_alive_edit').prop('checked', false);
                     $('#full_death_belt').show();
                     var years = '...';
@@ -217,8 +219,8 @@ function add_link_js(a){
                     $('#full_birth_death').val(years);
                     }
                 else {
+                    $('#full_death_edit').hide();
                     $('#full_is_alive_edit').prop('checked', true);
-                    $('#full_death_edit').prop('disabled', true);
                     var years = result['birth'];
                     $('#full_birth_death').val(years);
                     $('#full_death_belt').hide();
@@ -247,6 +249,7 @@ function add_link_js(a){
     $('#full_info_block').show();
     $( '#full_info_block').tabs( "option", "active", 0 );
     $('#full_close').click(function(){
+        closeEdit();
         $('#full_info_block').hide();
     });
 }

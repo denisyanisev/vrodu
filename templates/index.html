@@ -30,27 +30,19 @@
 
     <!-- Modals -->
     <div id="input_block" title="Добавить новую персону">
-        <label id="new_person_label">Добавить отдельную персону</label>
         <input type="radio" id="new_person" name="relative_type" value="new_person">
         <input id="person_id" value="" class="flushable" type="text" hidden />
         <input id="link_id" value="" class="inactive flushable" type="text" hidden /><br/>
-        <label>Имя</label><br />
-        <input id="first_name" value="" class="flushable" type="text"/><br />
-        <label>Фамилия</label><br />
-        <input id="last_name" value="" class="flushable" type="text"/><br />
-        <label>Отчество</label><br />
-        <input id="middle_name" value="" class="flushable" type="text"/><br />
-        <label>Биография</label><br />
-        <textarea id="description" class="flushable"></textarea><br />
-        <label>Год рождения</label><br />
-        <input id="birth" value="" class="flushable" type="text"/><br />
-        <label>Жив(а)?</label><input type="checkbox" id="is_alive" checked><br />
+        <input id="first_name" value="" placeholder="Имя" class="flushable form-control" type="text"/><br />
+        <input id="last_name" value="" placeholder="Фамилия" class="flushable form-control" type="text"/><br />
+        <input id="middle_name" value="" placeholder="Отчество" class="flushable form-control" type="text"/><br />
+        <textarea id="description" placeholder="Биография" class="flushable form-control"></textarea><br />
+        <input id="birth" value="" placeholder="Год рождения" class="flushable form-control" type="text"/><br />
+        <label>Жив(а)?</label><input type="checkbox" id="is_alive" checked="checked"><br />
         <div id="death_block">
-            <label>Год смерти</label><br />
-            <input id="death" value="" class="flushable" type="text"/><br />
+            <input id="death" value="" placeholder="Год смерти" class="flushable form-control" type="text"/><br />
         </div>
-        <label>Место жительства</label><br />
-        <input id="location" value="" class="flushable" type="text"/><br />
+        <input id="location" value="" placeholder="Место жительства" class="flushable form-control" type="text"/><br />
         <label>Пол:</label><br />
         <label>Мужской</label>
         <input type="radio" id="male" name="sex" value="M" checked>
@@ -89,9 +81,9 @@
             </div>
             <div style="clear: both"></div>
             <div id="bd_edit">
-                <input id="full_birth_edit" class="full_field full_field_enabled date-own form-control" type="text">
-                <span> - </span>
-                <input id="full_death_edit" class="full_field_enabled date-own form-control" type="text" disabled>
+                <input id="full_birth_edit" placeholder="Год" class="full_field full_field_enabled date-own form-control" type="text">
+                <span id="bd-"> - </span>
+                <input id="full_death_edit" placeholder="Год" class="full_field_enabled date-own form-control" type="text">
                 <span>Жив(а)?</span>
                 <input id="full_is_alive_edit" type="checkbox" checked/>
             </div>
@@ -99,10 +91,10 @@
             <textarea id="full_description" class="full_field form-control" disabled></textarea>
             <br />
             <span id="full_location_span">Место рождения: </span><input id="full_location" placeholder="Место рождения" class="full_field form-control" type="text" disabled/>
-                <button id="full_edit_save">Сохранить</button>
-                <button id="full_edit_cancel">Отменить</button>
-                <button id="full_edit" >Редактировать</button>
-                <button id="full_delete">Удалить персону</button>
+                <button type="button" class="btn btn-success" id="full_edit_save">Сохранить</button>
+                <button type="button" class="btn btn-secondary" id="full_edit_cancel">Отменить</button>
+                <button type="button" class="btn btn-primary" id="full_edit" >Редактировать</button>
+                <button type="button" class="btn btn-danger" id="full_delete">Удалить персону</button>
             <br /><br />
         </div>
     <div id="full_adding_tab">
@@ -112,11 +104,10 @@
                 <input type="radio" id="parent"  name="relative_type" value="parent" checked>
                 <label>Ребенка</label>
                 <input type="radio" id="child" name="relative_type" value="child"> <br />
-                <button id="add_person_button" onclick="open_input_block()">Добавить нового</button>
-                <button id="link_person_button">Связать существуещего</button><br />
-                <button id="link_marriage_button">Связать супруга</button><br />
-                <label>Добавить из ВК</label><br />
-                <input type="text" id="vk_id" value="" class="flushable"><br />
+                <button type="button" class="btn btn-primary" id="add_person_button" onclick="open_input_block()">Добавить нового</button>
+                <button type="button" class="btn btn-primary" id="link_person_button">Связать</button><br />
+                <button type="button" class="btn btn-info" id="link_marriage_button">Связать супруга</button><br />
+                <input type="text" id="vk_id" value="" placeholder="Добавить из ВК" class="flushable form-control"><br />
                 <div id="full_search_results"></div>
             </div>
         </div>

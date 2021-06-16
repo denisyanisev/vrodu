@@ -93,12 +93,10 @@ $(document).ready(function () {
     });
 
     $('#full_is_alive_edit').click(function(){
-        if ($('#full_is_alive_edit').attr("checked") == 'checked'){
-            $('#full_death_edit').prop('disabled', false);
-        }
-        else
-            $('#full_death_edit').prop('disabled', true);
+        $('#full_death_edit').toggle();
+        $('#bd-').toggle();
     });
+
 
     $('#full_edit_save').click(function(){
         var ChangeRequest = {

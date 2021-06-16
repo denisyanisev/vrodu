@@ -83,16 +83,26 @@
                 <div id="full_death_belt" class="death_belt"></div>
             </div>
             <div id="full_name_block">
-                <div id="full_last_name"></div>
-                <div id="full_name"></div>
-                <div id="full_middle_name"></div>
+                <input id="full_last_name" class="full_field form-control" type="text" size="15" placeholder="Фамилия" disabled/>
+                <input id="full_name" class="full_field form-control" type="text" size="15" placeholder="Имя" disabled/>
+                <input id="full_middle_name" class="full_field form-control" type="text" size="15" placeholder="Отчество" disabled/>
             </div>
             <div style="clear: both"></div>
-            <span id="full_birth_death"></span>
-            <span id="full_description"></span>
-            <span id="full_location"></span>
-                <div id="full_edit" >✎</div>
-                <div id="full_delete">Удалить персону</div>
+            <div id="bd_edit">
+                <input id="full_birth_edit" class="full_field full_field_enabled date-own form-control" type="text">
+                <span> - </span>
+                <input id="full_death_edit" class="full_field_enabled date-own form-control" type="text" disabled>
+                <span>Жив(а)?</span>
+                <input id="full_is_alive_edit" type="checkbox" checked/>
+            </div>
+            <input id="full_birth_death" type="text" class="full_field"  size="15" disabled />
+            <textarea id="full_description" class="full_field form-control" disabled></textarea>
+            <br />
+            <span id="full_location_span">Место рождения: </span><input id="full_location" placeholder="Место рождения" class="full_field form-control" type="text" disabled/>
+                <button id="full_edit_save">Сохранить</button>
+                <button id="full_edit_cancel">Отменить</button>
+                <button id="full_edit" >Редактировать</button>
+                <button id="full_delete">Удалить персону</button>
             <br /><br />
         </div>
     <div id="full_adding_tab">

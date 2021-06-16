@@ -8,6 +8,7 @@ var startApp = function(user){
                 options.items = data['persons'];
                 $("#diagram").famDiagram(options);
                 $("#diagram").famDiagram("update");
+                draw_belts();
             });
 }
 

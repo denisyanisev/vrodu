@@ -149,9 +149,9 @@ display: none;
     display: none;
     right: 14px;
     width: 385px;
-    height: 380px;
+    height: 434px;
     background: #88aae9;
-    top: 26px;
+    top: 61px;
     position: fixed;
     padding: 15px;
 }
@@ -166,9 +166,8 @@ display: none;
 
 #full_edit {
     position: absolute;
-    right: 150px;
-    bottom: 10px;
-    font-size: 20px;
+    right: 158px;
+    bottom: 14px;
     cursor: pointer;
 }
 
@@ -227,10 +226,6 @@ display: none;
     cursor: pointer;
 }
 
-#full_delete:hover {
-    text-decoration: underline;
-}
-
 #full_search_results{
     border-radius: 3px;
     padding: 5px;
@@ -262,3 +257,54 @@ display: none;
     background: transparent!important;
     border: none;
 }
+
+.full_field {
+    font-weight: normal;
+    background: transparent;
+    border: none;
+}
+
+.full_field_enabled {
+    border: 1px solid #456491;
+    background: #abc2ee;
+}
+
+.full_field:focus {
+    outline: none;
+    border: none;
+}
+
+#full_name_block input {
+    width: 150px;
+    margin-top: 5px;
+    height: 27px;
+}
+
+#full_birth_edit, #full_death_edit{
+    width: 60px;
+    margin-top: 7px;
+    display: inline;
+}
+
+#full_edit_cancel {
+    display: none;
+    position: absolute;
+    bottom: 14px;
+    right: 155px;
+    color: #1b5153;
+    cursor: pointer;
+}
+
+#full_edit_save {
+    display: none;
+    position: absolute;
+    bottom: 14px;
+    right: 241px;
+    color: #1b5153;
+    cursor: pointer;
+}
+
+#bd_edit {
+    display: none;
+}
+

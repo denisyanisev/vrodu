@@ -31,25 +31,31 @@ function add_person_base(Request){
             var cache = data
             var options = window.diagramSettings;
             if (Request.from_id && Request.relative_type == 'parent') {
-                $.get('/change', {
-                    id: Request.from_id,
-                    new_id: data['new_id'],
-                    sex: Request.sex,
-                    user_id: window.user.id
-                }, function(data) {
-                   if (data['persons'] != -1){
-                        options.items = data['persons'];
-                        $("#diagram").famDiagram(options);
-                        $("#diagram").famDiagram("update");
-                        draw_belts();
-                   }
-                   else {
-                        options.items = cache['persons'];
-                        $("#diagram").famDiagram(options);
-                        $("#diagram").famDiagram("update");
-                        draw_belts();
-                   }
-             });
+                $.ajax({
+                    'type': 'POST',
+                    url: '/change',
+                    contentType: 'application/json;charset=UTF-8',
+                    data: JSON.stringify({
+                        from_id: Request.from_id,
+                        new_id: data['new_id'],
+                        sex: Request.sex,
+                        user_id: window.user.id
+                    }),
+                    success: function(data) {
+                       if (data['persons'] != -1){
+                            options.items = data['persons'];
+                            $("#diagram").famDiagram(options);
+                            $("#diagram").famDiagram("update");
+                            draw_belts();
+                       }
+                       else {
+                            options.items = cache['persons'];
+                            $("#diagram").famDiagram(options);
+                            $("#diagram").famDiagram("update");
+                            draw_belts();
+                       }
+                    }
+                });
             }
             else {
             options.items = cache['persons'];
@@ -60,6 +66,29 @@ function add_person_base(Request){
     });
 }
 
+function change_person(Request){
+    $.ajax({
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8',
+        url: '/change',
+        data: JSON.stringify(Request),
+        dataType: 'json',
+        success: function(data) {
+            if (data['persons'] != -1){
+                var options = window.diagramSettings;
+                options.items = data['persons'];
+                $("#diagram").famDiagram(options);
+                $("#diagram").famDiagram("update");
+                draw_belts();
+            }
+            else {
+                $('#failed_message').text(data['Error']);
+                $("#dialog-message").dialog();
+                console.log(data);
+            }
+        }
+    });
+}
 
 function open_input_block(){
 $('#input_block').dialog({
@@ -172,7 +201,11 @@ function add_link_js(a){
             function(data){
                 var result = data['result'][0];
                 $('#full_photo').attr('src', photo);
+                $('#full_death_edit').prop('disabled', false);
+                $('#full_birth_edit').val(result['birth']);
+                $('#full_death_edit').val(result['death']);
                 if (result['alive'] == false) {
+                    $('#full_is_alive_edit').prop('checked', false);
                     $('#full_death_belt').show();
                     var years = '...';
                     if (result['birth'])
@@ -181,25 +214,33 @@ function add_link_js(a){
                         years += ' - ' + result['death'];
                     else
                         years += ' - ...'
-                    $('#full_birth_death').text(years);
+                    $('#full_birth_death').val(years);
                     }
                 else {
+                    $('#full_is_alive_edit').prop('checked', true);
+                    $('#full_death_edit').prop('disabled', true);
                     var years = result['birth'];
-                    $('#full_birth_death').text(years);
+                    $('#full_birth_death').val(years);
                     $('#full_death_belt').hide();
                 }
                 if (result['sex'] == 'F')
                     $('#full_info_block').css({'background': '#ffb1c7'});
                 else
                     $('#full_info_block').css({'background': '#88aae9'});
-                $('#full_name').text(result['first_name']);
-                $('#full_middle_name').text(result['middle_name']);
-                $('#full_last_name').text(result['last_name']);
-                $('#full_description').text(result['description']);
+                $('#full_name').val(result['first_name']);
+                $('#full_middle_name').val(result['middle_name']);
+                $('#full_last_name').val(result['last_name']);
+                $('#full_description').val(result['description']);
                 if (result['location'])
-                    $('#full_location').text('Место рождения: ' + result['location']);
+                {
+                    $('#full_location_span').show();
+                    $('#full_location').val(result['location']);
+                }
                 else
-                    $('#full_location').text('');
+                {
+                    $('#full_location_span').hide();
+                    $('#full_location').val('');
+                }
             });
     $('#full_search_results').hide();
     $('#vk_id').val('');

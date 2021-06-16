@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from flask_bootstrap import Bootstrap
-# from loguru import logger
+from loguru import logger
 from db import DBClient
 import random
 
@@ -106,17 +106,26 @@ def add_person():
     return jsonify({'new_id': new_id, 'persons': make_persons(user_id)})
 
 
-@app.route('/change')
+@app.route('/change', methods=['POST'])
 def change_person():
-    query_args = request.args
+    request_data = request.get_json()
+    edit_person = request_data.get('edit_person')
+    request_data.pop('edit_person', False)
+    logger.debug(request_data)
+    person_id = request_data.get('from_id')
+    user_id = request_data.get('user_id')
     collection = DBClient()['family']['persons']
-    person_id = query_args.get('id')
-    new_id = query_args.get('new_id')
-    sex = query_args.get('sex')
-    user_id = query_args.get('user_id')
+    new_id = request_data.get('new_id')
+    sex = request_data.get('sex')
     parent_str = parent_m_str if sex == 'M' else parent_f_str
-    collection.update_one({'_id': int(person_id)}, {'$set': {parent_str: new_id}})
-    return jsonify({'Status': 'ok', 'persons': make_persons(user_id)})
+    try:
+        if edit_person:
+            collection.update_one({'_id': int(person_id)}, {'$set': request_data})
+        else:
+            collection.update_one({'_id': int(person_id)}, {'$set': {parent_str: new_id}})
+        return jsonify({'Status': 'ok', 'persons': make_persons(user_id)})
+    except (ValueError, TypeError):
+        return jsonify({'Error': 'Нe удалось изменить персону.', 'persons': -1})
 
 
 @app.route('/link')

@@ -28,7 +28,7 @@ function add_person_base(Request){
                 $("#dialog-message").dialog();
                 return;
             }
-            var cache = data
+            var cache = data;
             var options = window.diagramSettings;
             if (Request.from_id && Request.relative_type == 'parent') {
                 $.ajax({
@@ -157,11 +157,11 @@ function add_person_js(a) {
 function add_link_js(a){
     closeEdit();
     if ( window.link == 'listening' ){
-        $('#link-tip').hide();
+        closeLink();
         var person_id = $("#person_id").val();
         var type_of_link = window.type_of_link;
         var link_id = $(a).find("[name=person_id]").val();
-        var relative_type = $("input[name=relative_type]:checked").val()
+        var relative_type = $("input[name=relative_type]:checked").val();
         if (link_id == person_id) {
             $('#failed_message').text('Привязка той же персоны!');
             $( "#dialog-message" ).dialog();
@@ -187,7 +187,6 @@ function add_link_js(a){
                         $('#failed_message').text(data['Error']);
                         $( "#dialog-message" ).dialog();
                     }
-                    window.link = 'inactive';
                 });
             }
     }
@@ -316,4 +315,5 @@ var setDiagramOptions = function(){
 ymaps.ready(init);
 function init() {
     var suggestView1 = new ymaps.SuggestView('location', {results: 4});
+    var suggestView2 = new ymaps.SuggestView('full_location', {results: 4});
     }

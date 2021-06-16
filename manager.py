@@ -165,6 +165,8 @@ def link():
     elif type_of_link == 'marriage':
         if target_person['sex'] == from_person['sex']:
             return jsonify({'Error': 'Запрещено создавать однополные браки.', 'persons': -1})
+        if from_id in target_person['spouses']:
+            return jsonify({'Error': 'Между персонами уже есть брак.', 'persons': -1})
         collection.update_one({'_id': int(target_id)}, {'$push': {'spouses': from_id}})
         collection.update_one({'_id': int(from_id)}, {'$push': {'spouses': target_id}})
         return jsonify({'Status': 'ok', 'persons': make_persons(user_id)})

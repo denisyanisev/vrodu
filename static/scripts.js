@@ -19,6 +19,11 @@ function closeEdit(){
     $('#full_birth_death').show();
 }
 
+function closeLink(){
+    $('#link-tip').hide();
+    window.link = 'inactive';
+}
+
 function flushFields(){
     $("#input_block input.flushable").val('');
     $("#input_block textarea").val('');
@@ -63,14 +68,35 @@ $(document).ready(function () {
         window.link = 'listening';
         window.type_of_link = 'parentship';
         $('#full_info_block').hide();
-        $('#link-tip').show()
+        $('#link-tip').show();
+        var relative_type = $("input[name=relative_type]:checked").val();
+        var name = `${$('#full_last_name').val()} ${$('#full_name').val()} ${$('#full_middle_name').val()}`
+        if (relative_type == 'parent')
+            relative_type = 'родителя';
+        else if (relative_type == 'child')
+            relative_type = 'ребенка';
+        $('#link-tip').children().filter('span').text(`Выберите ${relative_type} для ${name}`);
     });
 
     $('#link_marriage_button').click(function(){
         window.link = 'listening';
         window.type_of_link = 'marriage';
         $('#full_info_block').hide();
-        $('#link-tip').show()
+        $('#link-tip').show();
+        var name = `${$('#full_last_name').val()} ${$('#full_name').val()} ${$('#full_middle_name').val()}`
+        $('#link-tip').children().filter('span').text(`Выберите супруга(у) для ${name}`);
+    });
+
+    $('#cancel_link_button').click(function(){
+        closeLink();
+    });
+
+    $(document).on('keydown', function(event) {
+        if (event.key == "Escape") {
+           $('#full_info_block').hide();
+           closeLink();
+           closeEdit();
+        }
     });
 
     $('#vk_id').on('input', function(){
@@ -101,7 +127,7 @@ $(document).ready(function () {
     });
 
     $('#full_edit_save').click(function(){
-        var ChangeRequest = {
+        var Request = {
             edit_person: true,
             from_id: $("#person_id").val(),
             first_name: $('#full_name').val(),
@@ -114,7 +140,20 @@ $(document).ready(function () {
             location: $('#full_location').val(),
             user_id: window.user.id
         };
-        change_person(ChangeRequest);
+        if (Request.location != '') {
+            var myGeocoder = ymaps.geocode(Request.location);
+            myGeocoder.then(function(data){
+                var coordinates = data.geoObjects.get(0).geometry.getCoordinates();
+                Request.coordinate0 = coordinates[0];
+                Request.coordinate1 = coordinates[1];
+                change_person(Request);
+            });
+        }
+        else {
+            Request.coordinate0 = '';
+            Request.coordinate1 = '';
+            change_person(Request);
+        }
         closeEdit();
     });
 

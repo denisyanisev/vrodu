@@ -158,10 +158,12 @@ $(document).ready(function () {
     $('#full_edit_cancel').click(function(){
         closeEdit();
     })
-//    $("#full_birth_edit").datepicker({
-//        format: "yyyy",
-//        viewMode: "years",
-//        minViewMode: "years"
-//    });
+
+    $(".year-picker").datepicker({
+        format: "yyyy",
+        viewMode: "years",
+        minViewMode: "years",
+        autoclose:true
+    });
 
 });

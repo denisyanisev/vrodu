@@ -234,12 +234,10 @@ function add_link_js(a){
                 $('#full_description').val(result['description']);
                 if (result['location'])
                 {
-                    $('#full_location_span').show();
                     $('#full_location').val(result['location']);
                 }
                 else
                 {
-                    $('#full_location_span').hide();
                     $('#full_location').val('');
                 }
             });

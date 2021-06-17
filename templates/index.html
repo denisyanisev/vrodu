@@ -11,6 +11,7 @@
     <link href="{{ url_for('static', filename='primitives.latest.css') }}" media="screen" rel="stylesheet" type="text/css" />
     <link href="{{ url_for('static', filename='styles.css') }}" media="screen" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="{{ url_for('static', filename='jquery-ui.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" rel="stylesheet"/>
 {% endblock styles %}
 
 {% block content %}
@@ -32,18 +33,18 @@
     <div id="input_block" title="Добавить новую персону">
         <input type="radio" id="new_person" name="relative_type" value="new_person">
         <input id="person_id" value="" class="flushable" type="text" hidden />
-        <input id="link_id" value="" class="inactive flushable" type="text" hidden /><br/>
-        <input id="first_name" value="" placeholder="Имя" class="flushable form-control" type="text"/><br />
-        <input id="last_name" value="" placeholder="Фамилия" class="flushable form-control" type="text"/><br />
-        <input id="middle_name" value="" placeholder="Отчество" class="flushable form-control" type="text"/><br />
-        <textarea id="description" placeholder="Биография" class="flushable form-control"></textarea><br />
-        <input id="birth" value="" placeholder="Год рождения" class="flushable form-control" type="text"/><br />
-        <label>Жив(а)?</label><input type="checkbox" id="is_alive" checked="checked"><br />
+        <input id="link_id" value="" class="inactive flushable" type="text" hidden />
+        <input id="first_name" value="" placeholder="Имя" class="flushable form-control add_field" type="text"/>
+        <input id="last_name" value="" placeholder="Фамилия" class="flushable form-control add_field" type="text"/>
+        <input id="middle_name" value="" placeholder="Отчество" class="flushable form-control add_field" type="text"/>
+        <textarea id="description" placeholder="Биография" class="flushable form-control add_field"></textarea>
+        <input id="birth" value="" placeholder="Год рождения" class="flushable form-control add_field year-picker" type="text"/>
+        <label class="add_field">Жив(а)?</label><input type="checkbox" id="is_alive" checked="checked">
         <div id="death_block">
-            <input id="death" value="" placeholder="Год смерти" class="flushable form-control" type="text"/><br />
+            <input id="death" value="" placeholder="Год смерти" class="flushable form-control year-picker" type="text"/><br />
         </div>
-        <input id="location" value="" placeholder="Место жительства" class="flushable form-control" type="text"/><br />
-        <label>Пол:</label><br />
+        <input id="location" value="" placeholder="Место жительства" class="flushable form-control add_field" type="text"/>
+        <label class="add_field">Пол:</label><br />
         <label>Мужской</label>
         <input type="radio" id="male" name="sex" value="M" checked>
         <label>Женский</label>
@@ -82,16 +83,16 @@
             </div>
             <div style="clear: both"></div>
             <div id="bd_edit">
-                <input id="full_birth_edit" placeholder="Год" class="full_field full_field_enabled date-own form-control" type="text">
+                <input id="full_birth_edit" placeholder="Год" class="full_field full_field_enabled year-picker form-control" type="text">
                 <span id="bd-"> - </span>
-                <input id="full_death_edit" placeholder="Год" class="full_field_enabled date-own form-control" type="text">
+                <input id="full_death_edit" placeholder="Год" class="full_field_enabled year-picker form-control" type="text">
                 <span>Жив(а)?</span>
                 <input id="full_is_alive_edit" type="checkbox" checked/>
             </div>
             <input id="full_birth_death" type="text" class="full_field"  size="15" disabled />
-            <textarea id="full_description" class="full_field form-control" disabled></textarea>
+            <textarea id="full_description" placeholder="Биография" class="full_field form-control" disabled></textarea>
             <br />
-            <span id="full_location_span">Место рождения: </span><input id="full_location" placeholder="Место рождения" class="full_field form-control" type="text" disabled/>
+                <input id="full_location" placeholder="Место рождения" class="full_field form-control" type="text" disabled/>
                 <button type="button" class="btn btn-success" id="full_edit_save">Сохранить</button>
                 <button type="button" class="btn btn-secondary" id="full_edit_cancel">Отменить</button>
                 <button type="button" class="btn btn-primary" id="full_edit" >Редактировать</button>
@@ -100,7 +101,7 @@
         </div>
     <div id="full_adding_tab">
         <div id="full_relations">
-            <div id="add-person" title="Добавить родителя">
+            <div id="add-person">
                 <label>Родителя</label>
                 <input type="radio" id="parent"  name="relative_type" value="parent" checked>
                 <label>Ребенка</label>
@@ -122,6 +123,7 @@
     <script type="text/javascript" src="//vk.com/js/api/xd_connection.js"></script>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=3e171cbb-7d54-47b4-98e5-21877d7eeb70&lang=ru_RU" type="text/javascript"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='jquery-ui-1.10.2.custom.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='primitives.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='custom_primitives.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='jquery.ui.touch-punch.min.js') }}"></script>

@@ -100,7 +100,6 @@ $(document).ready(function () {
     });
 
     $('#vk_id').on('input', function(){
-        console.log($(this).val());
         var q = $(this).val();
         $('#full_search_results').show();
         getFriends(q);
@@ -177,9 +176,18 @@ $(document).ready(function () {
     });
 
     $("#link_map").click( function() {
-        $("#map_dialog").load('/map/' + window.user.id, function() {
-            $("#map_dialog").dialog("open");
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            url: '/map',
+            data: JSON.stringify({
+                user_id: window.user.id
+            }),
+            success: function(data){
+                $("#map_dialog").empty();
+                $("#map_dialog").append(data);
+                $("#map_dialog").dialog("open");
+            }
         });
-    })
-
+    });
 });

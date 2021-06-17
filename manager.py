@@ -215,10 +215,11 @@ def pull_info():
         return jsonify({'Error': 'Ошибка запроса.', 'persons': -1})
 
 
-@app.route('/map/<user_id>')
-def get_map(user_id):
+@app.route('/map', methods=['POST'])
+def get_map():
+    user_id = request.get_json(True).get('user_id')
     if not user_id:
-        user_id = '0'
+        user_id = 0
     collection = DBClient()['family']['persons']
     locations = []
     for person in collection.find({'tree_owner': user_id, 'coordinate0': {'$exists': True, '$ne': ''}}):

@@ -91,7 +91,6 @@ function change_person(Request){
             else {
                 $('#failed_message').text(data['Error']);
                 $("#dialog-message").dialog();
-                console.log(data);
             }
         }
     });

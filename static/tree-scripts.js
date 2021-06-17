@@ -2,7 +2,7 @@ $(function() {$( "#draggable" ).draggable();});
 
 function add_vk_person(vk_id, first_name, last_name, vk_sex, photo){
         var Request = {
-        from_id: $("#person_id").val(),
+        from_id: (parseInt($("#person_id").val())),
         first_name: first_name,
         middle_name: '',
         last_name: last_name,
@@ -21,7 +21,13 @@ function add_vk_person(vk_id, first_name, last_name, vk_sex, photo){
     }
 
 function add_person_base(Request){
-    $.get('/add', Request,  function(data) {
+    $.ajax({
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8',
+        url: '/add',
+        data: JSON.stringify(Request),
+        dataType: 'json',
+        success: function(data) {
             $('#full_info_block').hide();
             if (data['persons'] == -1){
                 $('#failed_message').text(data['Error']);
@@ -30,7 +36,7 @@ function add_person_base(Request){
             }
             var cache = data;
             var options = window.diagramSettings;
-            if (Request.from_id && Request.relative_type == 'parent') {
+            if (Request.from_id != null && Request.relative_type == 'parent') {
                 $.ajax({
                     'type': 'POST',
                     url: '/change',
@@ -63,6 +69,7 @@ function add_person_base(Request){
                 $("#diagram").famDiagram("update");
                 draw_belts();
             }
+        }
     });
 }
 
@@ -115,8 +122,8 @@ $('#input_block').dialog({
             coordinate0: '',
             coordinate1: '',
             relative_type: $("input[name=relative_type]:checked").val(),
-            from_id: $("#person_id").val(),
-            vk_id: $("#vk_id").val(),
+            from_id: (parseInt($("#person_id").val())),
+            vk_id: (parseInt($("#vk_id").val())),
             user_id: window.user.id
             };
         if (Request.first_name == ''){
@@ -158,9 +165,9 @@ function add_link_js(a){
     closeEdit();
     if ( window.link == 'listening' ){
         closeLink();
-        var person_id = $("#person_id").val();
+        var person_id = (parseInt($("#person_id").val()));
         var type_of_link = window.type_of_link;
-        var link_id = $(a).find("[name=person_id]").val();
+        var link_id = (parseInt($(a).find("[name=person_id]").val()));
         var relative_type = $("input[name=relative_type]:checked").val();
         if (link_id == person_id) {
             $('#failed_message').text('Привязка той же персоны!');
@@ -168,14 +175,19 @@ function add_link_js(a){
         }
         else {
             flushFields();
-            $.get('/link', {
-                person_id: person_id,
-                link_id: link_id,
-                relative_type: relative_type,
-                user_id: window.user.id,
-                type_of_link: type_of_link
-                },
-                function(data){
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                url: '/link',
+                data: JSON.stringify({
+                    person_id: person_id,
+                    link_id: link_id,
+                    relative_type: relative_type,
+                    user_id: window.user.id,
+                    type_of_link: type_of_link
+                }),
+                dataType: 'json',
+                success: function(data) {
                     if (data['persons'] != -1){
                         var options = window.diagramSettings;
                         options.items = data['persons'];
@@ -187,60 +199,64 @@ function add_link_js(a){
                         $('#failed_message').text(data['Error']);
                         $( "#dialog-message" ).dialog();
                     }
-                });
-            }
+                }
+            });
+        }
     }
     // Show full info and edit person
-
-    var person_id = $(a).find('[name=person_id]').val();
+    var person_id = (parseInt($(a).find('[name=person_id]').val()));
     $('#full_id').val(person_id);
     $("#person_id").val(person_id);
     var photo = $(a).find('[name=photo]').attr('src');
-    $.get('/pull', {
-            person_id: person_id
-            },
-            function(data){
-                var result = data['result'][0];
-                $('#full_photo').attr('src', photo);
-                $('#full_birth_edit').val(result['birth']);
-                $('#full_death_edit').val(result['death']);
-                if (result['alive'] == false) {
-                    $('#full_death_edit').show();
-                    $('#full_is_alive_edit').prop('checked', false);
-                    $('#full_death_belt').show();
-                    var years = '...';
-                    if (result['birth'])
-                        years = result['birth'];
-                    if (result['death'])
-                        years += ' - ' + result['death'];
-                    else
-                        years += ' - ...'
-                    $('#full_birth_death').val(years);
-                    }
-                else {
-                    $('#full_death_edit').hide();
-                    $('#full_is_alive_edit').prop('checked', true);
-                    var years = result['birth'];
-                    $('#full_birth_death').val(years);
-                    $('#full_death_belt').hide();
-                }
-                if (result['sex'] == 'F')
-                    $('#full_info_block').css({'background': '#ffb1c7'});
+    $.ajax({
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8',
+        url: '/pull',
+        data: JSON.stringify({person_id: person_id}),
+        dataType: 'json',
+        success: function(data) {
+            var result = data['result'][0];
+            $('#full_photo').attr('src', photo);
+            $('#full_birth_edit').val(result['birth']);
+            $('#full_death_edit').val(result['death']);
+            if (result['alive'] == false) {
+                $('#full_death_edit').show();
+                $('#full_is_alive_edit').prop('checked', false);
+                $('#full_death_belt').show();
+                var years = '...';
+                if (result['birth'])
+                    years = result['birth'];
+                if (result['death'])
+                    years += ' - ' + result['death'];
                 else
-                    $('#full_info_block').css({'background': '#88aae9'});
-                $('#full_name').val(result['first_name']);
-                $('#full_middle_name').val(result['middle_name']);
-                $('#full_last_name').val(result['last_name']);
-                $('#full_description').val(result['description']);
-                if (result['location'])
-                {
-                    $('#full_location').val(result['location']);
+                    years += ' - ...'
+                $('#full_birth_death').val(years);
                 }
-                else
-                {
-                    $('#full_location').val('');
-                }
-            });
+            else {
+                $('#full_death_edit').hide();
+                $('#full_is_alive_edit').prop('checked', true);
+                var years = result['birth'];
+                $('#full_birth_death').val(years);
+                $('#full_death_belt').hide();
+            }
+            if (result['sex'] == 'F')
+                $('#full_info_block').css({'background': '#ffb1c7'});
+            else
+                $('#full_info_block').css({'background': '#88aae9'});
+            $('#full_name').val(result['first_name']);
+            $('#full_middle_name').val(result['middle_name']);
+            $('#full_last_name').val(result['last_name']);
+            $('#full_description').val(result['description']);
+            if (result['location'])
+            {
+                $('#full_location').val(result['location']);
+            }
+            else
+            {
+                $('#full_location').val('');
+            }
+        }
+    });
     $('#full_search_results').hide();
     $('#vk_id').val('');
     $('#full_info_block').show();
@@ -255,32 +271,38 @@ function remove_person_js(person_id, title){
     $('#deleted_item').text(title);
     $( function() {
         $( "#dialog-confirm" ).dialog({
-          resizable: false,
-          height: "auto",
-          width: 400,
-          modal: true,
-          buttons: {
-            "Удалить": function() {
-                $.get('/remove', {
-                person_id: person_id,
-                user_id: window.user.id
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            buttons: {
+                "Удалить": function() {
+                    $.ajax({
+                        type: 'POST',
+                        contentType: 'application/json; charset=utf-8',
+                        url: '/remove',
+                        data: JSON.stringify({
+                            person_id: person_id,
+                            user_id: window.user.id
+                        }),
+                        dataType: 'json',
+                        success: function(data) {
+                            if (data['persons'] != -1){
+                                var options = window.diagramSettings;
+                                options.items = data['persons'];
+                                $("#diagram").famDiagram(options);
+                                $("#diagram").famDiagram("update");
+                                draw_belts();
+                            }
+                        }
+                    });
+                    $( this ).dialog( "close" );
+                    $('#full_info_block').hide();
                 },
-                function(data){
-                    if (data['persons'] != -1){
-                        var options = window.diagramSettings;
-                        options.items = data['persons'];
-                        $("#diagram").famDiagram(options);
-                        $("#diagram").famDiagram("update");
-                        draw_belts();
-                    }
-                });
-              $( this ).dialog( "close" );
-              $('#full_info_block').hide();
-            },
-            Cancel: function() {
-              $( this ).dialog( "close" );
+                Cancel: function() {
+                  $( this ).dialog( "close" );
+                }
             }
-          }
         });
     });
 }

@@ -13,15 +13,14 @@ parent_m_str = 'parent_m'
 parent_f_str = 'parent_f'
 
 
-def make_direct_relatives(person_id: int):
-    if person_id:
-        db = DBClient()['family']
-        collection = db['persons']
-        person = collection.find_one({'_id': int(person_id)})
-        relatives = list(filter(None, (person['parent_m'], person['parent_f'])))
-        for a in list(relatives):
-            relatives.extend(make_direct_relatives(a))
-        return relatives
+def make_direct_relatives(person_id):
+    db = DBClient()['family']
+    collection = db['persons']
+    person = collection.find_one({'_id': person_id})
+    relatives = list(filter(lambda x: not (x is None or x == ''), (person['parent_m'], person['parent_f'])))
+    for a in list(relatives):
+        relatives.extend(make_direct_relatives(a))
+    return relatives
 
 
 def make_persons(tree_owner: str = '0'):
@@ -52,14 +51,14 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/update')
+@app.route('/update', methods=['POST'])
 def fetch_persons():
-    return jsonify({'persons': make_persons(request.args.get('user_id'))})
+    return jsonify({'persons': make_persons(request.get_json(True).get('user_id'))})
 
 
-@app.route('/add')
+@app.route('/add', methods=['POST'])
 def add_person():
-    query_args = request.args
+    query_args = request.get_json(True)
     collection = DBClient()['family']['persons']
     new_id = collection.find_one({}, sort=[('_id', -1)])['_id'] + 1 if collection.count() else 0
     first_name = query_args.get('first_name').strip()
@@ -67,10 +66,10 @@ def add_person():
     last_name = query_args.get('last_name').strip()
     description = query_args.get('description').strip()
     birth = query_args.get('birth')
-    is_alive = query_args.get('is_alive') == 'true'
+    is_alive = query_args.get('is_alive')
     death = query_args.get('death')
     sex = query_args.get('sex')
-    from_id = query_args.get(from_id_str, '')
+    from_id = query_args.get(from_id_str)
     image = 'abc'[int(random.random()*3)] if sex == 'M' else 'fpt'[int(random.random()*3)]
     location = query_args.get('location')
     coordinate0 = query_args.get('coordinate0')
@@ -82,13 +81,13 @@ def add_person():
     parent_m = ''
     parent_f = ''
     if relative_type == 'child':
-        person = collection.find_one({'_id': int(from_id)})
+        person = collection.find_one({'_id': from_id})
         if person['sex'] == 'M':
             parent_m = from_id
         else:
             parent_f = from_id
     elif relative_type == 'parent':
-        person = collection.find_one({'_id': int(from_id)})
+        person = collection.find_one({'_id': from_id})
         person_name = ' '.join((person['first_name'], person['middle_name'], person['last_name'])).strip()
         if person[parent_m_str] and sex == 'M':
             return jsonify({'Error': f'У {person_name} уже есть отец.', 'persons': -1})
@@ -99,8 +98,8 @@ def add_person():
                            'first_name': first_name,
                            'middle_name': middle_name,
                            'last_name': last_name,
-                           parent_m_str: parent_m,
-                           parent_f_str: parent_f,
+                           'parent_m': parent_m,
+                           'parent_f': parent_f,
                            'spouses': [],
                            'image': photo or f'/static/photos/{image}.png',
                            'description': description,
@@ -119,7 +118,7 @@ def add_person():
 
 @app.route('/change', methods=['POST'])
 def change_person():
-    request_data = request.get_json()
+    request_data = request.get_json(True)
     edit_person = request_data.get('edit_person')
     request_data.pop('edit_person', False)
     logger.debug(request_data)
@@ -139,9 +138,9 @@ def change_person():
         return jsonify({'Error': 'Нe удалось изменить персону.', 'persons': -1})
 
 
-@app.route('/link')
+@app.route('/link', methods=['POST'])
 def link():
-    query_args = request.args
+    query_args = request.get_json(True)
     collection = DBClient()['family']['persons']
     user_id = query_args.get('user_id')
     relative_type = query_args.get(relative_type_str)
@@ -185,9 +184,9 @@ def link():
         return jsonify({'Status': 'ok', 'persons': make_persons(user_id)})
 
 
-@app.route('/remove')
+@app.route('/remove', methods=['POST'])
 def remove():
-    query_args = request.args
+    query_args = request.get_json(True)
     collection = DBClient()['family']['persons']
     user_id = query_args.get('user_id')
     person_id = query_args.get('person_id')
@@ -205,9 +204,9 @@ def remove():
         return jsonify({'Error': 'Удаление персоны неуспешно.', 'persons': -1})
 
 
-@app.route('/pull')
+@app.route('/pull', methods=['POST'])
 def pull_info():
-    query_args = request.args
+    query_args = request.get_json(True)
     collection = DBClient()['family']['persons']
     person_id = query_args.get('person_id')
     try:

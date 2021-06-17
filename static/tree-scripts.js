@@ -150,8 +150,10 @@ $('#input_block').dialog({
 function edit_person_js(a) {
 }
 
-function add_person_js(a) {
+function add_person_js(a, b) {
+    show_full_info(a);
     $('#full_info_block').tabs( "option", "active", 1 );
+    b.stopPropagation();
 }
 
 function add_link_js(a){
@@ -191,56 +193,59 @@ function add_link_js(a){
             }
     }
     // Show full info and edit person
+    show_full_info(a);
+}
 
+function show_full_info(a) {
     var person_id = $(a).find('[name=person_id]').val();
     $('#full_id').val(person_id);
     $("#person_id").val(person_id);
     var photo = $(a).find('[name=photo]').attr('src');
     $.get('/pull', {
-            person_id: person_id
-            },
-            function(data){
-                var result = data['result'][0];
-                $('#full_photo').attr('src', photo);
-                $('#full_birth_edit').val(result['birth']);
-                $('#full_death_edit').val(result['death']);
-                if (result['alive'] == false) {
-                    $('#full_death_edit').show();
-                    $('#full_is_alive_edit').prop('checked', false);
-                    $('#full_death_belt').show();
-                    var years = '...';
-                    if (result['birth'])
-                        years = result['birth'];
-                    if (result['death'])
-                        years += ' - ' + result['death'];
-                    else
-                        years += ' - ...'
-                    $('#full_birth_death').val(years);
-                    }
-                else {
-                    $('#full_death_edit').hide();
-                    $('#full_is_alive_edit').prop('checked', true);
-                    var years = result['birth'];
-                    $('#full_birth_death').val(years);
-                    $('#full_death_belt').hide();
-                }
-                if (result['sex'] == 'F')
-                    $('#full_info_block').css({'background': '#ffb1c7'});
+        person_id: person_id
+        },
+        function(data){
+            var result = data['result'][0];
+            $('#full_photo').attr('src', photo);
+            $('#full_birth_edit').val(result['birth']);
+            $('#full_death_edit').val(result['death']);
+            if (result['alive'] == false) {
+                $('#full_death_edit').show();
+                $('#full_is_alive_edit').prop('checked', false);
+                $('#full_death_belt').show();
+                var years = '...';
+                if (result['birth'])
+                    years = result['birth'];
+                if (result['death'])
+                    years += ' - ' + result['death'];
                 else
-                    $('#full_info_block').css({'background': '#88aae9'});
-                $('#full_name').val(result['first_name']);
-                $('#full_middle_name').val(result['middle_name']);
-                $('#full_last_name').val(result['last_name']);
-                $('#full_description').val(result['description']);
-                if (result['location'])
-                {
-                    $('#full_location').val(result['location']);
+                    years += ' - ...'
+                $('#full_birth_death').val(years);
                 }
-                else
-                {
-                    $('#full_location').val('');
-                }
-            });
+            else {
+                $('#full_death_edit').hide();
+                $('#full_is_alive_edit').prop('checked', true);
+                var years = result['birth'];
+                $('#full_birth_death').val(years);
+                $('#full_death_belt').hide();
+            }
+            if (result['sex'] == 'F')
+                $('#full_info_block').css({'background': '#ffb1c7'});
+            else
+                $('#full_info_block').css({'background': '#88aae9'});
+            $('#full_name').val(result['first_name']);
+            $('#full_middle_name').val(result['middle_name']);
+            $('#full_last_name').val(result['last_name']);
+            $('#full_description').val(result['description']);
+            if (result['location'])
+            {
+                $('#full_location').val(result['location']);
+            }
+            else
+            {
+                $('#full_location').val('');
+            }
+        });
     $('#full_search_results').hide();
     $('#vk_id').val('');
     $('#full_info_block').show();

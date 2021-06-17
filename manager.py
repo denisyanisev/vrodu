@@ -216,10 +216,8 @@ def pull_info():
         return jsonify({'Error': 'Ошибка запроса.', 'persons': -1})
 
 
-@app.route('/map')
-def get_map():
-    query_args = request.args
-    user_id = query_args.get('user_id')
+@app.route('/map/<user_id>')
+def get_map(user_id):
     if not user_id:
         user_id = '0'
     collection = DBClient()['family']['persons']
@@ -232,4 +230,3 @@ def get_map():
 
 if __name__ == '__main__':
     app.run(debug=True)
-    # app.run(debug=True, host="0.0.0.0")

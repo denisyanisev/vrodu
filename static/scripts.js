@@ -177,7 +177,7 @@ $(document).ready(function () {
     });
 
     $("#link_map").click( function() {
-        $("#map_dialog").load('/map', function() {
+        $("#map_dialog").load('/map/' + window.user.id, function() {
             $("#map_dialog").dialog("open");
         });
     })

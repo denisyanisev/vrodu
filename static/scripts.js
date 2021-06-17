@@ -166,4 +166,21 @@ $(document).ready(function () {
         autoclose:true
     });
 
+    $("#map_dialog").dialog({
+        autoOpen: false,
+        position: 'center' ,
+        title: 'EDIT',
+        draggable: false,
+        width : 550,
+        height : 460,
+        resizable : false,
+        modal : true,
+    });
+
+    $("#link_map").click( function() {
+        $("#map_dialog").load('/map', function() {
+            $("#map_dialog").dialog("open");
+        });
+    })
+
 });

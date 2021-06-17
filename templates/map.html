@@ -10,13 +10,10 @@
 {% endblock styles %}
 
 {% block content %}
-    <div id="map" style="width: 800px; height: 600px"></div>
+    <div id="map" style="width: 500px; height: 400px"></div>
 {% endblock content %}
 
 {% block scripts %}
-    {{ super() }}
-    <script type="text/javascript" src="//vk.com/js/api/xd_connection.js"></script>
-    <script type="text/javascript" src="https://api-maps.yandex.ru/2.1/?apikey=3e171cbb-7d54-47b4-98e5-21877d7eeb70&lang=ru_RU" ></script>
     <script type="text/javascript">
     ymaps.ready(init);
     function init(){

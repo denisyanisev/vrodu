@@ -306,3 +306,9 @@ display: none;
 .add_field{
     margin-top: 8px;
 }
+
+#link_map {
+    position: absolute;
+    top: 11px;
+    left: 53px;
+}

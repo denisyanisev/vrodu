@@ -91,8 +91,8 @@ label {
 
 #link-tip{
     position: absolute;
-    top: 10px;
-    left: 50px;
+    top: 8px;
+    left: 202px;
     display: none;
 }
 
@@ -311,4 +311,14 @@ display: none;
     position: absolute;
     top: 11px;
     left: 53px;
+}
+
+.link_alert {
+    display: inline;
+    padding: 5px;
+    font-size: 13px;
+}
+
+#cancel_link_button {
+    display: inline;
 }

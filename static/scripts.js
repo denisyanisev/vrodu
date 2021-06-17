@@ -169,7 +169,6 @@ $(document).ready(function () {
     $("#map_dialog").dialog({
         autoOpen: false,
         position: 'center' ,
-        title: 'EDIT',
         draggable: false,
         width : 550,
         height : 460,

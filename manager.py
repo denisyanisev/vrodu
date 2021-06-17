@@ -13,6 +13,17 @@ parent_m_str = 'parent_m'
 parent_f_str = 'parent_f'
 
 
+def make_direct_relatives(person_id: int):
+    if person_id:
+        db = DBClient()['family']
+        collection = db['persons']
+        person = collection.find_one({'_id': int(person_id)})
+        relatives = list(filter(None, (person['parent_m'], person['parent_f'])))
+        for a in list(relatives):
+            relatives.extend(make_direct_relatives(a))
+        return relatives
+
+
 def make_persons(tree_owner: str = '0'):
     db = DBClient()['family']
     collection = db['persons']
@@ -147,6 +158,8 @@ def link():
             from_id, target_id = target_id, from_id
             from_person, target_person = target_person, from_person
         try:
+            if target_id in make_direct_relatives(from_id):
+                return jsonify({'Error': f'{target_name} является предком {from_name}.', 'persons': -1})
             if from_person['sex'] == 'M':
                 if from_id == target_person[parent_m_str]:
                     return jsonify({'Error': f'{from_name} уже является отцом {target_name}.', 'persons': -1})
@@ -186,6 +199,7 @@ def remove():
     try:
         collection.delete_one({'_id': int(person_id)})
         collection.update_many({parent_str: person_id}, {'$set': {parent_str: ''}})
+        collection.update_many({'spouses': person_id}, {'$pull': {'spouses': person_id}})
         return jsonify({'Status': 'Персона удалена.', 'persons': make_persons(user_id)})
     except (ValueError, TypeError):
         return jsonify({'Error': 'Удаление персоны неуспешно.', 'persons': -1})

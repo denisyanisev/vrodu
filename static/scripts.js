@@ -55,7 +55,7 @@ $(document).ready(function () {
     });
 
     $('#full_delete').click(function(){
-        var person_id = $('#full_id').val();
+        var person_id = (parseInt($('#full_id').val()));
         var title = $('#full_name').text();
         remove_person_js(person_id, title);
     });
@@ -75,7 +75,7 @@ $(document).ready(function () {
             relative_type = 'родителя';
         else if (relative_type == 'child')
             relative_type = 'ребенка';
-        $('#link-tip').children().filter('span').text(`Выберите ${relative_type} для ${name}`);
+        $('#link-tip').children().filter('div').text(`Выберите ${relative_type} для ${name}`);
     });
 
     $('#link_marriage_button').click(function(){
@@ -84,7 +84,7 @@ $(document).ready(function () {
         $('#full_info_block').hide();
         $('#link-tip').show();
         var name = `${$('#full_last_name').val()} ${$('#full_name').val()} ${$('#full_middle_name').val()}`
-        $('#link-tip').children().filter('span').text(`Выберите супруга(у) для ${name}`);
+        $('#link-tip').children().filter('div').text(`Выберите супруга(у) для ${name}`);
     });
 
     $('#cancel_link_button').click(function(){
@@ -127,7 +127,7 @@ $(document).ready(function () {
     $('#full_edit_save').click(function(){
         var Request = {
             edit_person: true,
-            from_id: $("#person_id").val(),
+            from_id: (parseInt($("#person_id").val())),
             first_name: $('#full_name').val(),
             middle_name: $('#full_middle_name').val(),
             last_name: $('#full_last_name').val(),

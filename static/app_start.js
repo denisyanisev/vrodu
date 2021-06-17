@@ -1,15 +1,20 @@
 var startApp = function(user){
     window.user = user
-    $.get('/update', {
-            user_id: user.id
-            }, function (data){
-                setDiagramOptions();
-                var options = window.diagramSettings;
-                options.items = data['persons'];
-                $("#diagram").famDiagram(options);
-                $("#diagram").famDiagram("update");
-                draw_belts();
-            });
+    $.ajax({
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8',
+        url: '/update',
+        data: JSON.stringify({user_id: user.id}),
+        dataType: 'json',
+        success: function(data) {
+            setDiagramOptions();
+            var options = window.diagramSettings;
+            options.items = data['persons'];
+            $("#diagram").famDiagram(options);
+            $("#diagram").famDiagram("update");
+            draw_belts();
+        }
+    });
 }
 
 $(window).on("load", function(){
@@ -22,7 +27,7 @@ $(window).on("load", function(){
             var user = new Object();
             user.first_name = 'default';
             user.last_name = 'user';
-            user.id = '0';
+            user.id = 0;
             startApp(user);
         }, '5.75');
     }
@@ -32,7 +37,7 @@ $(window).on("load", function(){
         var user = new Object();
         user.first_name = 'default';
         user.last_name = 'user';
-        user.id = '0';
+        user.id = 0;
         startApp(user);
     }
 });

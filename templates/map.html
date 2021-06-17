@@ -29,10 +29,12 @@
         });
         myMap.geoObjects.add(objectManager);
         locations = {{ locations | safe }};
-        var myBounds = addLocations(myMap, locations);
-        myMap.setBounds(ymaps.util.bounds.fromPoints(myBounds));
-        if (myMap.getZoom() > 20){
-            myMap.setZoom(12);
+        if (locations.length > 0){
+            var myBounds = addLocations(myMap, locations);
+            myMap.setBounds(ymaps.util.bounds.fromPoints(myBounds));
+            if (myMap.getZoom() > 20){
+                myMap.setZoom(12);
+            }
         }
     }
     function addLocations(map, locations){

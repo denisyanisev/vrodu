@@ -123,6 +123,9 @@ $('#input_block').dialog({
             relative_type: $("input[name=relative_type]:checked").val(),
             from_id: (parseInt($("#person_id").val())),
             vk_id: (parseInt($("#vk_id").val())),
+            maiden_name: $("#maiden_name").val(),
+            short_desc: $("#short_desc").val(),
+            nationality: $("#nationality").val(),
             user_id: window.user.id
             };
         if (Request.first_name == ''){
@@ -244,14 +247,27 @@ function show_full_info(a) {
                 $('#full_birth_death').val(years);
                 $('#full_death_belt').hide();
             }
-            if (result['sex'] == 'F')
+            if (result['sex'] == 'F'){
+                $('#full_maiden_name').show();
                 $('#full_info_block').css({'background': '#ffb1c7'});
-            else
+            }
+            else {
+                $('#full_maiden_name').hide();
                 $('#full_info_block').css({'background': '#88aae9'});
+            }
             $('#full_name').val(result['first_name']);
             $('#full_middle_name').val(result['middle_name']);
-            $('#full_last_name').val(result['last_name']);
+
+            if (result['maiden_name']) {
+                $('#full_last_name').val(result['last_name'] + ' (' + result['maiden_name'] + ')');
+                $('#full_maiden_name').val(result['maiden_name']);
+            }
+            else
+                $('#full_last_name').val(result['last_name']);
+
             $('#full_description').val(result['description']);
+            $('#full_short_desc').val(result['short_desc']);
+            $('#full_nationality').val(result['nationality']);
             if (result['location'])
             {
                 $('#full_location').val(result['location']);

@@ -29,14 +29,15 @@ def make_persons(tree_owner: str = '0'):
     persons = list()
     for person in collection.find({'tree_owner': tree_owner}):
         person['id'] = person.pop('_id')
-        person['title'] = ' '.join([person.pop('first_name'), person.pop('middle_name'),
-                                    person.pop('last_name')]).strip()
+        last_name = person.pop('last_name') + ' ({})'.format(person.pop('maiden_name')) if person.get('maiden_name') else person.pop('last_name')
+        person['title'] = ' '.join([person.pop('first_name'), person.pop('middle_name'), last_name]).strip()
         person['parents'] = [person.pop(parent_m_str), person.pop(parent_f_str)]
+        person['description'] = person.get('short_desc', '')
         person['itemTitleColor'] = "#88aae9" if person['sex'] == 'M' else "#ffb1c7"
         if not person['alive'] and person['death']:
-            years = (person['birth'] if person['birth'] else '...') + ' - ' + person['death']
+            years = (person['birth'] if person['birth'] else '...') + '-' + person['death']
         elif not person['alive']:
-            years = (person['birth'] if person['birth'] else '...') + ' - ...'
+            years = (person['birth'] if person['birth'] else '...') + '-...'
         else:
             years = person['birth']
         person['years'] = years
@@ -78,6 +79,9 @@ def add_person():
     vk_id = query_args.get('vk_id')
     user_id = query_args.get('user_id')
     photo = query_args.get('photo')
+    maiden_name = query_args.get('maiden_name')
+    short_desc = query_args.get('short_desc')
+    nationality = query_args.get('nationality').strip().lower()
     parent_m = ''
     parent_f = ''
     if relative_type == 'child':
@@ -111,6 +115,9 @@ def add_person():
                            'coordinate0': coordinate0,
                            'coordinate1': coordinate1,
                            'vk_id': vk_id,
+                           'maiden_name': maiden_name,
+                           'short_desc': short_desc,
+                           'nationality': nationality,
                            'tree_owner': user_id,
                            })
     return jsonify({'new_id': new_id, 'persons': make_persons(user_id)})
@@ -121,7 +128,6 @@ def change_person():
     request_data = request.get_json(True)
     edit_person = request_data.get('edit_person')
     request_data.pop('edit_person', False)
-    logger.debug(request_data)
     person_id = request_data.get('from_id')
     user_id = request_data.get('user_id')
     collection = DBClient()['family']['persons']

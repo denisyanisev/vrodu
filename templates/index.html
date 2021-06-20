@@ -37,18 +37,28 @@
         <input id="first_name" value="" placeholder="Имя" class="flushable form-control add_field" type="text"/>
         <input id="last_name" value="" placeholder="Фамилия" class="flushable form-control add_field" type="text"/>
         <input id="middle_name" value="" placeholder="Отчество" class="flushable form-control add_field" type="text"/>
-        <textarea id="description" placeholder="Биография" class="flushable form-control add_field"></textarea>
         <input id="birth" value="" placeholder="Год рождения" class="flushable form-control add_field year-picker" type="text"/>
         <label class="add_field">Жив(а)?</label><input type="checkbox" id="is_alive" checked="checked">
         <div id="death_block">
-            <input id="death" value="" placeholder="Год смерти" class="flushable form-control year-picker" type="text"/><br />
+            <input id="death" value="" placeholder="Год смерти" class="flushable form-control year-picker" type="text"/>
         </div>
-        <input id="location" value="" placeholder="Место жительства" class="flushable form-control add_field" type="text"/>
-        <label class="add_field">Пол:</label><br />
+        <br/><label class="add_field">Пол:</label>
         <label>Мужской</label>
         <input type="radio" id="male" name="sex" value="M" checked>
         <label>Женский</label>
         <input type="radio" id="female" name="sex" value="F"><br />
+        <input id="maiden_name" value="" placeholder="Девичья фамилия" class="flushable form-control add_field" type="text"/>
+        <a class="link_additional" data-toggle="collapse" href="#additional_info" aria-expanded="false" aria-controls="collapseExample">
+            Дополнительная информация >
+        </a>
+        <div class="collapse" id="additional_info">
+            <div class="card card-body">
+                <input id="location" value="" placeholder="Место рождения" class="flushable form-control add_field" type="text"/>
+                <input id="short_desc" value="" placeholder="Короткое описание" class="flushable form-control add_field" type="text"/>
+                <textarea id="description" placeholder="Биография" class="flushable form-control add_field"></textarea>
+                <input id="nationality" value="" placeholder="Национальность" class="flushable form-control add_field" type="text"/>
+            </div>
+        </div>
     </div>
 
     <div id="dialog-confirm" title="Удалить персону?">
@@ -93,13 +103,15 @@
                 <input id="full_is_alive_edit" type="checkbox" checked/>
             </div>
             <input id="full_birth_death" type="text" class="full_field"  size="15" disabled />
+            <input id="full_short_desc" placeholder="Короткое описание" class="full_field form-control" type="text" disabled/>
             <textarea id="full_description" placeholder="Биография" class="full_field form-control" disabled></textarea>
-            <br />
-                <input id="full_location" placeholder="Место рождения" class="full_field form-control" type="text" disabled/>
-                <button type="button" class="btn btn-success" id="full_edit_save">Сохранить</button>
-                <button type="button" class="btn btn-secondary" id="full_edit_cancel">Отменить</button>
-                <button type="button" class="btn btn-primary" id="full_edit" >Редактировать</button>
-                <button type="button" class="btn btn-danger" id="full_delete">Удалить персону</button>
+            <input id="full_nationality" placeholder="Национальность" class="full_field form-control" type="text" disabled/>
+            <input id="full_location" placeholder="Место рождения" class="full_field form-control" type="text" disabled/>
+            <input id="full_maiden_name" placeholder="Девичья фамилия" class="full_field form-control" type="text" disabled/>
+            <button type="button" class="btn btn-success" id="full_edit_save">Сохранить</button>
+            <button type="button" class="btn btn-secondary" id="full_edit_cancel">Отменить</button>
+            <button type="button" class="btn btn-primary" id="full_edit" >Редактировать</button>
+            <button type="button" class="btn btn-danger" id="full_delete">Удалить персону</button>
             <br /><br />
         </div>
     <div id="full_adding_tab">

@@ -31,12 +31,13 @@ function flushFields(){
     $('#is_alive').prop('checked', true);
     $('#death_block').hide();
     $('#full_search_results').html('');
+    $('#additional_info').collapse('hide');
 }
 
 $(document).ready(function () {
     $('#is_alive').click(function(){
         if ($('#is_alive').attr("checked") == 'checked'){
-            $('#death_block').toggle('slow', function(){});
+            $('#death_block').toggle();
         }
     });
 
@@ -109,6 +110,10 @@ $(document).ready(function () {
 
     $('#full_edit').click(function(){
         $(this).hide();
+        var last_name = $('#full_last_name').val();
+        var maiden_name_pattern = ' (' + $('#full_maiden_name').val() + ')';
+        var last_name_cleared = last_name.replace(maiden_name_pattern, '');
+        $('#full_last_name').val(last_name_cleared);
         $('#full_edit_cancel').show();
         $('#full_edit_save').show();
         $('.full_field').prop('disabled', false);
@@ -122,6 +127,9 @@ $(document).ready(function () {
         $('#bd-').toggle();
     });
 
+    $('[name=sex]').change(function(){
+        $('#maiden_name').toggle();
+    })
 
     $('#full_edit_save').click(function(){
         var Request = {
@@ -135,6 +143,9 @@ $(document).ready(function () {
             alive: $('#full_is_alive_edit').prop('checked'),
             death: $('#full_death_edit').val(),
             location: $('#full_location').val(),
+            maiden_name: $('#full_maiden_name').val(),
+            short_desc: $('#full_short_desc').val(),
+            nationality: $('#full_nationality').val(),
             user_id: window.user.id
         };
         if (Request.location != '') {

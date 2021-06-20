@@ -17,6 +17,7 @@ function closeEdit(){
     $('.full_field').removeClass('full_field_enabled');
     $('#bd_edit').hide();
     $('#full_birth_death').show();
+    $('#full_maiden_name').val('');
 }
 
 function closeLink(){
@@ -113,6 +114,7 @@ $(document).ready(function () {
         var last_name = $('#full_last_name').val();
         var maiden_name_pattern = ' (' + $('#full_maiden_name').val() + ')';
         var last_name_cleared = last_name.replace(maiden_name_pattern, '');
+        console.log(last_name_cleared)
         $('#full_last_name').val(last_name_cleared);
         $('#full_edit_cancel').show();
         $('#full_edit_save').show();

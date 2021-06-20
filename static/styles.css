@@ -336,3 +336,7 @@ display: none;
 #full_maiden_name {
     display: none;
 }
+
+.ui-widget-header{
+    font-weight: normal!important;
+}

@@ -26,8 +26,8 @@ function closeLink(){
 }
 
 function flushFields(){
-    $("#input_block input.flushable").val('');
-    $("#input_block textarea").val('');
+    $("#input_block_modal input.flushable").val('');
+    $("#input_block_modal textarea").val('');
     $('#parent').prop('checked', true);
     $('#is_alive').prop('checked', true);
     $('#death_block').hide();
@@ -51,15 +51,93 @@ $(document).ready(function () {
     });
 
     $('#add_single').click(function(){
-        $('#new_person_label').show();
         $('#new_person').prop('checked', true);
-        open_input_block();
+        $('#input_block_modal').modal();
     });
 
+    $('#add_person_button').click(function(){
+        $('#input_block_modal').modal();
+    });
+
+    $('#add_person').click(function(){
+    console.log((parseInt($("#person_id").val())));
+        var Request = {
+            first_name: $("#first_name").val(),
+            middle_name: $("#middle_name").val(),
+            last_name: $("#last_name").val(),
+            description: $("#description").val(),
+            birth: $("#birth").val(),
+            is_alive: $("#is_alive").prop('checked'),
+            death: $("#death").val(),
+            sex: $("input[name=sex]:checked").val(),
+            location: $("#location").val(),
+            coordinate0: '',
+            coordinate1: '',
+            relative_type: $("input[name=relative_type]:checked").val(),
+            from_id: (parseInt($("#person_id").val())),
+            vk_id: (parseInt($("#vk_id").val())),
+            maiden_name: $("#maiden_name").val(),
+            short_desc: $("#short_desc").val(),
+            nationality: $("#nationality").val(),
+            user_id: window.user.id
+            };
+        if (Request.first_name == '') {
+            $('#input_block_modal').modal('hide');
+            $('#failed_message').text('Не указано имя');
+            $("#dialog-message").modal();
+            return;
+        }
+        $('#input_block_modal').modal("hide");
+        if (Request.location != '') {
+            var myGeocoder = ymaps.geocode(Request.location);
+            myGeocoder.then(function(data){
+                var coordinates = data.geoObjects.get(0).geometry.getCoordinates();
+                Request.coordinate0 = coordinates[0];
+                Request.coordinate1 = coordinates[1];
+                add_person_base(Request);
+                return;
+            });
+        }
+        else {
+            add_person_base(Request);
+            return;
+        }
+    });
+
+    $('#input_block_modal').on('hidden.bs.modal', function (e) {
+       flushFields();
+    })
+
     $('#full_delete').click(function(){
+
+        var title = $('#full_name').val();
+        $("#dialog-confirm").modal();
+        $('#deleted_item').text(title);
+    });
+
+    $('#delete_person').click(function(){
         var person_id = (parseInt($('#full_id').val()));
-        var title = $('#full_name').text();
-        remove_person_js(person_id, title);
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            url: '/remove',
+            data: JSON.stringify({
+                person_id: person_id,
+                user_id: window.user.id
+            }),
+            dataType: 'json',
+            success: function(data) {
+                if (data['persons'] != -1){
+                    var options = window.diagramSettings;
+                    options.items = data['persons'];
+                    $("#diagram").famDiagram(options);
+                    $("#diagram").famDiagram("update");
+                    draw_belts();
+                }
+            }
+        });
+        $("#dialog-confirm").modal('hide');
+        $('#full_info_block').hide();
     });
 
     $('#full_add_relation').click(function(){
@@ -178,17 +256,11 @@ $(document).ready(function () {
         autoclose:true
     });
 
-    $("#map_dialog").dialog({
-        autoOpen: false,
-        position: 'center' ,
-        draggable: false,
-        width : 550,
-        height : 460,
-        resizable : false,
-        modal : true,
+    $("#link_map").click( function() {
+        $('#map_modal').modal();
     });
 
-    $("#link_map").click( function() {
+    $('#map_modal').on('shown.bs.modal', function (e) {
         $.ajax({
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
@@ -197,10 +269,10 @@ $(document).ready(function () {
                 user_id: window.user.id
             }),
             success: function(data){
-                $("#map_dialog").empty();
-                $("#map_dialog").append(data);
-                $("#map_dialog").dialog("open");
+                $("#map_modal .modal-body").empty();
+                $("#map_modal .modal-body").append(data);
             }
         });
-    });
+    })
+
 });

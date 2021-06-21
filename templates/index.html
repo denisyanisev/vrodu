@@ -30,44 +30,106 @@
     </div>
 
     <!-- Modals -->
-    <div id="input_block" title="Добавить новую персону">
-        <input type="radio" id="new_person" name="relative_type" value="new_person">
-        <input id="person_id" value="" class="flushable" type="text" hidden />
-        <input id="link_id" value="" class="inactive flushable" type="text" hidden />
-        <input id="first_name" value="" placeholder="Имя" class="flushable form-control add_field" type="text"/>
-        <input id="last_name" value="" placeholder="Фамилия" class="flushable form-control add_field" type="text"/>
-        <input id="middle_name" value="" placeholder="Отчество" class="flushable form-control add_field" type="text"/>
-        <input id="birth" value="" placeholder="Год рождения" class="flushable form-control add_field year-picker" type="text"/>
-        <label class="add_field">Жив(а)?</label><input type="checkbox" id="is_alive" checked="checked">
-        <div id="death_block">
-            <input id="death" value="" placeholder="Год смерти" class="flushable form-control year-picker" type="text"/>
+    <div class="modal fade" id="input_block_modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="">Добавить новую персону</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                    <input type="radio" id="new_person" name="relative_type" value="new_person">
+                    <input id="person_id" value="" class="flushable" type="text" hidden />
+                    <input id="link_id" value="" class="inactive flushable" type="text" hidden />
+                    <input id="first_name" value="" placeholder="Имя" class="flushable form-control add_field" type="text"/>
+                    <input id="last_name" value="" placeholder="Фамилия" class="flushable form-control add_field" type="text"/>
+                    <input id="middle_name" value="" placeholder="Отчество" class="flushable form-control add_field" type="text"/>
+                    <input id="birth" value="" placeholder="Год рождения" class="flushable form-control add_field year-picker" type="text"/>
+                    <label class="add_field">Жив(а)?</label><input type="checkbox" id="is_alive" checked="checked">
+                    <div id="death_block">
+                        <input id="death" value="" placeholder="Год смерти" class="flushable form-control year-picker" type="text"/>
+                    </div>
+                    <br/><label class="add_field">Пол:</label>
+                    <label>Мужской</label>
+                    <input type="radio" id="male" name="sex" value="M" checked>
+                    <label>Женский</label>
+                    <input type="radio" id="female" name="sex" value="F"><br />
+                    <input id="maiden_name" value="" placeholder="Девичья фамилия" class="flushable form-control add_field" type="text"/>
+                    <a class="link_additional" data-toggle="collapse" href="#additional_info" aria-expanded="false" aria-controls="collapseExample">
+                        Дополнительная информация >
+                    </a>
+                    <div class="collapse" id="additional_info">
+                        <div class="card card-body">
+                            <input id="location" value="" placeholder="Место рождения" class="flushable form-control add_field" type="text"/>
+                            <input id="short_desc" value="" placeholder="Короткое описание" class="flushable form-control add_field" type="text"/>
+                            <textarea id="description" placeholder="Биография" class="flushable form-control add_field"></textarea>
+                            <input id="nationality" value="" placeholder="Национальность" class="flushable form-control add_field" type="text"/>
+                        </div>
+                    </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary" id="add_person">Добавить</button>
+              </div>
+            </div>
         </div>
-        <br/><label class="add_field">Пол:</label>
-        <label>Мужской</label>
-        <input type="radio" id="male" name="sex" value="M" checked>
-        <label>Женский</label>
-        <input type="radio" id="female" name="sex" value="F"><br />
-        <input id="maiden_name" value="" placeholder="Девичья фамилия" class="flushable form-control add_field" type="text"/>
-        <a class="link_additional" data-toggle="collapse" href="#additional_info" aria-expanded="false" aria-controls="collapseExample">
-            Дополнительная информация >
-        </a>
-        <div class="collapse" id="additional_info">
-            <div class="card card-body">
-                <input id="location" value="" placeholder="Место рождения" class="flushable form-control add_field" type="text"/>
-                <input id="short_desc" value="" placeholder="Короткое описание" class="flushable form-control add_field" type="text"/>
-                <textarea id="description" placeholder="Биография" class="flushable form-control add_field"></textarea>
-                <input id="nationality" value="" placeholder="Национальность" class="flushable form-control add_field" type="text"/>
+     </div>
+
+    <div class="modal fade" id="map_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Карта родственников</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+              </div>
+            </div>
+        </div>
+     </div>
+
+    <div class="modal" id="dialog-confirm" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title">Удалить персону?</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body">
+                  <span id="deleted_item"></span>
+               </div>
+               <div class="modal-footer">
+                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                   <button type="button" class="btn btn-primary" id="delete_person">Удалить</button>
+               </div>
             </div>
         </div>
     </div>
 
-    <div id="dialog-confirm" title="Удалить персону?">
-        <span id="deleted_item"></span>
+    <div class="modal" id="dialog-message" >
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title">Ошибка!</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                   <span id="failed_message"></span>
+                </div>
+            </div>
+        </div>
     </div>
-    <div id="dialog-message" title="Ошибка!">
-        <span id="failed_message"></span>
-    </div>
-    <!-- Modals -->
 
     <div id="link-tip">
         <div class="alert alert-danger link_alert" role="alert">Выберите персону, которую хотите связать</div>
@@ -75,8 +137,7 @@
     </div>
 
     <div id="add_single">+</div>
-    <a href="#" id="link_map">Показать на карте</a>
-    <div id="map_dialog"></div>
+    <a href="#" id="link_map"  data-toggle="modal">Показать на карте</a>
 
     <div id="full_info_block">
         <input id="full_id" value="" type="text" hidden/>
@@ -121,7 +182,7 @@
                 <input type="radio" id="parent"  name="relative_type" value="parent" checked>
                 <label>Ребенка</label>
                 <input type="radio" id="child" name="relative_type" value="child"> <br />
-                <button type="button" class="btn btn-primary" id="add_person_button" onclick="open_input_block()">Добавить нового</button>
+                <button type="button" class="btn btn-primary" id="add_person_button">Добавить нового</button>
                 <button type="button" class="btn btn-primary" id="link_person_button">Связать</button><br />
                 <button type="button" class="btn btn-info" id="link_marriage_button">Связать супруга</button><br />
                 <input type="text" id="vk_id" value="" placeholder="Добавить из ВК" class="flushable form-control"><br />

@@ -17,9 +17,7 @@ label {
     height: 1500px!important;
 }
 
-#input_block {
-    display: none;
-}
+
 
 .bp-button, .bp-plus {
     cursor: pointer;
@@ -339,4 +337,13 @@ display: none;
 
 .ui-widget-header{
     font-weight: normal!important;
+}
+
+#map_modal .modal-body {
+    width: 550px;
+    height: 460px;
+}
+
+.modal-header .close {
+    margin-top: -21px;
 }

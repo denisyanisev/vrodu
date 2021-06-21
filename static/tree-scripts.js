@@ -1,24 +1,24 @@
 $(function() {$( "#draggable" ).draggable();});
 
 function add_vk_person(vk_id, first_name, last_name, vk_sex, photo){
-        var Request = {
-        from_id: (parseInt($("#person_id").val())),
-        first_name: first_name,
-        middle_name: '',
-        last_name: last_name,
-        description: '',
-        birth: '',
-        is_alive: true,
-        death: '',
-        sex: (vk_sex == 2) ? 'M' : 'F',
-        location: '',
-        relative_type: $("input[name=relative_type]:checked").val(),
-        vk_id: vk_id,
-        photo: photo,
-        user_id: window.user.id
-        };
-        add_person_base(Request);
-    }
+    var Request = {
+    from_id: (parseInt($("#person_id").val())),
+    first_name: first_name,
+    middle_name: '',
+    last_name: last_name,
+    description: '',
+    birth: '',
+    is_alive: true,
+    death: '',
+    sex: (vk_sex == 2) ? 'M' : 'F',
+    location: '',
+    relative_type: $("input[name=relative_type]:checked").val(),
+    vk_id: vk_id,
+    photo: photo,
+    user_id: window.user.id
+    };
+    add_person_base(Request);
+}
 
 function add_person_base(Request){
     $.ajax({
@@ -31,7 +31,7 @@ function add_person_base(Request){
             $('#full_info_block').hide();
             if (data['persons'] == -1){
                 $('#failed_message').text(data['Error']);
-                $("#dialog-message").dialog();
+                $("#dialog-message").modal();
                 return;
             }
             var cache = data;
@@ -90,73 +90,10 @@ function change_person(Request){
             }
             else {
                 $('#failed_message').text(data['Error']);
-                $("#dialog-message").dialog();
+                $("#dialog-message").modal();
             }
         }
     });
-}
-
-function open_input_block(){
-$('#input_block').dialog({
-    modal: true,
-    width: 300,
-    closeOnEscape: true,
-    close: function(){
-        $('#new_person_label').hide();
-        flushFields();
-    },
-    buttons: [{
-        text: "Добавить",
-        click: function(){
-        var Request = {
-            first_name: $("#first_name").val(),
-            middle_name: $("#middle_name").val(),
-            last_name: $("#last_name").val(),
-            description: $("#description").val(),
-            birth: $("#birth").val(),
-            is_alive: $("#is_alive").prop('checked'),
-            death: $("#death").val(),
-            sex: $("input[name=sex]:checked").val(),
-            location: $("#location").val(),
-            coordinate0: '',
-            coordinate1: '',
-            relative_type: $("input[name=relative_type]:checked").val(),
-            from_id: (parseInt($("#person_id").val())),
-            vk_id: (parseInt($("#vk_id").val())),
-            maiden_name: $("#maiden_name").val(),
-            short_desc: $("#short_desc").val(),
-            nationality: $("#nationality").val(),
-            user_id: window.user.id
-            };
-        if (Request.first_name == ''){
-            $(this).dialog("close");
-            $('#failed_message').text('Не указано имя!');
-            $("#dialog-message").dialog();
-            return;
-        }
-        $(this).dialog("close");
-        if (Request.location != '') {
-            var myGeocoder = ymaps.geocode(Request.location);
-            myGeocoder.then(function(data){
-                var coordinates = data.geoObjects.get(0).geometry.getCoordinates();
-                Request.coordinate0 = coordinates[0];
-                Request.coordinate1 = coordinates[1];
-                add_person_base(Request);
-                return;
-            });
-       }
-        else {
-            add_person_base(Request);
-            return;
-        }
-    },
-        id: "add_person"
-  }]
-  });
-
-}
-
-function edit_person_js(a) {
 }
 
 function add_person_js(a, b) {
@@ -175,7 +112,7 @@ function add_link_js(a){
         var relative_type = $("input[name=relative_type]:checked").val();
         if (link_id == person_id) {
             $('#failed_message').text('Привязка той же персоны!');
-            $( "#dialog-message" ).dialog();
+            $( "#dialog-message" ).modal();
         }
         else {
             flushFields();
@@ -201,7 +138,7 @@ function add_link_js(a){
                     }
                     else {
                         $('#failed_message').text(data['Error']);
-                        $( "#dialog-message" ).dialog();
+                        $( "#dialog-message" ).modal();
                     }
                 }
             });
@@ -213,6 +150,7 @@ function add_link_js(a){
 
 function show_full_info(a) {
     var person_id = (parseInt($(a).find('[name=person_id]').val()));
+    console.log(person_id);
     $('#full_id').val(person_id);
     $("#person_id").val(person_id);
     var photo = $(a).find('[name=photo]').attr('src');
@@ -285,46 +223,6 @@ function show_full_info(a) {
     $('#full_close').click(function(){
         closeEdit();
         $('#full_info_block').hide();
-    });
-}
-
-function remove_person_js(person_id, title){
-    $('#deleted_item').text(title);
-    $( function() {
-        $( "#dialog-confirm" ).dialog({
-            resizable: false,
-            height: "auto",
-            width: 400,
-            modal: true,
-            buttons: {
-                "Удалить": function() {
-                    $.ajax({
-                        type: 'POST',
-                        contentType: 'application/json; charset=utf-8',
-                        url: '/remove',
-                        data: JSON.stringify({
-                            person_id: person_id,
-                            user_id: window.user.id
-                        }),
-                        dataType: 'json',
-                        success: function(data) {
-                            if (data['persons'] != -1){
-                                var options = window.diagramSettings;
-                                options.items = data['persons'];
-                                $("#diagram").famDiagram(options);
-                                $("#diagram").famDiagram("update");
-                                draw_belts();
-                            }
-                        }
-                    });
-                    $( this ).dialog( "close" );
-                    $('#full_info_block').hide();
-                },
-                Cancel: function() {
-                  $( this ).dialog( "close" );
-                }
-            }
-        });
     });
 }
 

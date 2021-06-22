@@ -7,7 +7,7 @@ import logging
 
 
 app = Flask(__name__)
-app.config['LOG_FILE'] = 'application.log'
+app.config['LOG_FILE'] = app.root_path + '/application.log'
 file_handler = logging.FileHandler(app.config['LOG_FILE'])
 file_handler.setLevel(logging.INFO)
 app.logger.addHandler(file_handler)

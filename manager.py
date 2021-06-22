@@ -88,7 +88,7 @@ def add_person():
     photo = query_args.get('photo')
     maiden_name = query_args.get('maiden_name')
     short_desc = query_args.get('short_desc')
-    nationality = query_args.get('nationality').strip().lower()
+    nationality = query_args.get('nationality', '').strip().lower()
     parent_m = ''
     parent_f = ''
     if relative_type == 'child':

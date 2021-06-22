@@ -3,8 +3,15 @@ from flask_bootstrap import Bootstrap
 from loguru import logger
 from db import DBClient
 import random
+import logging
+
 
 app = Flask(__name__)
+app.config['LOG_FILE'] = 'application.log'
+file_handler = logging.FileHandler(app.config['LOG_FILE'])
+file_handler.setLevel(logging.INFO)
+app.logger.addHandler(file_handler)
+
 Bootstrap(app)
 
 relative_type_str = "relative_type"
@@ -60,6 +67,7 @@ def fetch_persons():
 @app.route('/add', methods=['POST'])
 def add_person():
     query_args = request.get_json(True)
+    query_args = None
     collection = DBClient()['family']['persons']
     new_id = collection.find_one({}, sort=[('_id', -1)])['_id'] + 1 if collection.count() else 0
     first_name = query_args.get('first_name').strip()
@@ -235,4 +243,4 @@ def get_map():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

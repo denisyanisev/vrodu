@@ -67,7 +67,6 @@ def fetch_persons():
 @app.route('/add', methods=['POST'])
 def add_person():
     query_args = request.get_json(True)
-    query_args = None
     collection = DBClient()['family']['persons']
     new_id = collection.find_one({}, sort=[('_id', -1)])['_id'] + 1 if collection.count() else 0
     first_name = query_args.get('first_name').strip()

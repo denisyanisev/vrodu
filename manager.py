@@ -7,10 +7,11 @@ import logging
 
 
 app = Flask(__name__)
-app.config['LOG_FILE'] = app.root_path + '/application.log'
-file_handler = logging.FileHandler(app.config['LOG_FILE'])
-file_handler.setLevel(logging.INFO)
-app.logger.addHandler(file_handler)
+logging.basicConfig(filename=app.root_path + '/application.log', level=logging.INFO)
+#app.config['LOG_FILE'] = app.root_path + '/application.log'
+#file_handler = logging.FileHandler(app.config['LOG_FILE'])
+#file_handler.setLevel(logging.INFO)
+#app.logger.addHandler(file_handler)
 
 Bootstrap(app)
 
@@ -30,11 +31,15 @@ def make_direct_relatives(person_id):
     return relatives
 
 
-def make_persons(tree_owner: str = '0'):
+def make_persons(user_id: str = '0'):
     db = DBClient()['family']
     collection = db['persons']
     persons = list()
-    for person in collection.find({'tree_owner': tree_owner}):
+    persons_list = list(collection.find({'tree_owner': user_id}))
+    if not persons_list:
+    	for vk_user in collection.find({'vk_id': user_id}):
+    	    persons_list = collection.find({'tree_owner': vk_user['tree_owner']})
+    for person in persons_list:
         person['id'] = person.pop('_id')
         last_name = person.pop('last_name') + ' ({})'.format(person.pop('maiden_name')) if person.get('maiden_name') else person.pop('last_name')
         person['title'] = ' '.join([person.pop('first_name'), person.pop('middle_name'), last_name]).strip()
@@ -80,14 +85,14 @@ def add_person():
     from_id = query_args.get(from_id_str)
     image = 'abc'[int(random.random()*3)] if sex == 'M' else 'fpt'[int(random.random()*3)]
     location = query_args.get('location')
-    coordinate0 = query_args.get('coordinate0')
-    coordinate1 = query_args.get('coordinate1')
+    coordinate0 = query_args.get('coordinate0', '')
+    coordinate1 = query_args.get('coordinate1', '')
     relative_type = query_args.get(relative_type_str)  # кого мы добавляем
     vk_id = query_args.get('vk_id')
     user_id = query_args.get('user_id')
     photo = query_args.get('photo')
-    maiden_name = query_args.get('maiden_name')
-    short_desc = query_args.get('short_desc')
+    maiden_name = query_args.get('maiden_name', '')
+    short_desc = query_args.get('short_desc', '')
     nationality = query_args.get('nationality', '').strip().lower()
     parent_m = ''
     parent_f = ''

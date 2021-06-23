@@ -8,11 +8,6 @@ import logging
 
 app = Flask(__name__)
 logging.basicConfig(filename=app.root_path + '/application.log', level=logging.INFO)
-#app.config['LOG_FILE'] = app.root_path + '/application.log'
-#file_handler = logging.FileHandler(app.config['LOG_FILE'])
-#file_handler.setLevel(logging.INFO)
-#app.logger.addHandler(file_handler)
-
 Bootstrap(app)
 
 relative_type_str = "relative_type"
@@ -37,8 +32,8 @@ def make_persons(user_id: str = '0'):
     persons = list()
     persons_list = list(collection.find({'tree_owner': user_id}))
     if not persons_list:
-    	for vk_user in collection.find({'vk_id': user_id}):
-    	    persons_list = collection.find({'tree_owner': vk_user['tree_owner']})
+        for vk_user in collection.find({'vk_id': user_id}):
+            persons_list = collection.find({'tree_owner': vk_user['tree_owner']})
     for person in persons_list:
         person['id'] = person.pop('_id')
         last_name = person.pop('last_name') + ' ({})'.format(person.pop('maiden_name')) if person.get('maiden_name') else person.pop('last_name')

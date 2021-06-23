@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from flask_bootstrap import Bootstrap
-from loguru import logger
+# from loguru import logger
 from db import DBClient
 import random
 import logging
@@ -36,8 +36,12 @@ def make_persons(user_id: str = '0'):
             persons_list = collection.find({'tree_owner': vk_user['tree_owner']})
     for person in persons_list:
         person['id'] = person.pop('_id')
-        last_name = person.pop('last_name') + ' ({})'.format(person.pop('maiden_name')) if person.get('maiden_name') else person.pop('last_name')
-        person['title'] = ' '.join([person.pop('first_name'), person.pop('middle_name'), last_name]).strip()
+        if person.get('maiden_name'):
+            last_name = f'{person.get("last_name")} ({person.get("maiden_name")})'
+        else:
+            last_name = person.get('last_name')
+        person['title'] = ' '.join([person.get('first_name'), person.get('middle_name'), last_name]).strip()
+        person['title'] = person['title'].replace('  ', ' ')
         person['parents'] = [person.pop(parent_m_str), person.pop(parent_f_str)]
         person['description'] = person.get('short_desc', '')
         person['itemTitleColor'] = "#88aae9" if person['sex'] == 'M' else "#ffb1c7"
@@ -48,7 +52,7 @@ def make_persons(user_id: str = '0'):
         else:
             years = person['birth']
         person['years'] = years
-        person['alive'] = str(person['alive'])
+        person['alive'] = person['alive']
         person.pop('tree_owner')
         persons.append(person)
     return persons
@@ -68,7 +72,7 @@ def fetch_persons():
 def add_person():
     query_args = request.get_json(True)
     collection = DBClient()['family']['persons']
-    new_id = collection.find_one({}, sort=[('_id', -1)])['_id'] + 1 if collection.count() else 0
+    new_id = collection.find_one({}, sort=[('_id', -1)])['_id'] + 1 if collection.count_documents(dict()) else 0
     first_name = query_args.get('first_name').strip()
     middle_name = query_args.get('middle_name').strip()
     last_name = query_args.get('last_name').strip()
@@ -156,16 +160,23 @@ def link():
     query_args = request.get_json(True)
     collection = DBClient()['family']['persons']
     user_id = query_args.get('user_id')
-    relative_type = query_args.get(relative_type_str)
-    type_of_link = query_args.get('type_of_link')
+    link_type = query_args.get('link_type')
     from_id = query_args.get('person_id')
     target_id = query_args.get('link_id')
     target_person = collection.find_one({'_id': int(query_args.get('link_id'))})
     from_person = collection.find_one({'_id': int(query_args.get('person_id'))})
     target_name = ' '.join((target_person['first_name'], target_person['middle_name'], target_person['last_name']))
     from_name = ' '.join((from_person['first_name'], from_person['middle_name'], from_person['last_name']))
-    if type_of_link == 'parentship':
-        if relative_type == 'parent':
+    if link_type == 'spouse':
+        if target_person['sex'] == from_person['sex']:
+            return jsonify({'Error': 'Запрещено создавать однополные браки.', 'persons': -1})
+        if from_id in target_person['spouses']:
+            return jsonify({'Error': 'Между персонами уже есть брак.', 'persons': -1})
+        collection.update_one({'_id': int(target_id)}, {'$push': {'spouses': from_id}})
+        collection.update_one({'_id': int(from_id)}, {'$push': {'spouses': target_id}})
+        return jsonify({'Status': 'ok', 'persons': make_persons(user_id)})
+    else:
+        if link_type == 'parent':
             from_name, target_name = target_name, from_name
             from_id, target_id = target_id, from_id
             from_person, target_person = target_person, from_person
@@ -187,14 +198,6 @@ def link():
         except (ValueError, TypeError):
             return jsonify({'Error': 'Не удалось связать персоны.', 'persons': -1})
         return jsonify({'Status': 'ok', 'persons': make_persons(user_id)})
-    elif type_of_link == 'marriage':
-        if target_person['sex'] == from_person['sex']:
-            return jsonify({'Error': 'Запрещено создавать однополные браки.', 'persons': -1})
-        if from_id in target_person['spouses']:
-            return jsonify({'Error': 'Между персонами уже есть брак.', 'persons': -1})
-        collection.update_one({'_id': int(target_id)}, {'$push': {'spouses': from_id}})
-        collection.update_one({'_id': int(from_id)}, {'$push': {'spouses': target_id}})
-        return jsonify({'Status': 'ok', 'persons': make_persons(user_id)})
 
 
 @app.route('/remove', methods=['POST'])
@@ -215,17 +218,6 @@ def remove():
         return jsonify({'Status': 'Персона удалена.', 'persons': make_persons(user_id)})
     except (ValueError, TypeError):
         return jsonify({'Error': 'Удаление персоны неуспешно.', 'persons': -1})
-
-
-@app.route('/pull', methods=['POST'])
-def pull_info():
-    query_args = request.get_json(True)
-    collection = DBClient()['family']['persons']
-    person_id = query_args.get('person_id')
-    try:
-        return jsonify({'result': list(collection.find({'_id': int(person_id)}))})
-    except (ValueError, TypeError):
-        return jsonify({'Error': 'Ошибка запроса.', 'persons': -1})
 
 
 @app.route('/map', methods=['POST'])

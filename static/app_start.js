@@ -8,10 +8,8 @@ var startApp = function(user){
         dataType: 'json',
         success: function(data) {
             setDiagramOptions();
-            var options = window.diagramSettings;
-            options.items = data['persons'];
-            $("#diagram").famDiagram(options);
-            $("#diagram").famDiagram("update");
+            control.setOption('items', data['persons'])
+            control.update('Recreate');
             draw_belts();
         }
     });
@@ -20,7 +18,6 @@ var startApp = function(user){
 $(window).on("load", function(){
     try {
         VK.init(function(){
-            console.log("vk init");
             getUser(startApp);
         }, function(){
             console.log("error");

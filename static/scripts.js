@@ -60,7 +60,6 @@ $(document).ready(function () {
     });
 
     $('#add_person').click(function(){
-    console.log((parseInt($("#person_id").val())));
         var Request = {
             first_name: $("#first_name").val(),
             middle_name: $("#middle_name").val(),
@@ -128,11 +127,7 @@ $(document).ready(function () {
             dataType: 'json',
             success: function(data) {
                 if (data['persons'] != -1){
-                    var options = window.diagramSettings;
-                    options.items = data['persons'];
-                    $("#diagram").famDiagram(options);
-                    $("#diagram").famDiagram("update");
-                    draw_belts();
+                    setDiagramData(data['persons']);
                 }
             }
         });
@@ -145,11 +140,11 @@ $(document).ready(function () {
     });
 
     $('#link_person_button').click(function(){
+        var relative_type = $("input[name=relative_type]:checked").val();
         window.link = 'listening';
-        window.type_of_link = 'parentship';
+        window.linkType = relative_type;
         $('#full_info_block').hide();
         $('#link-tip').show();
-        var relative_type = $("input[name=relative_type]:checked").val();
         var name = `${$('#full_last_name').val()} ${$('#full_name').val()} ${$('#full_middle_name').val()}`
         if (relative_type == 'parent')
             relative_type = 'родителя';
@@ -160,7 +155,7 @@ $(document).ready(function () {
 
     $('#link_marriage_button').click(function(){
         window.link = 'listening';
-        window.type_of_link = 'marriage';
+        window.linkType = 'spouse';
         $('#full_info_block').hide();
         $('#link-tip').show();
         var name = `${$('#full_last_name').val()} ${$('#full_name').val()} ${$('#full_middle_name').val()}`

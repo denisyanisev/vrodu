@@ -1,3 +1,5 @@
+var control;
+
 $(function() {$( "#draggable" ).draggable();});
 
 function add_vk_person(vk_id, first_name, last_name, vk_sex, photo){
@@ -35,7 +37,6 @@ function add_person_base(Request){
                 return;
             }
             var cache = data;
-            var options = window.diagramSettings;
             if (Request.from_id != null && Request.relative_type == 'parent') {
                 $.ajax({
                     'type': 'POST',
@@ -49,25 +50,16 @@ function add_person_base(Request){
                     }),
                     success: function(data) {
                        if (data['persons'] != -1){
-                            options.items = data['persons'];
-                            $("#diagram").famDiagram(options);
-                            $("#diagram").famDiagram("update");
-                            draw_belts();
+                            setDiagramData(data['persons']);
                        }
                        else {
-                            options.items = cache['persons'];
-                            $("#diagram").famDiagram(options);
-                            $("#diagram").famDiagram("update");
-                            draw_belts();
+                            setDiagramData(cache['persons']);
                        }
                     }
                 });
             }
             else {
-            options.items = cache['persons'];
-                $("#diagram").famDiagram(options);
-                $("#diagram").famDiagram("update");
-                draw_belts();
+            setDiagramData(cache['persons']);
             }
         }
     });
@@ -82,11 +74,7 @@ function change_person(Request){
         dataType: 'json',
         success: function(data) {
             if (data['persons'] != -1){
-                var options = window.diagramSettings;
-                options.items = data['persons'];
-                $("#diagram").famDiagram(options);
-                $("#diagram").famDiagram("update");
-                draw_belts();
+                setDiagramData(data['persons']);
             }
             else {
                 $('#failed_message').text(data['Error']);
@@ -102,120 +90,103 @@ function add_person_js(a, b) {
     b.stopPropagation();
 }
 
-function add_link_js(a){
+function add_link_js(a, b){
     closeEdit();
-    if ( window.link == 'listening' ){
-        closeLink();
-        var person_id = (parseInt($("#person_id").val()));
-        var type_of_link = window.type_of_link;
-        var link_id = (parseInt($(a).find("[name=person_id]").val()));
-        var relative_type = $("input[name=relative_type]:checked").val();
-        if (link_id == person_id) {
-            $('#failed_message').text('Привязка той же персоны!');
-            $( "#dialog-message" ).modal();
-        }
-        else {
-            flushFields();
-            $.ajax({
-                type: 'POST',
-                contentType: 'application/json; charset=utf-8',
-                url: '/link',
-                data: JSON.stringify({
-                    person_id: person_id,
-                    link_id: link_id,
-                    relative_type: relative_type,
-                    user_id: window.user.id,
-                    type_of_link: type_of_link
-                }),
-                dataType: 'json',
-                success: function(data) {
-                    if (data['persons'] != -1){
-                        var options = window.diagramSettings;
-                        options.items = data['persons'];
-                        $("#diagram").famDiagram(options);
-                        $("#diagram").famDiagram("update");
-                        draw_belts();
-                    }
-                    else {
-                        $('#failed_message').text(data['Error']);
-                        $( "#dialog-message" ).modal();
-                    }
-                }
-            });
-        }
+    closeLink();
+    var person_id = b.id,
+        link_id = a.id,
+        linkType;
+    if (window.linkType) {
+        linkType = window.linkType;
+        window.linkType = undefined;
     }
-    // Show full info and edit person
+    if (link_id == person_id) {
+        $('#failed_message').text('Привязка той же персоны!');
+        $( "#dialog-message" ).modal();
+    }
+    else {
+        flushFields();
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            url: '/link',
+            data: JSON.stringify({
+                person_id: person_id,
+                link_id: link_id,
+                link_type: linkType,
+                user_id: window.user.id
+            }),
+            dataType: 'json',
+            success: function(data) {
+                if (data['persons'] != -1){
+                    setDiagramData(data['persons']);
+                }
+                else {
+                    $('#failed_message').text(data['Error']);
+                    $( "#dialog-message" ).modal();
+                }
+            }
+        });
+    }
     show_full_info(a);
 }
 
+// Show full info and edit person
 function show_full_info(a) {
-    var person_id = (parseInt($(a).find('[name=person_id]').val()));
-    console.log(person_id);
+    var person_id = a.id;
     $('#full_id').val(person_id);
     $("#person_id").val(person_id);
-    var photo = $(a).find('[name=photo]').attr('src');
-    $.ajax({
-        type: 'POST',
-        contentType: 'application/json; charset=utf-8',
-        url: '/pull',
-        data: JSON.stringify({person_id: person_id}),
-        dataType: 'json',
-        success: function(data) {
-            var result = data['result'][0];
-            $('#full_photo').attr('src', photo);
-            $('#full_birth_edit').val(result['birth']);
-            $('#full_death_edit').val(result['death']);
-            if (result['alive'] == false) {
-                $('#full_death_edit').show();
-                $('#full_is_alive_edit').prop('checked', false);
-                $('#full_death_belt').show();
-                var years = '...';
-                if (result['birth'])
-                    years = result['birth'];
-                if (result['death'])
-                    years += ' - ' + result['death'];
-                else
-                    years += ' - ...'
-                $('#full_birth_death').val(years);
-                }
-            else {
-                $('#full_death_edit').hide();
-                $('#full_is_alive_edit').prop('checked', true);
-                var years = result['birth'];
-                $('#full_birth_death').val(years);
-                $('#full_death_belt').hide();
-            }
-            if (result['sex'] == 'F'){
-                $('#full_maiden_name').show();
-                $('#full_info_block').css({'background': '#ffb1c7'});
-            }
-            else {
-                $('#full_maiden_name').hide();
-                $('#full_info_block').css({'background': '#88aae9'});
-            }
-            $('#full_name').val(result['first_name']);
-            $('#full_middle_name').val(result['middle_name']);
-
-            if (result['maiden_name']) {
-                $('#full_last_name').val(result['last_name'] + ' (' + result['maiden_name'] + ')');
-                $('#full_maiden_name').val(result['maiden_name']);
-            }
-            else
-                $('#full_last_name').val(result['last_name']);
-
-            $('#full_description').val(result['description']);
-            $('#full_short_desc').val(result['short_desc']);
-            $('#full_nationality').val(result['nationality']);
-            if (result['location'])
-            {
-                $('#full_location').val(result['location']);
-            }
-            else
-            {
-                $('#full_location').val('');
-            }
-        }
-    });
+    var photo = a.image;
+    $('#full_photo').attr('src', photo);
+    $('#full_birth_edit').val(a.birth);
+    $('#full_death_edit').val(a.death);
+    if (a.alive === false) {
+        $('#full_death_edit').show();
+        $('#full_is_alive_edit').prop('checked', false);
+        $('#full_death_belt').show();
+        var years = '...';
+        if (a.birth)
+            years = a.birth;
+        if (a.death)
+            years += ' - ' + a.death;
+        else
+            years += ' - ...'
+        $('#full_birth_death').val(years);
+    }
+    else {
+        $('#full_death_edit').hide();
+        $('#full_is_alive_edit').prop('checked', true);
+        var years = a.birth;
+        $('#full_birth_death').val(years);
+        $('#full_death_belt').hide();
+    }
+    if (a['sex'] == 'F'){
+        $('#full_maiden_name').show();
+        $('#full_info_block').css({'background': '#ffb1c7'});
+    }
+    else {
+        $('#full_maiden_name').hide();
+        $('#full_info_block').css({'background': '#88aae9'});
+    }
+    if (a['first_name']) $('#full_name').val(a['first_name']);
+    if (a['middle_name']) $('#full_middle_name').val(a['middle_name']);
+    if (a['maiden_name']) {
+        $('#full_last_name').val(a['last_name'] + ' (' + a['maiden_name'] + ')');
+        $('#full_maiden_name').val(a['maiden_name']);
+    }
+    else
+        $('#full_last_name').val(a['last_name']);
+    if (a['description']) $('#full_description').val(a['description']);
+    if (a['short_desc']) $('#full_short_desc').val(a['short_desc']);
+    if (a['nationality']) $('#full_nationality').val(a['nationality']);
+    if (a['location'])
+    {
+        $('#full_location').val(a['location']);
+    }
+    else
+    {
+        $('#full_location').val('');
+    }
     $('#full_search_results').hide();
     $('#vk_id').val('');
     $('#full_info_block').show();
@@ -226,30 +197,73 @@ function show_full_info(a) {
     });
 }
 
+
+var setDiagramData = function(persons){
+    control.setOption('items', persons);
+    control.update('Recreate');
+    draw_belts();
+}
+
 var setDiagramOptions = function(){
-    var options = new primitives.orgdiagram.Config();
+    var options = new primitives.FamConfig();
     options.cursorItem = null;
-    options.hasSelectorCheckbox = primitives.common.Enabled.False;
-    options.hasButtons = primitives.common.Enabled.False;
-    options.pageFitMode = primitives.common.PageFitMode.PrintPreview;
-    options.elbowType = primitives.common.ElbowType.Round;
+    options.hasSelectorCheckbox = primitives.Enabled.False;
+    options.buttonsPanelSize = 36;
+    options.hasButtons = primitives.Enabled.Auto;
+    options.pageFitMode = primitives.PageFitMode.None;
+    options.onButtonsRender = function (data) {
+        var itemConfig = data.context;
+        var element = data.element;
+        element.innerHTML = "";
+        element.appendChild(primitives.JsonML.toHTML(["div",
+            {
+            class: "btn-group-vertical btn-group-sm"
+            },
+            ["button", 
+                {
+                    "type": "button",
+                    "data-buttonname": "delete",
+                    "class": "btn btn-light"
+                },
+                ["i", { "class": "fa fa-minus-circle" }]
+            ],
+            ["button", 
+                {
+                    "type": "button",
+                    "data-buttonname": "add",
+                    "class": "btn btn-light"
+                },
+                ["i", { "class": "fa fa-user-plus" }]
+            ]
+        ]));
+    };
+    //options.elbowType = primitives.ElbowType.Round;
     options.normalLevelShift = 20;
     options.dotLevelShift = 20;
-    options.lineLevelShift = 24;
+    options.lineLevelShift = 20;
     options.normalItemsInterval = 10;
-    options.dotItemsInterval = 1;
-    options.lineItemsInterval = 1;
+    options.dotItemsInterval = 10;
+    options.lineItemsInterval = 50;
     options.linesWidth = 1;
     options.linesColor = "#7C8993";
-    $("#diagram").famDiagram(options);
+    options.onCursorChanging = function(event, eventArgs){
+        if (window.link == 'listening') add_link_js(eventArgs.context, eventArgs.oldContext);
+    };
+    options.onCursorChanged = function(event, eventArgs){
+        show_full_info(eventArgs.context);
+    };
+
+    control = primitives.FamDiagram(document.getElementById("diagram"), options);
     var placeholder = $(".placeholder");
     $("#diagram").css({
         width: placeholder.width(),
         height: placeholder.height(),
     });
 
-    window.diagramSettings = options;
 }
+
+
+
 
 ymaps.ready(init);
 function init() {

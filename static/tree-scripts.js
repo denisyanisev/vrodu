@@ -4,7 +4,7 @@ $(function() {$( "#draggable" ).draggable();});
 
 function add_vk_person(vk_id, first_name, last_name, vk_sex, photo){
     var Request = {
-    from_id: (parseInt($("#person_id").val())),
+    from_id: (parseInt($("#full_id").val())),
     first_name: first_name,
     middle_name: '',
     last_name: last_name,
@@ -30,14 +30,13 @@ function add_person_base(Request){
         data: JSON.stringify(Request),
         dataType: 'json',
         success: function(data) {
-            $('#full_info_block').hide();
             if (data['persons'] == -1){
                 $('#failed_message').text(data['Error']);
                 $("#dialog-message").modal();
                 return;
             }
-            var cache = data;
-            if (Request.from_id != null && Request.relative_type == 'parent') {
+            var cache = data, new_id = cache['new_id'];
+            if (Request.from_id != undefined && Request.relative_type == 'parent') {
                 $.ajax({
                     'type': 'POST',
                     url: '/change',
@@ -49,17 +48,23 @@ function add_person_base(Request){
                         user_id: window.user.id
                     }),
                     success: function(data) {
-                       if (data['persons'] != -1){
+                        if (data['persons'] != -1){
+                            control.setOption('cursorItem', new_id);
                             setDiagramData(data['persons']);
-                       }
-                       else {
+                            show_full_info(data['persons'].find(person => person.id===new_id));
+                        }
+                        else {
+                            control.setOption('cursorItem', new_id);
                             setDiagramData(cache['persons']);
-                       }
+                            show_full_info(cache['persons'].find(person => person.id===new_id));
+                        }
                     }
                 });
             }
             else {
-            setDiagramData(cache['persons']);
+                control.setOption('cursorItem', new_id);
+                setDiagramData(cache['persons']);
+                show_full_info(cache['persons'].find(person => person.id===new_id));
             }
         }
     });
@@ -74,7 +79,7 @@ function change_person(Request){
         dataType: 'json',
         success: function(data) {
             if (data['persons'] != -1){
-                setDiagramData(data['persons']);
+                updateDiagramData(data['persons']);
             }
             else {
                 $('#failed_message').text(data['Error']);
@@ -82,12 +87,6 @@ function change_person(Request){
             }
         }
     });
-}
-
-function add_person_js(a, b) {
-    show_full_info(a);
-    $('#full_info_block').tabs( "option", "active", 1 );
-    b.stopPropagation();
 }
 
 function add_link_js(a, b){
@@ -135,7 +134,6 @@ function add_link_js(a, b){
 function show_full_info(a) {
     var person_id = a.id;
     $('#full_id').val(person_id);
-    $("#person_id").val(person_id);
     var photo = a.image;
     $('#full_photo').attr('src', photo);
     $('#full_birth_edit').val(a.birth);
@@ -168,39 +166,39 @@ function show_full_info(a) {
         $('#full_maiden_name').hide();
         $('#full_info_block').css({'background': '#88aae9'});
     }
-    if (a['first_name']) $('#full_name').val(a['first_name']);
-    if (a['middle_name']) $('#full_middle_name').val(a['middle_name']);
+    $('#full_name').val(a['first_name'] ? a['first_name'] : '');
+    $('#full_middle_name').val(a['middle_name'] ? a['middle_name'] : '');
     if (a['maiden_name']) {
         $('#full_last_name').val(a['last_name'] + ' (' + a['maiden_name'] + ')');
         $('#full_maiden_name').val(a['maiden_name']);
     }
     else
-        $('#full_last_name').val(a['last_name']);
-    if (a['description']) $('#full_description').val(a['description']);
-    if (a['short_desc']) $('#full_short_desc').val(a['short_desc']);
-    if (a['nationality']) $('#full_nationality').val(a['nationality']);
-    if (a['location'])
-    {
-        $('#full_location').val(a['location']);
-    }
-    else
-    {
-        $('#full_location').val('');
-    }
+        $('#full_last_name').val(a['last_name'] ? a['last_name'] : '');
+    $('#full_description').val(a['description'] ? a['description'] : '');
+    $('#full_short_desc').val(a['short_desc'] ? a['short_desc'] : '');
+    $('#full_nationality').val(a['nationality'] ? a['nationality']: '');
+    $('#full_location').val(a['location'] ? a['location'] : '');
+    
     $('#full_search_results').hide();
     $('#vk_id').val('');
     $('#full_info_block').show();
     $( '#full_info_block').tabs( "option", "active", 0 );
     $('#full_close').click(function(){
-        closeEdit();
         $('#full_info_block').hide();
+        closeEdit();
     });
 }
 
 
 var setDiagramData = function(persons){
     control.setOption('items', persons);
-    control.update('Recreate');
+    control.update('Recreate', true);
+    draw_belts();
+}
+
+var updateDiagramData = function(persons){
+    if (persons) control.setOption('items', persons);
+    control.update('Recreate', true);
     draw_belts();
 }
 
@@ -217,7 +215,8 @@ var setDiagramOptions = function(){
         element.innerHTML = "";
         element.appendChild(primitives.JsonML.toHTML(["div",
             {
-            class: "btn-group-vertical btn-group-sm"
+            class: "btn-group-vertical btn-group-sm",
+            style: "display: block;"
             },
             ["button", 
                 {
@@ -249,9 +248,22 @@ var setDiagramOptions = function(){
     options.onCursorChanging = function(event, eventArgs){
         if (window.link == 'listening') add_link_js(eventArgs.context, eventArgs.oldContext);
     };
-    options.onCursorChanged = function(event, eventArgs){
+    options.onMouseClick = function(event, eventArgs){
         show_full_info(eventArgs.context);
     };
+    options.onButtonClick = function(event, eventArgs){
+        switch(eventArgs.name){
+            case 'delete':
+                delete_person_base(eventArgs.context.id);
+                break;
+            case 'add':
+            {
+                $('#person_id').val(eventArgs.context.id);
+                $('#input_block_modal').modal();
+                break;
+            }
+        }
+    }
 
     control = primitives.FamDiagram(document.getElementById("diagram"), options);
     var placeholder = $(".placeholder");
@@ -259,11 +271,14 @@ var setDiagramOptions = function(){
         width: placeholder.width(),
         height: placeholder.height(),
     });
-
 }
 
-
-
+var delete_person_base = function(person_id) {
+    const title = control.getOption('items').find(person => person.id === person_id).title;
+    $('#deleted_item').text(title);
+    $('#dialog-confirm')[0].person_id = person_id;
+    $('#dialog-confirm').modal();
+}
 
 ymaps.ready(init);
 function init() {

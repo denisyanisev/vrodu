@@ -9,6 +9,8 @@ function draw_belts() {
 }
 
 function closeEdit(){
+    control.setOption('cursorItem', null);
+    control.update('Refresh');
     $('#full_edit').show();
     $('#full_edit_save').hide();
     $('#full_edit_cancel').hide();
@@ -56,6 +58,7 @@ $(document).ready(function () {
     });
 
     $('#add_person_button').click(function(){
+        $('#person_id').val($('#full_id').val());
         $('#input_block_modal').modal();
     });
 
@@ -80,13 +83,13 @@ $(document).ready(function () {
             nationality: $("#nationality").val(),
             user_id: window.user.id
             };
+        $('#input_block_modal').modal("hide");
         if (Request.first_name == '') {
             $('#input_block_modal').modal('hide');
             $('#failed_message').text('Не указано имя');
             $("#dialog-message").modal();
             return;
-        }
-        $('#input_block_modal').modal("hide");
+        }        
         if (Request.location != '') {
             var myGeocoder = ymaps.geocode(Request.location);
             myGeocoder.then(function(data){
@@ -108,35 +111,48 @@ $(document).ready(function () {
     })
 
     $('#full_delete').click(function(){
-
-        var title = $('#full_name').val();
-        $("#dialog-confirm").modal();
-        $('#deleted_item').text(title);
+        delete_person_base(parseInt($("#full_id").val()));
     });
 
     $('#delete_person').click(function(){
-        var person_id = (parseInt($('#full_id').val()));
-        $.ajax({
-            type: 'POST',
-            contentType: 'application/json; charset=utf-8',
-            url: '/remove',
-            data: JSON.stringify({
-                person_id: person_id,
-                user_id: window.user.id
-            }),
-            dataType: 'json',
-            success: function(data) {
-                if (data['persons'] != -1){
-                    setDiagramData(data['persons']);
-                }
-            }
-        });
-        $("#dialog-confirm").modal('hide');
+        $('#dialog-confirm')[0].confirm = true;
+        $('#dialog-confirm').modal('hide');
         $('#full_info_block').hide();
+        control.setOption('cursorItem', null);
     });
 
     $('#full_add_relation').click(function(){
         $('#full_relations_block').show();
+    });
+
+    const modal = $('#dialog-confirm')[0];
+    $('#dialog-confirm').on('hide.bs.modal', function(e){
+        if (modal.confirm){
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                url: '/remove',
+                data: JSON.stringify({
+                    person_id: modal.person_id,
+                    user_id: window.user.id
+                }),
+                dataType: 'json',
+                success: function(data) {
+                    if (data['persons'] != -1){
+                        control.setOption('cursorItem', null);
+                        setDiagramData(data['persons']);
+                        console.log('Успешно удалена персона');
+                    }
+                    else {
+                        $('#failed_message').text(data['Error']);
+                        $( "#dialog-message" ).modal();
+                    }
+
+                }
+            });
+            modal.confirm = false;
+            modal.person_id = undefined;
+        }
     });
 
     $('#link_person_button').click(function(){
@@ -209,7 +225,7 @@ $(document).ready(function () {
     $('#full_edit_save').click(function(){
         var Request = {
             edit_person: true,
-            from_id: (parseInt($("#person_id").val())),
+            from_id: (parseInt($("#full_id").val())),
             first_name: $('#full_name').val(),
             middle_name: $('#full_middle_name').val(),
             last_name: $('#full_last_name').val(),

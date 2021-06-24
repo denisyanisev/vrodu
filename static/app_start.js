@@ -8,9 +8,7 @@ var startApp = function(user){
         dataType: 'json',
         success: function(data) {
             setDiagramOptions();
-            control.setOption('items', data['persons'])
-            control.update('Recreate');
-            draw_belts();
+            setDiagramData(data['persons'])
         }
     });
 }

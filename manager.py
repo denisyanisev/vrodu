@@ -90,7 +90,7 @@ def add_person():
     user_id = query_args.get('user_id')
     photo = query_args.get('photo')
     maiden_name = query_args.get('maiden_name', '')
-    short_desc = query_args.get('short_desc', '')
+    full_desc = query_args.get('full_desc', '')
     nationality = query_args.get('nationality', '').strip().lower()
     parent_m = ''
     parent_f = ''
@@ -126,7 +126,7 @@ def add_person():
                            'coordinate1': coordinate1,
                            'vk_id': vk_id,
                            'maiden_name': maiden_name,
-                           'short_desc': short_desc,
+                           'full_desc': full_desc,
                            'nationality': nationality,
                            'tree_owner': user_id,
                            })

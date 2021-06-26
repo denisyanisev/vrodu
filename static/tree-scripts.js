@@ -174,8 +174,9 @@ function show_full_info(a) {
     }
     else
         $('#full_last_name').val(a['last_name'] ? a['last_name'] : '');
+        $('#full_maiden_name').val('');
     $('#full_description').val(a['description'] ? a['description'] : '');
-    $('#full_short_desc').val(a['short_desc'] ? a['short_desc'] : '');
+    $('#full_full_desc').val(a['full_desc'] ? a['full_desc'] : '');
     $('#full_nationality').val(a['nationality'] ? a['nationality']: '');
     $('#full_location').val(a['location'] ? a['location'] : '');
     
@@ -236,7 +237,6 @@ var setDiagramOptions = function(){
             ]
         ]));
     };
-    //options.elbowType = primitives.ElbowType.Round;
     options.normalLevelShift = 20;
     options.dotLevelShift = 20;
     options.lineLevelShift = 20;

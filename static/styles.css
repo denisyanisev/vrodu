@@ -325,7 +325,7 @@ display: none;
     display: none;
 }
 
-#full_location, #full_short_desc, #full_description, #full_nationality, #full_maiden_name{
+#full_location, #full_full_desc, #full_description, #full_nationality, #full_maiden_name{
     margin-top: 5px;
 }
 

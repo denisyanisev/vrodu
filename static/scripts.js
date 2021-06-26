@@ -30,6 +30,7 @@ function closeLink(){
 function flushFields(){
     $("#input_block_modal input.flushable").val('');
     $("#input_block_modal textarea").val('');
+    $('#male').prop('checked', true);
     $('#parent').prop('checked', true);
     $('#is_alive').prop('checked', true);
     $('#death_block').hide();
@@ -79,7 +80,7 @@ $(document).ready(function () {
             from_id: (parseInt($("#person_id").val())),
             vk_id: (parseInt($("#vk_id").val())),
             maiden_name: $("#maiden_name").val(),
-            short_desc: $("#short_desc").val(),
+            full_desc: $("#full_desc").val(),
             nationality: $("#nationality").val(),
             user_id: window.user.id
             };
@@ -141,7 +142,6 @@ $(document).ready(function () {
                     if (data['persons'] != -1){
                         control.setOption('cursorItem', null);
                         setDiagramData(data['persons']);
-                        console.log('Успешно удалена персона');
                     }
                     else {
                         $('#failed_message').text(data['Error']);
@@ -203,7 +203,6 @@ $(document).ready(function () {
         var last_name = $('#full_last_name').val();
         var maiden_name_pattern = ' (' + $('#full_maiden_name').val() + ')';
         var last_name_cleared = last_name.replace(maiden_name_pattern, '');
-        console.log(last_name_cleared)
         $('#full_last_name').val(last_name_cleared);
         $('#full_edit_cancel').show();
         $('#full_edit_save').show();
@@ -219,7 +218,8 @@ $(document).ready(function () {
     });
 
     $('[name=sex]').change(function(){
-        $('#maiden_name').toggle();
+        if ($('[name=sex]:checked').val() === 'F') $('#maiden_name').show();
+        else $('#maiden_name').hide();
     })
 
     $('#full_edit_save').click(function(){
@@ -235,7 +235,7 @@ $(document).ready(function () {
             death: $('#full_death_edit').val(),
             location: $('#full_location').val(),
             maiden_name: $('#full_maiden_name').val(),
-            short_desc: $('#full_short_desc').val(),
+            full_desc: $('#full_full_desc').val(),
             nationality: $('#full_nationality').val(),
             user_id: window.user.id
         };

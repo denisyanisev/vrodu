@@ -238,13 +238,16 @@ var setDiagramOptions = function(){
         ]));
     };
     options.normalLevelShift = 20;
-    options.dotLevelShift = 20;
-    options.lineLevelShift = 20;
-    options.normalItemsInterval = 10;
-    options.dotItemsInterval = 10;
-    options.lineItemsInterval = 50;
+    //options.dotLevelShift = 20;
+    options.lineLevelShift = 30;
+    options.normalItemsInterval = 15;
+    //options.dotItemsInterval = 10;
+    options.lineItemsInterval = 30;
     options.linesWidth = 1;
     options.linesColor = "#7C8993";
+    options.navigationMode = primitives.NavigationMode['CursorOnly'];
+    options.scale = 1;
+    options.pageFitMode = primitives.PageFitMode['FitToPage'];
     options.onCursorChanging = function(event, eventArgs){
         if (window.link == 'listening') add_link_js(eventArgs.context, eventArgs.oldContext);
     };
@@ -266,10 +269,10 @@ var setDiagramOptions = function(){
     }
 
     control = primitives.FamDiagram(document.getElementById("diagram"), options);
-    var placeholder = $(".placeholder");
+    // var placeholder = $(".placeholder");
     $("#diagram").css({
-        width: placeholder.width(),
-        height: placeholder.height(),
+        width: '1000px', //placeholder.width(),
+        height: '2000px' //placeholder.height(),
     });
 }
 
@@ -285,3 +288,8 @@ function init() {
     var suggestView1 = new ymaps.SuggestView('location', {results: 4});
     var suggestView2 = new ymaps.SuggestView('full_location', {results: 4});
     }
+
+var zoomDiagram = function(){
+    control.setOption('scale', parseFloat($('#zoomSlider').val()));
+    control.update('Refresh');
+}

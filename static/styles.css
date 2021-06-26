@@ -345,3 +345,13 @@ display: none;
 .modal-header .close {
     margin-top: -21px;
 }
+
+
+#tree_list div {
+    cursor:pointer;
+}
+
+#tree_list div:hover{
+    color: blue;
+}
+

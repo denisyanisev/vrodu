@@ -38,6 +38,22 @@ function flushFields(){
     $('#additional_info').collapse('hide');
 }
 
+function TreeSwitch(tree_id){
+        console.log(tree_id);
+        window.tree_id = tree_id
+	$.ajax({
+	    type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+	    url: '/update',
+	    data: JSON.stringify({user_id: user.id, tree_id: tree_id}),	
+   	    dataType: 'json',
+	    success: function(data) {
+		setDiagramData(data['persons'])	
+            }	    
+	});
+    }
+
+
 $(document).ready(function () {
     $('#is_alive').click(function(){
         if ($('#is_alive').attr("checked") == 'checked'){

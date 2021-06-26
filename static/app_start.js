@@ -7,6 +7,10 @@ var startApp = function(user){
         data: JSON.stringify({user_id: user.id}),
         dataType: 'json',
         success: function(data) {
+             data['tree_list'].forEach(function(elem) {
+	        console.log(elem['tree_owner']);	
+		$('#tree_list').append($('<div href="#" onclick="TreeSwitch('+elem['tree_owner']+')">'+elem['tree_owner']+'</div>'));
+		});
             setDiagramOptions();
             setDiagramData(data['persons'])
         }

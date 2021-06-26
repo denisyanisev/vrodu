@@ -14,8 +14,6 @@ relative_type_str = "relative_type"
 from_id_str = 'from_id'
 parent_m_str = 'parent_m'
 parent_f_str = 'parent_f'
-
-
 def make_direct_relatives(person_id):
     db = DBClient()['family']
     collection = db['persons']
@@ -26,14 +24,15 @@ def make_direct_relatives(person_id):
     return relatives
 
 
-def make_persons(user_id: str = '0'):
+def make_persons(tree_id: str = '0'):
     db = DBClient()['family']
     collection = db['persons']
     persons = list()
-    persons_list = list(collection.find({'tree_owner': user_id}))
-    if not persons_list:
-        for vk_user in collection.find({'vk_id': user_id}):
-            persons_list = collection.find({'tree_owner': vk_user['tree_owner']})
+    #persons_list = list(collection.find({'tree_owner': user_id}))
+    #if not persons_list:
+    #    for vk_user in collection.find({'vk_id': user_id}):
+    #        persons_list = collection.find({'tree_owner': vk_user['tree_owner']})
+    persons_list = collection.find({'tree_owner': tree_id})
     for person in persons_list:
         person['id'] = person.pop('_id')
         if person.get('maiden_name'):
@@ -64,7 +63,12 @@ def index():
 
 @app.route('/update', methods=['POST'])
 def fetch_persons():
-    return jsonify({'persons': make_persons(request.get_json(True).get('user_id'))})
+    query_args = request.get_json(True)
+    collection = DBClient()['family']['persons']
+    user_id = request.get_json(True).get('user_id')
+    tree_list = list(collection.find({'vk_id': user_id}))
+    tree_id = request.get_json(True).get('tree_id', tree_list[0]['tree_owner'])
+    return jsonify({'persons': make_persons(tree_id), 'tree_list': tree_list})
 
 
 @app.route('/add', methods=['POST'])

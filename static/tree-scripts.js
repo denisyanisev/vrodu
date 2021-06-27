@@ -17,7 +17,7 @@ function add_vk_person(vk_id, first_name, last_name, vk_sex, photo){
     relative_type: $("input[name=relative_type]:checked").val(),
     vk_id: vk_id,
     photo: photo,
-    user_id: window.user.id
+    tree_id: window.tree_id
     };
     add_person_base(Request);
 }
@@ -45,7 +45,7 @@ function add_person_base(Request){
                         from_id: Request.from_id,
                         new_id: data['new_id'],
                         sex: Request.sex,
-                        user_id: window.user.id
+                        tree_id: window.tree_id
                     }),
                     success: function(data) {
                         if (data['persons'] != -1){

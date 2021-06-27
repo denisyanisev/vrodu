@@ -39,22 +39,23 @@ function flushFields(){
 }
 
 function TreeSwitch(tree_id){
-        console.log(tree_id);
-        window.tree_id = tree_id
+    window.tree_id = tree_id
 	$.ajax({
 	    type: 'POST',
-            contentType: 'application/json; charset=utf-8',
+        contentType: 'application/json; charset=utf-8',
 	    url: '/update',
 	    data: JSON.stringify({user_id: user.id, tree_id: tree_id}),	
    	    dataType: 'json',
 	    success: function(data) {
 		setDiagramData(data['persons'])	
-            }	    
+        }
 	});
-    }
+}
 
 
 $(document).ready(function () {
+    $('#tree_list').menu();
+
     $('#is_alive').click(function(){
         if ($('#is_alive').attr("checked") == 'checked'){
             $('#death_block').toggle();
@@ -98,7 +99,7 @@ $(document).ready(function () {
             maiden_name: $("#maiden_name").val(),
             full_desc: $("#full_desc").val(),
             nationality: $("#nationality").val(),
-            user_id: window.user.id
+            tree_id: window.tree_id
             };
         $('#input_block_modal').modal("hide");
         if (Request.first_name == '') {
@@ -253,7 +254,7 @@ $(document).ready(function () {
             maiden_name: $('#full_maiden_name').val(),
             full_desc: $('#full_full_desc').val(),
             nationality: $('#full_nationality').val(),
-            user_id: window.user.id
+            tree_id: window.tree_id
         };
         if (Request.location != '') {
             var myGeocoder = ymaps.geocode(Request.location);

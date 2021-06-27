@@ -1,5 +1,6 @@
 var startApp = function(user){
     window.user = user
+    window.tree_id = user.id
     $.ajax({
         type: 'POST',
         contentType: 'application/json; charset=utf-8',
@@ -7,9 +8,11 @@ var startApp = function(user){
         data: JSON.stringify({user_id: user.id}),
         dataType: 'json',
         success: function(data) {
-             data['tree_list'].forEach(function(elem) {
-	        console.log(elem['tree_owner']);	
-		$('#tree_list').append($('<div href="#" onclick="TreeSwitch('+elem['tree_owner']+')">'+elem['tree_owner']+'</div>'));
+        data['tree_list'].forEach(function(elem) {
+            if (user.id == elem['tree_owner'])
+                $('#tree_list').append($('<li href="#" onclick="TreeSwitch('+elem['tree_owner']+')">Мое Дерево</li>'));
+            else
+                $('#tree_list').append($('<li href="#" onclick="TreeSwitch('+elem['tree_owner']+')">Дерево '+elem['tree_owner']+'</li>'));
 		});
             setDiagramOptions();
             setDiagramData(data['persons'])

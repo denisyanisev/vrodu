@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, jsonify
 from flask_bootstrap import Bootstrap
-# from loguru import logger
 from db import DBClient
 import random
 import logging
@@ -14,6 +13,8 @@ relative_type_str = "relative_type"
 from_id_str = 'from_id'
 parent_m_str = 'parent_m'
 parent_f_str = 'parent_f'
+
+
 def make_direct_relatives(person_id):
     db = DBClient()['family']
     collection = db['persons']
@@ -24,14 +25,10 @@ def make_direct_relatives(person_id):
     return relatives
 
 
-def make_persons(tree_id: str = '0'):
+def make_persons(tree_id: int = 0):
     db = DBClient()['family']
     collection = db['persons']
     persons = list()
-    #persons_list = list(collection.find({'tree_owner': user_id}))
-    #if not persons_list:
-    #    for vk_user in collection.find({'vk_id': user_id}):
-    #        persons_list = collection.find({'tree_owner': vk_user['tree_owner']})
     persons_list = collection.find({'tree_owner': tree_id})
     for person in persons_list:
         person['id'] = person.pop('_id')
@@ -65,9 +62,9 @@ def index():
 def fetch_persons():
     query_args = request.get_json(True)
     collection = DBClient()['family']['persons']
-    user_id = request.get_json(True).get('user_id')
+    user_id = query_args.get('user_id')
     tree_list = list(collection.find({'vk_id': user_id}))
-    tree_id = request.get_json(True).get('tree_id', tree_list[0]['tree_owner'])
+    tree_id = query_args.get('tree_id', tree_list[0]['tree_owner'])
     return jsonify({'persons': make_persons(tree_id), 'tree_list': tree_list})
 
 
@@ -91,7 +88,7 @@ def add_person():
     coordinate1 = query_args.get('coordinate1', '')
     relative_type = query_args.get(relative_type_str)  # кого мы добавляем
     vk_id = query_args.get('vk_id')
-    user_id = query_args.get('user_id')
+    tree_id = query_args.get('tree_id')
     photo = query_args.get('photo')
     maiden_name = query_args.get('maiden_name', '')
     full_desc = query_args.get('full_desc', '')
@@ -132,9 +129,9 @@ def add_person():
                            'maiden_name': maiden_name,
                            'full_desc': full_desc,
                            'nationality': nationality,
-                           'tree_owner': user_id,
+                           'tree_owner': tree_id,
                            })
-    return jsonify({'new_id': new_id, 'persons': make_persons(user_id)})
+    return jsonify({'new_id': new_id, 'persons': make_persons(tree_id)})
 
 
 @app.route('/change', methods=['POST'])
@@ -143,7 +140,7 @@ def change_person():
     edit_person = request_data.get('edit_person')
     request_data.pop('edit_person', False)
     person_id = request_data.get('from_id')
-    user_id = request_data.get('user_id')
+    tree_id = request_data.get('tree_id')
     collection = DBClient()['family']['persons']
     new_id = request_data.get('new_id')
     sex = request_data.get('sex')
@@ -153,7 +150,7 @@ def change_person():
             collection.update_one({'_id': int(person_id)}, {'$set': request_data})
         else:
             collection.update_one({'_id': int(person_id)}, {'$set': {parent_str: new_id}})
-        return jsonify({'Status': 'ok', 'persons': make_persons(user_id)})
+        return jsonify({'Status': 'ok', 'persons': make_persons(tree_id)})
     except (ValueError, TypeError):
         return jsonify({'Error': 'Нe удалось изменить персону.', 'persons': -1})
 
@@ -237,4 +234,4 @@ def get_map():
 
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)

@@ -288,6 +288,13 @@ $(document).ready(function () {
         $('#map_modal').modal();
     });
 
+    document.onwheel = function (event){
+        event.preventDefault();
+        const change = parseFloat($('#zoomSlider').val()) + event.deltaY * 0.02;
+        $('#zoomSlider').val(change);
+        zoomDiagram();
+    };
+
     $('#map_modal').on('shown.bs.modal', function (e) {
         $.ajax({
             type: 'POST',

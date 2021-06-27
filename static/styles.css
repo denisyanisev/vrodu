@@ -12,11 +12,6 @@ label {
     border: 0px;
 }
 
-.placeholder {
-    width: 1300px!important;
-    height: 1500px!important;
-}
-
 .bp-button, .bp-plus {
     cursor: pointer;
 	font-size: 13px;
@@ -297,6 +292,19 @@ display: none;
 
 .add_field{
     margin-top: 8px;
+}
+
+body {
+  overflow-y: hidden; /* Hide vertical scrollbar */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
+}
+
+#zoomSlider{
+    position: absolute;
+    top: 110px;
+    left: -55px;
+    width: 150px;
+    rotate: 270deg;
 }
 
 #link_map {

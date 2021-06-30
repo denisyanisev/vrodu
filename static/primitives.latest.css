@@ -33,7 +33,7 @@
     font-size: 11px;
     line-height: 11px;
     color: white;
-    padding: 0;
+    padding: 1px;
 }
 
 .bp-title-frame {
@@ -50,7 +50,7 @@
 
 .bp-description {
     font-size: 10px;
-    line-height: 12px;
+    /* line-height: 12px; */
 }
 
 .bp-cursor-frame {

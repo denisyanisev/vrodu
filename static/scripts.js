@@ -36,6 +36,7 @@ function flushFields(){
     $('#death_block').hide();
     $('#full_search_results').html('');
     $('#additional_info').collapse('hide');
+    $('#maiden_name').hide();
 }
 
 function TreeSwitch(tree_id){

@@ -10,9 +10,9 @@ var startApp = function(user){
         success: function(data) {
         data['tree_list'].forEach(function(elem) {
             if (user.id == elem['tree_owner'])
-                $('#tree_list').append($('<li href="#" onclick="TreeSwitch('+elem['tree_owner']+')">Мое Дерево</li>'));
+                $('#tree_list').append($('<li href="#" onclick="TreeSwitch(' + elem +')">Мое Дерево</li>'));
             else
-                $('#tree_list').append($('<li href="#" onclick="TreeSwitch('+elem['tree_owner']+')">Дерево '+elem['tree_owner']+'</li>'));
+                $('#tree_list').append($('<li href="#" onclick="TreeSwitch(' + elem + ')">Дерево ' + elem + '</li>'));
 		});
             setDiagramOptions();
             setDiagramData(data['persons'])

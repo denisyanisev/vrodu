@@ -63,8 +63,8 @@ def fetch_persons():
     query_args = request.get_json(True)
     collection = DBClient()['family']['persons']
     user_id = query_args.get('user_id')
-    tree_list = list(collection.find({'vk_id': user_id}))
-    tree_id = query_args.get('tree_id', tree_list[0]['tree_owner'])
+    tree_list = [tree['tree_owner'] for tree in collection.find({'vk_id': user_id})]
+    tree_id = query_args.get('tree_id', tree_list[0]['tree_owner'] if tree_list else 0)
     return jsonify({'persons': make_persons(tree_id), 'tree_list': tree_list})
 
 
@@ -130,6 +130,7 @@ def add_person():
                            'full_desc': full_desc,
                            'nationality': nationality,
                            'tree_owner': tree_id,
+                           'permissions': 777
                            })
     return jsonify({'new_id': new_id, 'persons': make_persons(tree_id)})
 

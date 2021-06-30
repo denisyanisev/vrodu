@@ -290,7 +290,7 @@ $(document).ready(function () {
 
     document.onwheel = function (event){
         event.preventDefault();
-        const change = parseFloat($('#zoomSlider').val()) + event.deltaY * 0.02;
+        const change = parseFloat($('#zoomSlider').val()) - Math.min(event.deltaY * 0.003, 0.125);
         $('#zoomSlider').val(change);
         zoomDiagram();
     };

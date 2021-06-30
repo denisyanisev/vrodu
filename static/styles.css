@@ -49,24 +49,13 @@ label {
 }
 
 .death_belt {
-    display: block;
-    width: 27px;
-    height: 1px;
+    position: relative;
+    bottom: 13px;
+    left: 26px;
+    width: 40px;
+    height: 5px;
     background: black;
-    right: 82px;
-    bottom: 41px;
-    z-index: 1;
-    -moz-transform: rotate(315deg);
-    -ms-transform: rotate(315deg);
-    -webkit-transform: rotate(
-        315deg
-        );
-            -o-transform: rotate(15deg);
-            transform: rotate(
-        315deg
-        );
-    border: 2px black solid;
-    border-radius: 59px;
+    transform: rotate(315deg);
 }
 
 .bp-title-frame{
@@ -138,7 +127,7 @@ display: none;
 }
 
 #full_info_block {
-    display: none;
+    position: none;
     right: 14px;
     width: 385px;
     height: 480px;
@@ -182,10 +171,7 @@ display: none;
 
 #full_death_belt{
     position: absolute;
-    display: none;
-    right: 11px!important;
-    bottom: 15px!important;
-    width: 57px;
+    width: 58px;
     height: 8px;
     top: 76px;
     left: 51px;
@@ -304,7 +290,10 @@ body {
     top: 110px;
     left: -55px;
     width: 150px;
-    rotate: 270deg;
+    -moz-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    -webkit-transform: rotate(270deg);
+    transform: rotate(270deg);
 }
 
 #link_map {
@@ -369,7 +358,7 @@ body {
 #tree_list {
     position: absolute;
     top: 57px;
-    left: 10px;
+    left: 5rem;
     padding: 7px;
 }
 

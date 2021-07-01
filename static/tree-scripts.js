@@ -133,7 +133,7 @@ function add_link_js(a, b){
 
 // Show full info and edit person
 function show_full_info(a) {
-    console.log(a);
+    closeEdit();
     var person_id = a.id;
     $('#full_id').val(person_id);
     var photo = a.image;
@@ -170,13 +170,8 @@ function show_full_info(a) {
     }
     $('#full_name').val(a['first_name'] ? a['first_name'] : '');
     $('#full_middle_name').val(a['middle_name'] ? a['middle_name'] : '');
-    if (a['maiden_name']) {
-        $('#full_last_name').val(a['last_name'] + ' (' + a['maiden_name'] + ')');
-        $('#full_maiden_name').val(a['maiden_name']);
-    }
-    else
-        $('#full_last_name').val(a['last_name'] ? a['last_name'] : '');
-        $('#full_maiden_name').val('');
+    $('#full_last_name').val(a['last_name'] ? a['last_name'] : '');
+    $('#full_maiden_name').val(a['maiden_name'] ? a['maiden_name'] : '');
     $('#full_description').val(a['description'] ? a['description'] : '');
     $('#full_full_desc').val(a['full_desc'] ? a['full_desc'] : '');
     $('#full_nationality').val(a['nationality'] ? a['nationality']: '');
@@ -255,6 +250,9 @@ var setDiagramOptions = function(){
     };
     options.onMouseClick = function(event, eventArgs){
         show_full_info(eventArgs.context);
+        const x = eventArgs.position.x, y = eventArgs.position.y, scale = parseFloat($('#zoomSlider').val());
+        $('#draggable').css({left:-x*scale+($(window).width()-parseInt($('#full_info_block').css('width')))/2, 
+        top:Math.min(0,-y*scale+$(window).height()/2)});
     };
     options.onButtonClick = function(event, eventArgs){
         switch(eventArgs.name){
@@ -272,10 +270,14 @@ var setDiagramOptions = function(){
     options.defaultTemplateName = 'personTemplate1';
     options.templates = [getPersonsTemplates()];
     options.onItemRender = onTemplateRender;
+    const myWidth = '2000px', myHeight = '2000px';
     control = primitives.FamDiagram(document.getElementById("diagram"), options);
     $("#diagram").css({
-        width: '2000px',
-        height: '2000px' 
+        width: myWidth,
+        height: myHeight 
+    });
+    $('#draggable').css({
+        width: myWidth
     });
 };
 
@@ -351,15 +353,10 @@ var onTemplateRender = function (event, data) {
         title.textContent = itemConfig.title;
         titleFrame.style.backgroundColor = itemConfig.itemTitleColor;
         photo.src = itemConfig.image;
-        if (data.context.alive === false)
-        {
-            deathBelt.classList.add('death_belt');
-        }
+        if (data.context.alive === false) deathBelt.classList.add('death_belt');
         description.textContent = itemConfig.description;
         years.textContent = itemConfig.years;
     }
-
-
 };
 
 var delete_person_base = function(person_id) {

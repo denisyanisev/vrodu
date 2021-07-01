@@ -3,12 +3,11 @@ label {
 }
 
 .tree_container {
-    overflow: hidden;
+    overflow: visible;
 }
 
 #draggable{
-    overflow: hidden;
-    width: 2000px!important;
+    overflow: visible;
     border: 0px;
 }
 
@@ -59,7 +58,7 @@ label {
 }
 
 .bp-title-frame{
-    margin-top: 2px;
+    margin-top: 3px;
 }
 
 #dialog-confirm {
@@ -92,27 +91,6 @@ label {
     display: none;
 }
 
-/* Create three equal columns that floats next to each other */
-.column {
-    float: left;
-    width: 33.3%;
-    font-size: 15px;
-
-    /* padding: 10px; */
-    /* height: 100px; Should be removed. Only for demonstration */
-}
-
-/* Clear floats after the columns */
-.row:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-.row {
-    margin-right: 0px;
-    margin-left: 0px;
-}
-
 .vk_block{
 position: absolute;
 top: 10px;
@@ -127,7 +105,6 @@ display: none;
 }
 
 #full_info_block {
-    position: none;
     right: 14px;
     width: 385px;
     height: 480px;
@@ -138,10 +115,8 @@ display: none;
 }
 
 #full_photo{
+    position: relative;
     width: 100px;
-    height: 100px;
-    float: left;
-    margin-right: 20px;
 }
 
 
@@ -167,23 +142,31 @@ display: none;
 
 #full_name_block {
     font-weight: bold;
+    float: left;
+    margin-left: 18px;
 }
 
-#full_death_belt{
-    position: absolute;
-    width: 58px;
+#full_death_belt{   
+    width: 70px;
     height: 8px;
-    top: 76px;
-    left: 51px;
+    bottom: 25px;
+    left: 44px;
 }
 
 #full_photo_block {
-    position: relative;
+    width: 100px;
+    height: 100px;
+    box-sizing: content-box;
+    padding-right: 1px;
+    padding-bottom: 1px;
+    float: left;
+    overflow: hidden;
 }
 
 #full_birth_death {
-    margin-top: 10px;
-    display: block;
+    margin-top: 4px;
+    padding: 0px;
+    font-size: 18px;
 }
 
 #full_delete {

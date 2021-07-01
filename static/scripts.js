@@ -9,17 +9,13 @@ function draw_belts() {
 }
 
 function closeEdit(){
-    control.setOption('cursorItem', null);
-    control.update('Refresh');
     $('#full_edit').show();
     $('#full_edit_save').hide();
     $('#full_edit_cancel').hide();
-    $('#full_edit_save').hide();
     $('.full_field').prop('disabled', true);
     $('.full_field').removeClass('full_field_enabled');
     $('#bd_edit').hide();
     $('#full_birth_death').show();
-    $('#full_maiden_name').val('');
 }
 
 function closeLink(){
@@ -205,6 +201,8 @@ $(document).ready(function () {
            $('#full_info_block').hide();
            closeLink();
            closeEdit();
+           control.setOption('cursorItem', null);
+           control.update('Refresh');
         }
     });
 

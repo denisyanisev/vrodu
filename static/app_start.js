@@ -16,6 +16,7 @@ var startApp = function(user){
 		});
             setDiagramOptions();
             setDiagramData(data['persons'])
+            $('#draggable').css({left: (-parseInt($('#draggable').css('width'))+parseInt($(window).width()))/2});
         }
     });
 }

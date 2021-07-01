@@ -8,10 +8,10 @@ var startApp = function(user){
         data: JSON.stringify({user_id: user.id}),
         dataType: 'json',
         success: function(data) {
+	$('#tree_list').append($('<li href="#" onclick="TreeSwitch(' + user.id  +  ')">Мое Дерево</li>'));
+	console.log(user.id)
         data['tree_list'].forEach(function(elem) {
-            if (user.id == elem['tree_owner'])
-                $('#tree_list').append($('<li href="#" onclick="TreeSwitch(' + elem +')">Мое Дерево</li>'));
-            else
+            if (user.id != elem)
                 $('#tree_list').append($('<li href="#" onclick="TreeSwitch(' + elem + ')">Дерево ' + elem + '</li>'));
 		});
             setDiagramOptions();

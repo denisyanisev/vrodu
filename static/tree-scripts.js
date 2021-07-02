@@ -2,7 +2,7 @@ var control;
 
 $(function() {$( "#draggable" ).draggable();});
 
-function add_vk_person(vk_id, first_name, last_name, vk_sex, photo){
+function add_vk_person(vk_id, first_name, last_name, vk_sex, photo, relation){
     var Request = {
     from_id: (parseInt($("#full_id").val())),
     first_name: first_name,
@@ -14,7 +14,7 @@ function add_vk_person(vk_id, first_name, last_name, vk_sex, photo){
     death: '',
     sex: (vk_sex == 2) ? 'M' : 'F',
     location: '',
-    relative_type: $("input[name=relative_type]:checked").val(),
+    relative_type: (relation) ? relation :  $("input[name=relative_type]:checked").val(),
     vk_id: vk_id,
     photo: photo,
     tree_id: window.tree_id

@@ -8,9 +8,11 @@ var startApp = function(user){
         data: JSON.stringify({user_id: user.id}),
         dataType: 'json',
         success: function(data) {
+	var res = data['persons'].filter(person => (user.id == person['vk_id'] && user.id == person['tree_owner']))
+	if (res.length == 0)
+	    addMainPerson()
 	$('#tree_list').append($('<li href="#" onclick="TreeSwitch(' + user.id  +  ')">Мое Дерево</li>'));
-	console.log(user.id)
-        data['tree_list'].forEach(function(elem) {
+	data['tree_list'].forEach(function(elem) {
             if (user.id != elem)
                 $('#tree_list').append($('<li href="#" onclick="TreeSwitch(' + elem + ')">Дерево ' + elem + '</li>'));
 		});

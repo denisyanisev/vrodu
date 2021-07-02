@@ -48,7 +48,6 @@ def make_persons(tree_id: int = 0):
             years = person['birth']
         person['years'] = years
         person['alive'] = person['alive']
-        person.pop('tree_owner')
         persons.append(person)
     return persons
 
@@ -64,7 +63,7 @@ def fetch_persons():
     collection = DBClient()['family']['persons']
     user_id = query_args.get('user_id')
     tree_list = [tree['tree_owner'] for tree in collection.find({'vk_id': user_id})]
-    tree_id = query_args.get('tree_id', tree_list[0] if tree_list else 0)
+    tree_id = query_args.get('tree_id', user_id if tree_list else 0)
     return jsonify({'persons': make_persons(tree_id), 'tree_list': tree_list})
 
 

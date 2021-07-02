@@ -285,6 +285,12 @@ body {
     left: 53px;
 }
 
+#center_on_person {
+    position: absolute;
+    top: 11px;
+    left: 190px;
+}
+
 .link_alert {
     display: inline;
     padding: 5px;

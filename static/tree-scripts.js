@@ -181,6 +181,8 @@ function show_full_info(a) {
     $('#vk_id').val('');
     $('#full_info_block').show();
     $( '#full_info_block').tabs( "option", "active", 0 );
+    
+    $('#person_id').val(a.id);
     $('#full_close').click(function(){
         $('#full_info_block').hide();
         closeEdit();
@@ -235,24 +237,19 @@ var setDiagramOptions = function(){
         ]));
     };
     options.normalLevelShift = 20;
-    //options.dotLevelShift = 20;
     options.lineLevelShift = 30;
     options.normalItemsInterval = 15;
-    //options.dotItemsInterval = 10;
     options.lineItemsInterval = 30;
     options.linesWidth = 1;
     options.linesColor = "#7C8993";
     options.navigationMode = primitives.NavigationMode['CursorOnly'];
     options.scale = 1;
-    //options.pageFitMode = primitives.PageFitMode['FitToPage'];
+    //options.pageFitMode = primitives.PageFitMode['FitToPage'];  
     options.onCursorChanging = function(event, eventArgs){
         if (window.link == 'listening') add_link_js(eventArgs.context, eventArgs.oldContext);
     };
     options.onMouseClick = function(event, eventArgs){
         show_full_info(eventArgs.context);
-        const x = eventArgs.position.x, y = eventArgs.position.y, scale = parseFloat($('#zoomSlider').val());
-        $('#draggable').css({left:-x*scale+($(window).width()-parseInt($('#full_info_block').css('width')))/2, 
-        top:Math.min(0,-y*scale+$(window).height()/2)});
     };
     options.onButtonClick = function(event, eventArgs){
         switch(eventArgs.name){
@@ -285,14 +282,11 @@ var getPersonsTemplates = function() {
     var result = new primitives.TemplateConfig();
     result.name = 'personTemplate1';
     result.itemSize = new primitives.Size(152, 83);
-    //result.itemSize = new primitives.Size(80, 36);
     //result.minimizedItemSize = new primitives.Size(3, 3);
     //result.highlightPadding = new primitives.Thickness(4, 4, 4, 4);
 
     result.itemTemplate = 
-    `<div class=" bp-item bp-corner-all bt-item-frame" style="border-width: 1px;
-        width: 151px;
-        height: 83px;">
+    `<div class=" bp-item bp-corner-all bt-item-frame" style="border-width: 1px;">
         <div name="titleBackground" class=" bp-item bp-corner-all bp-title-frame" style="
             top: 1px;
             left: 61px;
@@ -365,6 +359,15 @@ var delete_person_base = function(person_id) {
     $('#dialog-confirm')[0].person_id = person_id;
     $('#dialog-confirm').modal();
 };
+
+var centerOnPerson = function(personId){
+    const position = control.getPosition(personId).position;
+    if (position){
+        const x = position.x, y = position.y, scale = parseFloat($('#zoomSlider').val());
+        $('#draggable').css({left:(-x)*scale+($(window).width()-parseInt($('#full_info_block').css('width')))/2, 
+        top:Math.min(0,-y*scale+$(window).height()/2)});
+    }
+}
 
 ymaps.ready(init);
 function init() {

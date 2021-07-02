@@ -162,6 +162,9 @@ function BaseControl(element, options, taskManagerFactory, eventArgsFactory, tem
    * @param {boolean} forceCenterOnCursor 
    */
 
+  function getPosition(cursorId){
+    return eventArgsFactory(_data, null, cursorId);
+  }
 
   function update(updateMode, forceCenterOnCursor) {
     if (forceCenterOnCursor == null) {
@@ -902,7 +905,8 @@ function BaseControl(element, options, taskManagerFactory, eventArgsFactory, tem
     getOptions: getOptions,
     setOption: setOption,
     getOption: getOption,
-    update: update
+    update: update,
+    getPosition: getPosition
   };
 }
 ;

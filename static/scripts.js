@@ -287,6 +287,10 @@ $(document).ready(function () {
         $('#map_modal').modal();
     });
 
+    $("#center_on_person").click( function() {
+        centerOnPerson(parseInt($('#person_id').val()));
+    });
+
     document.onwheel = function (event){
         event.preventDefault();
         const change = parseFloat($('#zoomSlider').val()) - Math.min(event.deltaY * 0.003, 0.125);

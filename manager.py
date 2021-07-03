@@ -92,6 +92,7 @@ def add_person():
     maiden_name = query_args.get('maiden_name', '')
     full_desc = query_args.get('full_desc', '')
     nationality = query_args.get('nationality', '').strip().lower()
+    vk_confirm = query_args.get('vk_confirm')
     parent_m = ''
     parent_f = ''
     if relative_type == 'child':
@@ -129,7 +130,8 @@ def add_person():
                            'full_desc': full_desc,
                            'nationality': nationality,
                            'tree_owner': tree_id,
-                           'permissions': 777
+                           'permissions': 777,
+                           'vk_confirm': vk_confirm
                            })
     return jsonify({'new_id': new_id, 'persons': make_persons(tree_id)})
 

@@ -44,7 +44,9 @@ function TreeSwitch(tree_id){
 	    data: JSON.stringify({user_id: user.id, tree_id: tree_id}),	
    	    dataType: 'json',
 	    success: function(data) {
-		setDiagramData(data['persons'])	
+		    setDiagramData(data['persons']);
+            $('#full_info_block').hide();
+            closeEdit();
         }
 	});
 }

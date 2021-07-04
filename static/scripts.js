@@ -47,6 +47,19 @@ function TreeSwitch(tree_id){
 		    setDiagramData(data['persons']);
             $('#full_info_block').hide();
             closeEdit();
+                var confirms = data['persons'].filter(person => person['vk_confirm'] === 0)
+                if (confirms.length > 0)
+                    {
+                        confirm_person = confirms[0]
+                        console.log(confirm_person.id)
+                        centerOnPerson(confirm_person.id)
+                        $('#confirmed_item').append('<span>' + confirm_person.first_name + ' ' + confirm_person.last_name + '</span><br />')
+                        $('#confirmed_item').append('<img style="height: 100px" src="' + confirm_person.image + '"/><br />')
+                        $('#confirmed_item').append('<span>ВК ID: </span><a href="vk.com/id' + confirm_person.vk_id + '">'
+                        + confirm_person.vk_id + '</a>')
+                        window.confirm_id = confirm_person.id
+                        $('#confirm_vk').modal()
+                    }
         }
 	});
 }
@@ -313,6 +326,28 @@ $(document).ready(function () {
                 $("#map_modal .modal-body").append(data);
             }
         });
-    })
+    });
+
+    $("#not_confirm_person").click( function() {
+        var Request = {
+            edit_person: true,
+            vk_confirm: 1,
+            from_id: window.confirm_id,
+            tree_id: window.tree_id
+        }
+        change_person(Request);
+        $('#confirm_vk').modal('hide');
+    });
+
+    $("#confirm_person").click( function() {
+        var Request = {
+            edit_person: true,
+            vk_confirm: 2,
+            from_id: window.confirm_id,
+            tree_id: window.tree_id
+        }
+        change_person(Request);
+        $('#confirm_vk').modal('hide');
+    });
 
 });

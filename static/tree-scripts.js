@@ -18,7 +18,7 @@ function add_vk_person(vk_id, first_name, last_name, vk_sex, photo, relation){
     vk_id: vk_id,
     photo: photo,
     tree_id: window.tree_id,
-    vk_confirm: false
+    vk_confirm: 0
     };
     add_person_base(Request);
 }

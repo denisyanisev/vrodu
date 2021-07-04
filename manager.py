@@ -29,7 +29,7 @@ def make_persons(tree_id: int = 0):
     db = DBClient()['family']
     collection = db['persons']
     persons = list()
-    persons_list = collection.find({'tree_owner': tree_id})
+    persons_list = collection.find({'tree_id': tree_id})
     for person in persons_list:
         person['id'] = person.pop('_id')
         if person.get('maiden_name'):
@@ -62,7 +62,7 @@ def fetch_persons():
     query_args = request.get_json(True)
     collection = DBClient()['family']['persons']
     user_id = query_args.get('user_id')
-    tree_list = [tree['tree_owner'] for tree in collection.find({'vk_id': user_id})]
+    tree_list = [tree['tree_id'] for tree in collection.find({'vk_id': user_id})]
     tree_id = query_args.get('tree_id', user_id if tree_list else 0)
     return jsonify({'persons': make_persons(tree_id), 'tree_list': tree_list})
 
@@ -129,7 +129,7 @@ def add_person():
                            'maiden_name': maiden_name,
                            'full_desc': full_desc,
                            'nationality': nationality,
-                           'tree_owner': tree_id,
+                           'tree_id': tree_id,
                            'permissions': 777,
                            'vk_confirm': vk_confirm
                            })
@@ -208,7 +208,7 @@ def remove():
     collection = DBClient()['family']['persons']
     user_id = query_args.get('user_id')
     person_id = query_args.get('person_id')
-    person = collection.find_one({'_id': int(person_id), 'tree_owner': user_id})
+    person = collection.find_one({'_id': int(person_id), 'tree_id': user_id})
     if not person:
         return jsonify({'Error': 'Не найдена персона для удаления', 'persons': -1})
     sex = person['sex']
@@ -229,7 +229,7 @@ def get_map():
         user_id = 0
     collection = DBClient()['family']['persons']
     locations = []
-    for person in collection.find({'tree_owner': user_id, 'coordinate0': {'$exists': True, '$ne': ''}}):
+    for person in collection.find({'tree_id': user_id, 'coordinate0': {'$exists': True, '$ne': ''}}):
         person_name = ' '.join((person['first_name'], person['middle_name'], person['last_name'])).strip()
         locations.append({'person': person_name, 'coordinates': [person['coordinate0'], person['coordinate1']]})
     return render_template('map.html', locations=locations)

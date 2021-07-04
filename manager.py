@@ -142,6 +142,7 @@ def change_person():
     edit_person = request_data.get('edit_person')
     request_data.pop('edit_person', False)
     person_id = request_data.get('from_id')
+    request_data.pop('from_id', False)
     tree_id = request_data.get('tree_id')
     collection = DBClient()['family']['persons']
     new_id = request_data.get('new_id')

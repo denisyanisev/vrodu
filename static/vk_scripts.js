@@ -7,7 +7,7 @@ var getUser = function(callback){
 var addMainPerson = function(){
 	VK.api("users.get", {'fields': 'city,domain,photo_50,photo_200_orig,sex'}, function(data) {
 		main_person = data.response[0]
-		add_vk_person(main_person.id, main_person.first_name, main_person.last_name, main_person.sex, main_person.photo_200_orig, 'new_person')
+		add_vk_person(main_person.id, main_person.first_name, main_person.last_name, main_person.sex, main_person.photo_200_orig, 'new_person', 'confirmed')
 	});
 }
 

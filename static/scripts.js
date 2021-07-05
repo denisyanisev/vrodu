@@ -229,6 +229,44 @@ $(document).ready(function () {
 
     $( "#full_info_block" ).tabs();
 
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.name = 'photo';
+    input.onchange = function(event) {          
+        var photo = input.files[0],   
+        from_id = parseInt($('#person_id').val()),
+        extension = input.files[0].name.split('.').pop(),
+        formData = new FormData();
+
+        formData.append('photo', photo);
+        formData.append('from_id', from_id);
+        formData.append('ext', extension);
+        formData.append('user_id', window.user.id);
+
+        $.ajax({url : '/uploadphoto',
+            type : 'POST',
+            data : formData,
+            processData: false,
+            contentType: false,
+            success : function(data) {
+                setDiagramData(data['persons']);
+                show_full_info(data['persons'].find(person => person.id===from_id));
+            }
+        });
+    };
+
+    $('#full_photo_upload').click(function(event){
+        input.click();
+    });
+    $('#full_photo_block').hover(function(event){
+        console.log(event);
+        $('#full_photo_upload').css('display', 'inline');
+    }, function(event){
+        console.log(event);
+        $('#full_photo_upload').hide();
+    });
+
     $('#full_edit').click(function(){
         $(this).hide();
         var last_name = $('#full_last_name').val();

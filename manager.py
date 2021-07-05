@@ -141,7 +141,7 @@ def change_person():
     request_data = request.get_json(True)
     edit_person = request_data.get('edit_person')
     request_data.pop('edit_person', False)
-    person_id = request_data.get('from_id')
+    person_id = request_data.pop('from_id')
     request_data.pop('from_id', False)
     tree_id = request_data.get('tree_id')
     collection = DBClient()['family']['persons']
@@ -234,6 +234,24 @@ def get_map():
         person_name = ' '.join((person['first_name'], person['middle_name'], person['last_name'])).strip()
         locations.append({'person': person_name, 'coordinates': [person['coordinate0'], person['coordinate1']]})
     return render_template('map.html', locations=locations)
+
+
+@app.route('/uploadphoto', methods=['POST'])
+def upload_photo():
+    content = request.form
+    collection = DBClient()['family']['persons']
+    try:
+        file = request.files['photo']
+        user_id = int(content['user_id'])
+        person_id = int(content['from_id'])
+        ext = content["ext"]
+        hashed = hash(file)
+        path = f'/static/photos/custom/{person_id}_{hashed}.{ext}'
+        file.save(app.root_path + path)
+        collection.update_one({'_id': int(person_id)}, {'$set': {'image': path}})
+        return jsonify({'persons': make_persons(user_id)})
+    except TypeError as err:
+        return jsonify({'Error': 'Загрузка фото неуспешна.', 'persons': -1})
 
 
 if __name__ == '__main__':

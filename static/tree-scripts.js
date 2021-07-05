@@ -274,9 +274,6 @@ var setDiagramOptions = function(){
         width: myWidth,
         height: myHeight 
     });
-    $('#draggable').css({
-        width: myWidth
-    });
 };
 
 var getPersonsTemplates = function() {
@@ -365,16 +362,16 @@ var centerOnPerson = function(personId){
     const position = control.getPosition(personId).position;
     if (position){
         const x = position.x, y = position.y, scale = parseFloat($('#zoomSlider').val());
-        $('#draggable').css({left:(-x)*scale+($(window).width()-parseInt($('#full_info_block').css('width')))/2, 
-        top:Math.min(0,-y*scale+$(window).height()/2)});
+        $('#draggable').css({left:(-x)*scale-80+($(window).width()-parseInt($('#full_info_block').css('width')))/2, 
+        top: Math.min(0,-y*scale-45+$(window).height()/2)});
     }
-}
+};
 
 ymaps.ready(init);
 function init() {
     var suggestView1 = new ymaps.SuggestView('location', {results: 4});
     var suggestView2 = new ymaps.SuggestView('full_location', {results: 4});
-}
+};
 
 var zoomDiagram = function(){
     control.setOption('scale', parseFloat($('#zoomSlider').val()));

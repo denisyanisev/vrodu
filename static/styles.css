@@ -126,6 +126,13 @@ display: none;
     bottom: 6px;
 }
 
+#full_photo_upload {
+    position: absolute;
+    left: 35px;
+    width: 100px;
+    display: none;
+}
+
 #full_close {
     width: 15px;
     position: absolute;

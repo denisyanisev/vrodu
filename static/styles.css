@@ -129,6 +129,7 @@ display: none;
 #full_photo_upload {
     position: absolute;
     left: 35px;
+    top: 65px;
     width: 100px;
     display: none;
 }
@@ -171,7 +172,7 @@ display: none;
 }
 
 #full_birth_death {
-    margin-top: 4px;
+    margin-top: 15px;
     padding: 0px;
     font-size: 18px;
 }
@@ -219,6 +220,16 @@ display: none;
     font-weight: normal;
     background: transparent;
     border: none;
+}
+#full_spouses {
+    max-height: 94px;
+    margin-bottom: 10px;
+    overflow: auto;
+}
+
+#full_spouses a {
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .full_field_enabled {

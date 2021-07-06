@@ -167,14 +167,15 @@
     <div id="full_info_block" style='display: none'>
         <input id="full_id" value="" type="text" hidden/>
         <ul>
-            <li><a href="#full_info_tab">Полная информация</a></li>
-            <li><a href="#full_adding_tab">Добавить персону</a></li>
+            <li><a href="#full_info_tab">Персона</a></li>
+            <li><a href="#full_bio_tab">Биография</a></li>
+            <li><a href="#full_adding_tab">Добавить</a></li>
         </ul>
         <div id="full_info_tab">
             <div id="full_photo_block">
                 <img id="full_photo" src=""/>
-                <img id='full_photo_upload' src="/static/photos/PhotoUpload.png" />
                 <div id="full_death_belt" class="death_belt"></div>
+                <img id='full_photo_upload' src="/static/photos/PhotoUpload.png" />
             </div>
             <div id="full_name_block">
                 <input id="full_last_name" class="full_field form-control" type="text" size="15" placeholder="Фамилия" disabled/>
@@ -190,7 +191,7 @@
                 <input id="full_is_alive_edit" type="checkbox" checked/>
             </div>
             <input id="full_birth_death" type="text" class="full_field"  size="15" disabled />
-            <input id="full_description" placeholder="Короткое описание" class="full_field form-control" type="text" disabled/>
+            <input id="full_description" placeholder="Краткое описание" class="full_field form-control" type="text" disabled/>
             <textarea id="full_full_desc" placeholder="Биография" class="full_field form-control" disabled></textarea>
             <input id="full_nationality" placeholder="Национальность" class="full_field form-control" type="text" disabled/>
             <input id="full_location" placeholder="Место рождения" class="full_field form-control" type="text" disabled/>
@@ -201,21 +202,28 @@
             <button type="button" class="btn btn-danger" id="full_delete">Удалить персону</button>
             <br /><br />
         </div>
-    <div id="full_adding_tab">
-        <div id="full_relations">
-            <div id="add-person">
-                <label>Родителя</label>
-                <input type="radio" id="parent"  name="relative_type" value="parent" checked>
-                <label>Ребенка</label>
-                <input type="radio" id="child" name="relative_type" value="child"> <br />
-                <button type="button" class="btn btn-primary" id="add_person_button">Добавить нового</button>
-                <button type="button" class="btn btn-primary" id="link_person_button">Связать</button><br />
-                <button type="button" class="btn btn-info" id="link_marriage_button">Связать супруга</button><br />
-                <input type="text" id="vk_id" value="" placeholder="Добавить из ВК" class="flushable form-control"><br />
-                <div id="full_search_results"></div>
+        <div id="full_bio_tab">
+            <div style="font-size: 18px; margin-bottom: 5px;">Супруги</div>
+            <div id="full_spouses_block">
+                <div id="full_spouses" class="list-group"></div>
+                <button id="remove_spouse" class="btn btn-danger" type="button">Удалить брак</button>
             </div>
         </div>
-    </div>
+        <div id="full_adding_tab">
+            <div id="full_relations">
+                <div id="add-person">
+                    <label>Родителя</label>
+                    <input type="radio" id="parent"  name="relative_type" value="parent" checked>
+                    <label>Ребенка</label>
+                    <input type="radio" id="child" name="relative_type" value="child"> <br />
+                    <button type="button" class="btn btn-primary" id="add_person_button">Добавить нового</button>
+                    <button type="button" class="btn btn-primary" id="link_person_button">Связать</button><br />
+                    <button type="button" class="btn btn-info" id="link_marriage_button">Связать супруга</button><br />
+                    <input type="text" id="vk_id" value="" placeholder="Добавить из ВК" class="flushable form-control"><br />
+                    <div id="full_search_results"></div>
+                </div>
+            </div>
+        </div>
         <div id="full_close" >X</div>
     </div>
 {% endblock content %}

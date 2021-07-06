@@ -214,6 +214,7 @@ $(document).ready(function () {
     $(document).on('keydown', function(event) {
         if (event.key == "Escape") {
            $('#full_info_block').hide();
+           $('#dialog-message').modal('hide');
            closeLink();
            closeEdit();
            control.setOption('cursorItem', null);
@@ -260,10 +261,8 @@ $(document).ready(function () {
         input.click();
     });
     $('#full_photo_block').hover(function(event){
-        console.log(event);
         $('#full_photo_upload').css('display', 'inline');
     }, function(event){
-        console.log(event);
         $('#full_photo_upload').hide();
     });
 
@@ -281,7 +280,7 @@ $(document).ready(function () {
         $('#full_birth_death').hide();
     });
 
-    $('#full_is_alive_edit').click(function(){
+    $('#full_is_alive_edit').click(function(event){
         $('#full_death_edit').toggle();
         $('#bd-').toggle();
     });
@@ -328,6 +327,39 @@ $(document).ready(function () {
     $('#full_edit_cancel').click(function(){
         closeEdit();
     })
+
+    $('#remove_spouse').click(event => {
+        var spouseSelected = $('#full_spouses').children('.active');
+        if (spouseSelected.length){
+            var targetSpouseId = parseInt(spouseSelected.attr('person-id')),
+                fromSpouseId = parseInt($("#full_id").val());
+            var targetSpouse = control.getOption('items').find(person => person.id===targetSpouseId),
+                fromSpouse = control.getOption('items').find(person => person.id===fromSpouseId);
+
+            fromSpouse.spouses.splice(fromSpouse.spouses.indexOf(targetSpouseId), 1);
+            var Request = {
+                edit_person: true,
+                from_id: fromSpouseId,
+                spouses: fromSpouse.spouses,
+                tree_id: window.tree_id
+            };
+            change_person(Request, true, 1);
+            
+            
+            targetSpouse.spouses.splice(targetSpouse.spouses.indexOf(fromSpouseId));
+            Request = {
+                edit_person: true,
+                from_id: targetSpouseId,
+                spouses: targetSpouse.spouses,
+                tree_id: window.tree_id
+            }  
+            change_person(Request, false);            
+        }
+        else {
+            $('#failed_message').text('Не выбран брак для удаления');
+            $("#dialog-message").modal();
+        }            
+    });
 
     $(".year-picker").datepicker({
         format: "yyyy",

@@ -71,7 +71,7 @@ function add_person_base(Request){
     });
 }
 
-function change_person(Request){
+function change_person(Request, showFullInfo = true, tab = 0){
     $.ajax({
         type: 'POST',
         contentType: 'application/json; charset=utf-8',
@@ -81,7 +81,7 @@ function change_person(Request){
         success: function(data) {
             if (data['persons'] != -1){
                 updateDiagramData(data['persons']);
-                show_full_info(data['persons'].find(person => person.id===Request.from_id));
+                if (showFullInfo) show_full_info(data['persons'].find(person => person.id===Request.from_id), tab);
             }
             else {
                 $('#failed_message').text(data['Error']);
@@ -121,6 +121,7 @@ function add_link_js(a, b){
             success: function(data) {
                 if (data['persons'] != -1){
                     setDiagramData(data['persons']);
+                    show_full_info(data['persons'].find(person => person.id===link_id))
                 }
                 else {
                     $('#failed_message').text(data['Error']);
@@ -129,11 +130,10 @@ function add_link_js(a, b){
             }
         });
     }
-    show_full_info(a);
 }
 
 // Show full info and edit person
-function show_full_info(a) {
+function show_full_info(a, tab = 0) {
     closeEdit();
     var person_id = a.id;
     $('#full_id').val(person_id);
@@ -169,6 +169,21 @@ function show_full_info(a) {
         $('#full_maiden_name').hide();
         $('#full_info_block').css({'background': '#88aae9'});
     }
+    $('#full_spouses').empty();
+    $('#remove_spouse').hide();
+    if (a.spouses.length){
+        var items = control.getOption('items');
+        a.spouses.forEach(person_id => {
+            const person = items.find(person => person.id===person_id);
+            $('#full_spouses').append('<a href="#" person-id='+person.id+' class="list-group-item">'+person.title+'</a>');
+        });
+        $('#remove_spouse').show();
+        $('#full_spouses a').click(function(event){
+            event.preventDefault();
+            $('#full_spouses a').removeClass('active');
+            $(this).addClass('active');
+        }); 
+    }
     $('#full_name').val(a['first_name'] ? a['first_name'] : '');
     $('#full_middle_name').val(a['middle_name'] ? a['middle_name'] : '');
     $('#full_last_name').val(a['last_name'] ? a['last_name'] : '');
@@ -181,7 +196,7 @@ function show_full_info(a) {
     $('#full_search_results').hide();
     $('#vk_id').val('');
     $('#full_info_block').show();
-    $( '#full_info_block').tabs( "option", "active", 0 );
+    $( '#full_info_block').tabs( "option", "active", tab );
     
     $('#person_id').val(a.id);
     $('#full_close').click(function(){
@@ -246,11 +261,14 @@ var setDiagramOptions = function(){
     options.navigationMode = primitives.NavigationMode['CursorOnly'];
     options.scale = 1;
     //options.pageFitMode = primitives.PageFitMode['FitToPage'];  
-    options.onCursorChanging = function(event, eventArgs){
-        if (window.link == 'listening') add_link_js(eventArgs.context, eventArgs.oldContext);
-    };
     options.onMouseClick = function(event, eventArgs){
         show_full_info(eventArgs.context);
+    };
+    options.onCursorChanging = function(event, eventArgs){
+        //if (window.link == 'listening') add_link_js(eventArgs.context, eventArgs.oldContext);
+    };
+    options.onCursorChanged = function(event, eventArgs){
+        if (window.link == 'listening') add_link_js(eventArgs.context, eventArgs.oldContext);
     };
     options.onButtonClick = function(event, eventArgs){
         switch(eventArgs.name){

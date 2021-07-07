@@ -380,8 +380,7 @@ body {
 
 .ver_div {
     position: absolute;
-    bottom: 2px;
-    top: 2px;
+    bottom: 3px;
     font-size: 17px;
     color: #4230d9;
     font-weight: bold;
@@ -389,7 +388,7 @@ body {
     height: 15px;
     border-radius: 18px;
     line-height: 11px;
-    left: 1px;
+    right: 3px;
 }
 
 .bp-title-frame {

@@ -354,7 +354,7 @@ var onTemplateRender = function (event, data) {
             var ver_div = document.createElement('div');
             ver_div.className = 'ver_div';
             ver_div.textContent = "✔"
-            title.append(ver_div)
+            data.element.append(ver_div)
         }
         photo.src = itemConfig.image;
         if (data.context.alive === false) deathBelt.classList.add('death_belt');

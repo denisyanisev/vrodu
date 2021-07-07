@@ -192,7 +192,16 @@ function show_full_info(a, tab = 0) {
     $('#full_full_desc').val(a['full_desc'] ? a['full_desc'] : '');
     $('#full_nationality').val(a['nationality'] ? a['nationality']: '');
     $('#full_location').val(a['location'] ? a['location'] : '');
-    
+    if (a['vk_id']) {
+        $('#full_vk_link').attr('href', 'https://vk.com/id' + a['vk_id']);
+        $('#full_vk_link img').show();
+        if (a['vk_confirm'] == 0)
+            $('#full_vk_text').html('(Приглашение отправлено)')
+        if (a['vk_confirm'] == 1)
+            $('#full_vk_text').html('(Приглашение отклонено)')
+        if (a['vk_confirm'] == 2)
+            $('#full_vk_text').html('(Верифицировано)')
+    }
     $('#full_search_results').hide();
     $('#vk_id').val('');
     $('#full_info_block').show();
@@ -302,40 +311,16 @@ var getPersonsTemplates = function() {
     //result.highlightPadding = new primitives.Thickness(4, 4, 4, 4);
 
     result.itemTemplate = 
-    `<div class=" bp-item bp-corner-all bt-item-frame" style="border-width: 1px;">
-        <div name="titleBackground" class=" bp-item bp-corner-all bp-title-frame" style="
-            top: 1px;
-            left: 61px;
-            width: 89px;
-            height: 47px;
-            background-color: rgb(255, 177, 199);">
-            <div name="title" class=" bp-item bp-title" style="top: 1px; left: 4px; color: rgb(0, 0, 128);
-                position: initial; font-size: 12px;">
-            </div>
+    `<div class="bp-item bp-corner-all bt-item-frame">
+        <div name="titleBackground" class="bp-item bp-corner-all bp-title-frame">
+            <center><div name="title" class=" bp-item bp-title"></div></center>
         </div>
-        <div name="photoBorder" class=" bp-item bp-photo-frame" style="
-            top: 3px;
-            left: 2px;
-            width: 57px;
-            height: 57px;
-            padding: 1px;
-            float: left;">
+        <div name="photoBorder" class="bp-item bp-photo-frame">
             <img name="photo" style="width: 57px;">
             <div name="death_belt"></div>
         </div>
-        <div name="description" class=" bp-item bp-description" style="
-            bottom: 1px;
-            left: 63px;
-            width: 85px;
-            max-height: 29px;">
-        </div>
-        <div class="years" style="
-            bottom: 0px;
-            left: 1px;
-            text-align: center;
-            position: absolute;
-            width: 61px;
-            font-size: 13px;">
+        <div name="description" class="bp-item bp-description"></div>
+        <div class="years">
         </div>
     </div>`
     return result;
@@ -353,15 +338,24 @@ var onTemplateRender = function (event, data) {
     var itemConfig = data.context;
 
     if (data.templateName == 'personTemplate1') {
-        var title = data.element.querySelector('.bp-title'),
+        title = data.element.querySelector('.bp-title'),
         titleFrame = data.element.querySelector('.bp-title-frame'),
         photo = data.element.querySelector('img'),
         deathBelt = data.element.querySelector('div[name=death_belt]'),
         description = data.element.querySelector('.bp-description'),
         years = data.element.querySelector('.years');
-
         title.textContent = itemConfig.title;
-        titleFrame.style.backgroundColor = itemConfig.itemTitleColor;
+        titleFrame.style.backgroundColor = (data.context['sex'] == 'M') ? "#88aae9" : "#ffb1c7"
+
+        if (data.context['vk_confirm'] == 0 || data.context['vk_confirm'] == 1)
+            data.element.style.backgroundColor = "#8ceae5"
+        if (data.context['vk_confirm'] == 2) {
+            data.element.style.backgroundColor = "#8ceae5";
+            var ver_div = document.createElement('div');
+            ver_div.className = 'ver_div';
+            ver_div.textContent = "✔"
+            title.append(ver_div)
+        }
         photo.src = itemConfig.image;
         if (data.context.alive === false) deathBelt.classList.add('death_belt');
         description.textContent = itemConfig.description;

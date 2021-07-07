@@ -39,7 +39,6 @@ def make_persons(tree_id: int = 0):
         person['title'] = ' '.join([person.get('first_name'), person.get('middle_name'), last_name]).strip()
         person['title'] = person['title'].replace('  ', ' ')
         person['parents'] = [person.pop(parent_m_str), person.pop(parent_f_str)]
-        person['itemTitleColor'] = "#88aae9" if person['sex'] == 'M' else "#ffb1c7"
         if not person['alive'] and person['death']:
             years = (person['birth'] if person['birth'] else '...') + '-' + person['death']
         elif not person['alive']:

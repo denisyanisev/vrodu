@@ -53,11 +53,13 @@ function add_person_base(Request){
                             control.setOption('cursorItem', new_id);
                             setDiagramData(data['persons']);
                             show_full_info(data['persons'].find(person => person.id===new_id));
+                            centerOnPerson(new_id);
                         }
                         else {
                             control.setOption('cursorItem', new_id);
                             setDiagramData(cache['persons']);
                             show_full_info(cache['persons'].find(person => person.id===new_id));
+                            centerOnPerson(new_id);
                         }
                     }
                 });
@@ -66,6 +68,7 @@ function add_person_base(Request){
                 control.setOption('cursorItem', new_id);
                 setDiagramData(cache['persons']);
                 show_full_info(cache['persons'].find(person => person.id===new_id));
+                centerOnPerson(new_id);
             }
         }
     });

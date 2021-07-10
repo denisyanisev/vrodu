@@ -230,31 +230,75 @@ $(document).ready(function () {
 
     $( "#full_info_block" ).tabs();
 
-    var input = document.createElement('input');
+    var input = document.createElement('input'),
+        supportedTypes = ['image/png', 'image/jpeg', 'image/webp'];
     input.type = 'file';
-    input.accept = 'image/*';
-    input.name = 'photo';
+    input.accept = supportedTypes.join(',');
     input.onchange = function(event) {          
-        var photo = input.files[0],   
-        from_id = parseInt($('#person_id').val()),
-        extension = input.files[0].name.split('.').pop(),
-        formData = new FormData();
+        var photo = input.files[0];
+        
+        if (photo.size < 10484880){
+            if (supportedTypes.includes(photo.type)){
+                var reader = new FileReader;
+                reader.onload = function(event){
+                    var photoUrl = reader.result;
+                    $('#photo-crop-block').modal();
+                    $('#photo-crop').attr('src', photoUrl);
+                    $('#photo-crop').croppie({
+                        viewport: {
+                            width: 150,
+                            height: 150,
+                            type: 'square'
+                        },
+                        boundary: {
+                            width: 400,
+                            height: 300
+                            },
+                        mouseWheelZoom: true,
+                        //showZoomer: false,
+                    });
+                    $('#photo-crop-btn').on('click', function(event){
+                        $('#photo-crop').croppie('result', {type: 'blob', size: 'viewport', format: 'jpeg', quality: 1
+                        }).then(function(finPhoto){
+                            var from_id = parseInt($('#person_id').val()),
+                                extension = 'jpeg',
+                                formData = new FormData();
 
-        formData.append('photo', photo);
-        formData.append('from_id', from_id);
-        formData.append('ext', extension);
-        formData.append('user_id', window.user.id);
+                            formData.append('photo', finPhoto);
+                            formData.append('from_id', from_id);
+                            formData.append('ext', extension);
+                            formData.append('user_id', window.user.id);
 
-        $.ajax({url : '/uploadphoto',
-            type : 'POST',
-            data : formData,
-            processData: false,
-            contentType: false,
-            success : function(data) {
-                setDiagramData(data['persons']);
-                show_full_info(data['persons'].find(person => person.id===from_id));
+                            $.ajax({url : '/uploadphoto',
+                                type : 'POST',
+                                data : formData,
+                                processData: false,
+                                contentType: false,
+                                success : function(data) {
+                                    setDiagramData(data['persons']);
+                                    show_full_info(data['persons'].find(person => person.id===from_id));
+                                }
+                            });
+                        });
+                        $('#photo-crop-block').modal('hide');
+                    });
+                    $('#photo-crop-block').on('hide.bs.modal', function(event){
+                        $('#photo-crop-block').off('hide.bs.modal');
+                        $('#photo-crop-btn').off('click');
+                        $('#photo-crop').croppie('destroy');
+                    });
+                };
+                reader.readAsDataURL(photo);
             }
-        });
+            else {
+                $('#failed_message').text('Фотография должна быть формата PNG или JPEG');
+                $("#dialog-message").modal();
+            }
+        } 
+        else {
+            $('#failed_message').text('Файл не должен превышать 10МБ!');
+            $("#dialog-message").modal();
+        }
     };
 
     $('#full_photo_upload').click(function(event){
@@ -376,12 +420,12 @@ $(document).ready(function () {
         centerOnPerson(parseInt($('#person_id').val()));
     });
 
-    document.onwheel = function (event){
-        event.preventDefault();
-        const change = parseFloat($('#zoomSlider').val()) - Math.min(event.deltaY * 0.003, 0.125);
-        $('#zoomSlider').val(change);
-        zoomDiagram();
-    };
+    // document.onwheel = function (event){
+    //     event.preventDefault();
+    //     const change = parseFloat($('#zoomSlider').val()) - Math.min(event.deltaY * 0.003, 0.125);
+    //     $('#zoomSlider').val(change);
+    //     zoomDiagram();
+    // };
 
     $('#map_modal').on('shown.bs.modal', function (e) {
         $.ajax({

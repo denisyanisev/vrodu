@@ -111,7 +111,10 @@ display: none;
 }
 
 #full_photo{
-    position: relative;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    margin: auto;
     width: 100px;
 }
 
@@ -124,8 +127,6 @@ display: none;
 
 #full_photo_upload {
     position: absolute;
-    left: 35px;
-    top: 65px;
     width: 100px;
     display: none;
 }
@@ -165,6 +166,7 @@ display: none;
     padding-bottom: 1px;
     float: left;
     overflow: hidden;
+    position: relative;
 }
 
 #full_birth_death {

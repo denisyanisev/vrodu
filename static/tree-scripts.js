@@ -187,6 +187,8 @@ function show_full_info(a, tab = 0) {
             $(this).addClass('active');
         }); 
     }
+    $('#full_vk_text').empty();
+    $('#full_vk_link').hide();
     $('#full_name').val(a['first_name'] ? a['first_name'] : '');
     $('#full_middle_name').val(a['middle_name'] ? a['middle_name'] : '');
     $('#full_last_name').val(a['last_name'] ? a['last_name'] : '');
@@ -196,6 +198,7 @@ function show_full_info(a, tab = 0) {
     $('#full_nationality').val(a['nationality'] ? a['nationality']: '');
     $('#full_location').val(a['location'] ? a['location'] : '');
     if (a['vk_id']) {
+        $('#full_vk_link').show();
         $('#full_vk_link').attr('href', 'https://vk.com/id' + a['vk_id']);
         $('#full_vk_link img').show();
         if (a['vk_confirm'] == 0)

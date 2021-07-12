@@ -2,13 +2,20 @@ label {
     font-weight: normal
 }
 
-.tree_container {
+/* .tree_container {
     overflow: visible;
-}
+} */
 
 #draggable{
-    overflow: visible;
-    border: 0px;
+    width: min-content;
+    padding: 5px;
+    border: 2px solid #b78846;
+    background-color: #faf9f9;
+}
+
+#diagram{
+    border: 2px solid #b78846;
+    background-color: #faf9f9;
 }
 
 .bp-button, .bp-plus {
@@ -81,6 +88,7 @@ label {
     width: 20px;
     height: 20px;
     text-align: center;
+    background-color: #fff;
 }
 
 #new_person{
@@ -295,15 +303,16 @@ body {
     transform: rotate(270deg);
 }
 
-#link_map {
+#link_map, #center_on_person {
     position: absolute;
     top: 11px;
     left: 53px;
+    background-color: #fff;
+    border-radius: 5px;
+    line-height: 0.8;
 }
 
 #center_on_person {
-    position: absolute;
-    top: 11px;
     left: 190px;
 }
 

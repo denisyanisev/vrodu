@@ -291,7 +291,7 @@ $(document).ready(function () {
                 reader.readAsDataURL(photo);
             }
             else {
-                $('#failed_message').text('Фотография должна быть формата PNG или JPEG');
+                $('#failed_message').text('Фотография должна быть формата PNG, JPEG или WEBP');
                 $("#dialog-message").modal();
             }
         } 
@@ -464,6 +464,10 @@ $(document).ready(function () {
         change_person(Request);
         $('#confirm_vk').modal('hide');
         $('#confirm_vk').empty()
+    });
+
+    $(function() {
+
     });
 
 });

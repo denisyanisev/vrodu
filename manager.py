@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, jsonify
 from flask_bootstrap import Bootstrap
 from db import DBClient
-import random
 import logging
+import os
 
 
 app = Flask(__name__)
@@ -46,7 +46,11 @@ def make_persons(tree_id: int = 0):
         else:
             years = person['birth']
         person['years'] = years
-        person['alive'] = person['alive']
+        if not person.get('image'):
+            if person['sex'] == 'M':
+                person['image'] = '/static/photos/male.png'
+            else:
+                person['image'] = '/static/photos/female.png'
         persons.append(person)
     return persons
 
@@ -80,7 +84,6 @@ def add_person():
     death = query_args.get('death')
     sex = query_args.get('sex')
     from_id = query_args.get(from_id_str)
-    image = 'abc'[int(random.random()*3)] if sex == 'M' else 'fpt'[int(random.random()*3)]
     location = query_args.get('location')
     coordinate0 = query_args.get('coordinate0', '')
     coordinate1 = query_args.get('coordinate1', '')
@@ -115,7 +118,7 @@ def add_person():
                            'parent_m': parent_m,
                            'parent_f': parent_f,
                            'spouses': [],
-                           'image': photo or f'/static/photos/{image}.png',
+                           'image': photo,
                            'description': description,
                            'sex': sex,
                            'birth': birth,
@@ -243,13 +246,15 @@ def upload_photo():
         file = request.files['photo']
         user_id = int(content['user_id'])
         person_id = int(content['from_id'])
-        ext = content["ext"]
-        hashed = hash(file)
-        path = f'/static/photos/custom/{person_id}_{hashed}.{ext}'
+        person = collection.find_one({'_id': person_id, 'tree_id': user_id})
+        ext = content['ext']
+        path = f'/static/photos/custom/{person_id}_image.{ext}'
+        if person['image']:
+            os.remove(app.root_path + person['image'])
         file.save(app.root_path + path)
-        collection.update_one({'_id': int(person_id)}, {'$set': {'image': path}})
+        collection.update_one({'_id': person_id, 'tree_id': user_id}, {'$set': {'image': path}})
         return jsonify({'persons': make_persons(user_id)})
-    except TypeError as err:
+    except (ValueError, TypeError) as err:
         return jsonify({'Error': 'Загрузка фото неуспешна.', 'persons': -1})
 
 

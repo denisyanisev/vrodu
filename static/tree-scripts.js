@@ -1,7 +1,5 @@
 var control;
 
-$(function() {$( "#draggable" ).draggable();});
-
 function add_vk_person(vk_id, first_name, last_name, vk_sex, photo, relation, confirmed){
     var Request = {
     from_id: (parseInt($("#full_id").val())),
@@ -220,11 +218,18 @@ function show_full_info(a, tab = 0) {
     });
 }
 
-
 var setDiagramData = function(persons){
     control.setOption('items', persons);
     control.update('Recreate', true);
     draw_belts();
+    var treeWidth = parseInt($('#diagram').css('width')),
+        treeHeight = parseInt($('#diagram').css('height')),
+        windowWidth = parseInt($(window).width()),
+        windowHeight = parseInt($(window).height());
+    $("#draggable").draggable({
+        scroll: false,
+        containment: [-0.5*treeWidth, -0.5*treeHeight, windowWidth - 0.5*treeWidth, windowHeight - 0.5*treeHeight],
+    });
 }
 
 var updateDiagramData = function(persons){
@@ -239,7 +244,6 @@ var setDiagramOptions = function(){
     options.hasSelectorCheckbox = primitives.Enabled.False;
     options.buttonsPanelSize = 36;
     options.hasButtons = primitives.Enabled.Auto;
-    options.pageFitMode = primitives.PageFitMode.None;
     options.onButtonsRender = function (data) {
         var itemConfig = data.context;
         var element = data.element;
@@ -275,12 +279,18 @@ var setDiagramOptions = function(){
     options.linesColor = "#7C8993";
     options.navigationMode = primitives.NavigationMode['CursorOnly'];
     options.scale = 1;
-    //options.pageFitMode = primitives.PageFitMode['FitToPage'];  
+    options.enablePanning = false;
+
+    // options.pageFitMode = primitives.PageFitMode.None;
+    options.pageFitMode = primitives.PageFitMode.AutoSize;  
+    options.autoSizeMaximum = new primitives.Size(10000, 10000);
+    const myWidth = 800, myHeight = 600;
+    options.autoSizeMinimum = new primitives.Size(myWidth, myHeight);
+
     options.onMouseClick = function(event, eventArgs){
         show_full_info(eventArgs.context);
     };
     options.onCursorChanging = function(event, eventArgs){
-        //if (window.link == 'listening') add_link_js(eventArgs.context, eventArgs.oldContext);
     };
     options.onCursorChanged = function(event, eventArgs){
         if (window.link == 'listening') add_link_js(eventArgs.context, eventArgs.oldContext);
@@ -301,12 +311,12 @@ var setDiagramOptions = function(){
     options.defaultTemplateName = 'personTemplate1';
     options.templates = [getPersonsTemplates()];
     options.onItemRender = onTemplateRender;
-    const myWidth = '2000px', myHeight = '2000px';
-    control = primitives.FamDiagram(document.getElementById("diagram"), options);
     $("#diagram").css({
         width: myWidth,
         height: myHeight 
     });
+
+    control = primitives.FamDiagram(document.getElementById("diagram"), options);
 };
 
 var getPersonsTemplates = function() {
@@ -381,7 +391,7 @@ var centerOnPerson = function(personId){
     if (position){
         const x = position.x, y = position.y, scale = parseFloat($('#zoomSlider').val());
         $('#draggable').css({left:(-x)*scale-80+($(window).width()-parseInt($('#full_info_block').css('width')))/2, 
-        top: Math.min(0,-y*scale-45+$(window).height()/2)});
+        top: Math.min(10,-y*scale-45+$(window).height()/2)});
     }
 };
 

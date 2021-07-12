@@ -25482,7 +25482,7 @@ function AlignDiagramTask(orientationOptionTask, itemsSizesOptionTask, visualTre
     switch (pageFitMode) {
       case _enums__WEBPACK_IMPORTED_MODULE_4__["PageFitMode"].AutoSize:
         _data.panelSize = new _graphics_structs_Size__WEBPACK_IMPORTED_MODULE_0__["default"](placeholderSize);
-        break;
+        // break;
 
       default:
         _data.panelSize = new _graphics_structs_Size__WEBPACK_IMPORTED_MODULE_0__["default"](placeholderSize);

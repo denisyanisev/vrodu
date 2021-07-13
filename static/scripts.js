@@ -303,11 +303,32 @@ $(document).ready(function () {
 
     $('#full_photo_upload').click(function(event){
         input.click();
+        $('#full_photo_upload').mouseleave();
     });
-    $('#full_photo_block').hover(function(event){
-        $('#full_photo_upload').css('display', 'inline');
+    $('#full_photo_upload').hover(function(event){
+        $('#full_photo_upload_img').show();
     }, function(event){
-        $('#full_photo_upload').hide();
+        $('#full_photo_upload_img').hide();
+    });
+
+    $('#photo_delete').click(function(event){
+        $('#dialog-photo-confirm').modal('hide');
+        $.ajax({url : '/deletephoto',
+            type : 'POST',
+            data : JSON.stringify({user_id: window.user.id, from_id: parseInt($('#full_id').val())}),
+            contentType: 'application/json; charset=utf-8',
+            success : function(data) {
+                if (data['persons'] != -1){
+                    setDiagramData(data['persons']);
+                    show_full_info(data['persons'].find(person => person.id===parseInt($('#full_id').val())));
+                }
+            }
+        });
+    });
+
+    $('#full_photo_delete').click(function(event){
+        event.stopPropagation();
+        $('#dialog-photo-confirm').modal();
     });
 
     $('#full_edit').click(function(){

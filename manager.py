@@ -55,6 +55,14 @@ def make_persons(tree_id: int = 0):
     return persons
 
 
+def delete_photo_base(person):
+    if person['image']:
+        os.remove(app.root_path + person['image'])
+        return True
+    else:
+        return False
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -214,6 +222,7 @@ def remove():
     person = collection.find_one({'_id': int(person_id), 'tree_id': user_id})
     if not person:
         return jsonify({'Error': 'Не найдена персона для удаления', 'persons': -1})
+    delete_photo_base(person)
     sex = person['sex']
     parent_str = parent_m_str if sex == 'M' else parent_f_str
     try:
@@ -238,6 +247,23 @@ def get_map():
     return render_template('map.html', locations=locations)
 
 
+@app.route('/deletephoto', methods=['POST'])
+def delete_photo():
+    content = request.get_json(True)
+    collection = DBClient()['family']['persons']
+    try:
+        user_id = content['user_id']
+        person_id = content['from_id']
+        person = collection.find_one({'_id': person_id, 'tree_id': user_id})
+        if delete_photo_base(person):
+            collection.update_one({'_id': person_id, 'tree_id': user_id}, {'$set': {'image': ''}})
+            return jsonify({'persons': make_persons(user_id)})
+        else:
+            return jsonify({'Error': 'Фотография или персона не найдены.', 'persons': -1})
+    except (ValueError, TypeError) as err:
+        return jsonify({'Error': 'Удаление фотографии неуспешно.', 'persons': -1})
+
+
 @app.route('/uploadphoto', methods=['POST'])
 def upload_photo():
     content = request.form
@@ -249,13 +275,12 @@ def upload_photo():
         person = collection.find_one({'_id': person_id, 'tree_id': user_id})
         ext = content['ext']
         path = f'/static/photos/custom/{person_id}_image.{ext}'
-        if person['image']:
-            os.remove(app.root_path + person['image'])
+        delete_photo_base(person)
         file.save(app.root_path + path)
         collection.update_one({'_id': person_id, 'tree_id': user_id}, {'$set': {'image': path}})
         return jsonify({'persons': make_persons(user_id)})
     except (ValueError, TypeError) as err:
-        return jsonify({'Error': 'Загрузка фото неуспешна.', 'persons': -1})
+        return jsonify({'Error': 'Загрузка фотографии неуспешна.', 'persons': -1})
 
 
 if __name__ == '__main__':

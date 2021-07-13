@@ -11,11 +11,19 @@ label {
     padding: 5px;
     border: 2px solid #b78846;
     background-color: #faf9f9;
+    min-width: 800px;
+    min-height: 600px;
+    display: none;
+}
+
+#diagram-container{
+    border: 2px solid #b78846;
+    background-color: #faf9f9;
+    min-height: inherit
 }
 
 #diagram{
-    border: 2px solid #b78846;
-    background-color: #faf9f9;
+    margin: auto;
 }
 
 .bp-button, .bp-plus {
@@ -136,8 +144,27 @@ display: none;
 #full_photo_upload {
     position: absolute;
     width: 100px;
-    display: none;
+    height: 100px;
+    border: 0px solid;
+    border-radius: 50%;
 }
+
+#full_photo_upload_img{
+    width: 100px;
+    display: none;
+    cursor: pointer;
+}
+
+#full_photo_delete{
+    position: absolute;
+    left: 86px;
+    font-size: 16px;
+    z-index: 5;
+    display: none;
+    cursor: pointer;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+
 
 #full_close {
     width: 15px;

@@ -25482,7 +25482,7 @@ function AlignDiagramTask(orientationOptionTask, itemsSizesOptionTask, visualTre
     switch (pageFitMode) {
       case _enums__WEBPACK_IMPORTED_MODULE_4__["PageFitMode"].AutoSize:
         _data.panelSize = new _graphics_structs_Size__WEBPACK_IMPORTED_MODULE_0__["default"](placeholderSize);
-        // break;
+        break;
 
       default:
         _data.panelSize = new _graphics_structs_Size__WEBPACK_IMPORTED_MODULE_0__["default"](placeholderSize);
@@ -25769,7 +25769,7 @@ function ApplyLayoutChangesTask(getGraphics, setLayout, itemsSizesOptionTask, cu
         it is handy when it is needed to limit oversized diagram expansion
         or diagram is empty or so tiny that it is not clear that it exists at all
       */
-      viewportSize = new _graphics_structs_Size__WEBPACK_IMPORTED_MODULE_0__["default"](mousePanelSize.width + 25, mousePanelSize.height + 25);
+      viewportSize = new _graphics_structs_Size__WEBPACK_IMPORTED_MODULE_0__["default"](mousePanelSize.width + 20, mousePanelSize.height + 20);
       viewportSize.addThickness(frameThickness);
 
       if (titlesThickness.isPositive()) {

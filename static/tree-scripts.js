@@ -208,6 +208,10 @@ function show_full_info(a, tab = 0) {
     }
     $('#full_search_results').hide();
     $('#vk_id').val('');
+    if (photo.includes('male'))
+        $('#full_photo_delete').hide();
+    else
+        $('#full_photo_delete').show();
     $('#full_info_block').show();
     $( '#full_info_block').tabs( "option", "active", tab );
     
@@ -222,13 +226,13 @@ var setDiagramData = function(persons){
     control.setOption('items', persons);
     control.update('Recreate', true);
     draw_belts();
-    var treeWidth = parseInt($('#diagram').css('width')),
-        treeHeight = parseInt($('#diagram').css('height')),
+    var treeWidth = parseInt($('#draggable').css('width')),
+        treeHeight = parseInt($('#draggable').css('height')),
         windowWidth = parseInt($(window).width()),
         windowHeight = parseInt($(window).height());
     $("#draggable").draggable({
         scroll: false,
-        containment: [-0.5*treeWidth, -0.5*treeHeight, windowWidth - 0.5*treeWidth, windowHeight - 0.5*treeHeight],
+        containment: [-0.85*treeWidth, -0.85*treeHeight, windowWidth - 0.15*treeWidth, windowHeight - 0.15*treeHeight],
     });
 }
 
@@ -259,7 +263,8 @@ var setDiagramOptions = function(){
                     "data-buttonname": "delete",
                     "class": "btn btn-light"
                 },
-                ["i", { "class": "fa fa-minus-circle" }]
+                ["p", { "class": "fa fa-remove",
+                        "style": "font-size: 16px"}]
             ],
             ["button", 
                 {
@@ -284,7 +289,7 @@ var setDiagramOptions = function(){
     // options.pageFitMode = primitives.PageFitMode.None;
     options.pageFitMode = primitives.PageFitMode.AutoSize;  
     options.autoSizeMaximum = new primitives.Size(10000, 10000);
-    const myWidth = 800, myHeight = 600;
+    const myWidth = 100, myHeight = 100;
     options.autoSizeMinimum = new primitives.Size(myWidth, myHeight);
 
     options.onMouseClick = function(event, eventArgs){
@@ -387,11 +392,16 @@ var delete_person_base = function(person_id) {
 };
 
 var centerOnPerson = function(personId){
-    const position = control.getPosition(personId).position;
+    const position = control.getPosition(personId).position,
+        scale = parseFloat($('#zoomSlider').val());
+
     if (position){
-        const x = position.x, y = position.y, scale = parseFloat($('#zoomSlider').val());
-        $('#draggable').css({left:(-x)*scale-80+($(window).width()-parseInt($('#full_info_block').css('width')))/2, 
-        top: Math.min(10,-y*scale-45+$(window).height()/2)});
+        const x = position.x * scale, 
+            y = position.y * scale, 
+            offsetWidth = parseInt($('#diagram').css('margin-left')),
+            offsetHeight = parseInt($('#diagram').css('margin-top'));
+        $('#draggable').css({left:-x-offsetWidth-80+($(window).width()-parseInt($('#full_info_block').css('width')))/2, 
+        top: Math.min(30, -y-offsetHeight-45+$(window).height()/2)});
     }
 };
 
@@ -402,6 +412,12 @@ function init() {
 };
 
 var zoomDiagram = function(){
+    width = parseInt($('#draggable').css('width'))/2;
+    height = parseInt($('#draggable').css('height'))/2;
     control.setOption('scale', parseFloat($('#zoomSlider').val()));
     control.update('Refresh');
+    newWidth = parseInt($('#draggable').css('width'))/2;
+    newHeight = parseInt($('#draggable').css('height'))/2;
+    $('#draggable').css({left: parseInt($('#draggable').css('left')) + width - newWidth, 
+        top: parseInt($('#draggable').css('top')) + height - newHeight});
 };

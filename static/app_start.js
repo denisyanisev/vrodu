@@ -18,7 +18,8 @@ var startApp = function(user){
             });
             setDiagramOptions();
             setDiagramData(data['persons'])
-            $('#draggable').css({left: (-parseInt($('#diagram').css('width'))+parseInt($(window).width()))/2, top: 25});
+            $('#draggable').css({left: (-parseInt($('#draggable').css('width'))+parseInt($(window).width()))/2, top: 30});
+            $('#draggable').show();
         }
     });
 }

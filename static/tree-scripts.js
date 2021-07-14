@@ -2,7 +2,7 @@ var control;
 
 function add_vk_person(vk_id, first_name, last_name, vk_sex, photo, relation, confirmed){
     var Request = {
-    from_id: (parseInt($("#full_id").val())),
+    from_id: parseInt($("#full_id").val()),
     first_name: first_name,
     middle_name: '',
     last_name: last_name,
@@ -34,7 +34,10 @@ function add_person_base(Request){
                 $("#dialog-message").modal();
                 return;
             }
-            var cache = data, new_id = cache['new_id'];
+            var cache = data, new_id = data['new_id'];
+            if (Request.photo) {
+                fetch(photo).then(res => res.blob()).then(result => upload_photo(result, new_id, 'jpeg'));
+            }
             if (Request.from_id != undefined && Request.relative_type == 'parent') {
                 $.ajax({
                     'type': 'POST',
@@ -131,6 +134,28 @@ function add_link_js(a, b){
             }
         });
     }
+}
+
+function upload_photo(photo, from_id, ext){
+    var from_id = from_id,
+        extension = ext,
+        formData = new FormData();
+
+    formData.append('photo', photo);
+    formData.append('from_id', from_id);
+    formData.append('ext', extension);
+    formData.append('user_id', window.user.id);
+
+    $.ajax({url : '/uploadphoto',
+        type : 'POST',
+        data : formData,
+        processData: false,
+        contentType: false,
+        success : function(data) {
+            setDiagramData(data['persons']);
+            show_full_info(data['persons'].find(person => person.id===from_id));
+        }
+    });
 }
 
 // Show full info and edit person

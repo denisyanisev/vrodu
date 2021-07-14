@@ -234,7 +234,7 @@ $(document).ready(function () {
         supportedTypes = ['image/png', 'image/jpeg', 'image/webp'];
     input.type = 'file';
     input.accept = supportedTypes.join(',');
-    input.onchange = function(event) {          
+    input.onchange = function(event) {
         var photo = input.files[0];
         
         if (photo.size < 10484880){
@@ -259,27 +259,8 @@ $(document).ready(function () {
                     });
                     $('#photo-crop-btn').on('click', function(event){
                         $('#photo-crop').croppie('result', {type: 'blob', size: 'viewport', format: 'jpeg', quality: 1
-                        }).then(function(finPhoto){
-                            var from_id = parseInt($('#person_id').val()),
-                                extension = 'jpeg',
-                                formData = new FormData();
-
-                            formData.append('photo', finPhoto);
-                            formData.append('from_id', from_id);
-                            formData.append('ext', extension);
-                            formData.append('user_id', window.user.id);
-
-                            $.ajax({url : '/uploadphoto',
-                                type : 'POST',
-                                data : formData,
-                                processData: false,
-                                contentType: false,
-                                success : function(data) {
-                                    setDiagramData(data['persons']);
-                                    show_full_info(data['persons'].find(person => person.id===from_id));
-                                }
-                            });
-                        });
+                        }).then(function(result){
+                            upload_photo(result, parseInt($('#person_id').val()), 'jpeg')});
                         $('#photo-crop-block').modal('hide');
                     });
                     $('#photo-crop-block').on('hide.bs.modal', function(event){

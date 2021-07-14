@@ -2,10 +2,6 @@ label {
     font-weight: normal
 }
 
-/* .tree_container {
-    overflow: visible;
-} */
-
 #draggable{
     width: min-content;
     padding: 5px;
@@ -164,7 +160,6 @@ display: none;
     cursor: pointer;
     text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
-
 
 #full_close {
     width: 15px;

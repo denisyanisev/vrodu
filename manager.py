@@ -98,7 +98,6 @@ def add_person():
     relative_type = query_args.get(relative_type_str)  # кого мы добавляем
     vk_id = query_args.get('vk_id')
     tree_id = query_args.get('tree_id')
-    photo = query_args.get('photo')
     maiden_name = query_args.get('maiden_name', '')
     full_desc = query_args.get('full_desc', '')
     nationality = query_args.get('nationality', '').strip().lower()
@@ -126,7 +125,7 @@ def add_person():
                            'parent_m': parent_m,
                            'parent_f': parent_f,
                            'spouses': [],
-                           'image': photo,
+                           'image': '',
                            'description': description,
                            'sex': sex,
                            'birth': birth,
@@ -260,7 +259,7 @@ def delete_photo():
             return jsonify({'persons': make_persons(user_id)})
         else:
             return jsonify({'Error': 'Фотография или персона не найдены.', 'persons': -1})
-    except (ValueError, TypeError) as err:
+    except (ValueError, TypeError):
         return jsonify({'Error': 'Удаление фотографии неуспешно.', 'persons': -1})
 
 
@@ -279,7 +278,7 @@ def upload_photo():
         file.save(app.root_path + path)
         collection.update_one({'_id': person_id, 'tree_id': user_id}, {'$set': {'image': path}})
         return jsonify({'persons': make_persons(user_id)})
-    except (ValueError, TypeError) as err:
+    except (ValueError, TypeError):
         return jsonify({'Error': 'Загрузка фотографии неуспешна.', 'persons': -1})
 
 

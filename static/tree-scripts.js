@@ -117,7 +117,7 @@ function updateTree({tree_id = window.tree_id, person_id = null, tab = 0, callba
         type: 'POST',
         contentType: 'application/json; charset=utf-8',
         url: '/update',
-        data: JSON.stringify({user_id: window.user_id, tree_id: tree_id}),
+        data: JSON.stringify({user_id: window.user.id, tree_id: tree_id}),
         dataType: 'json',
         success: function(data) {
             setDiagramData(data['persons']);

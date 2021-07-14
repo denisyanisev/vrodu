@@ -57,10 +57,10 @@ def make_persons(tree_id: int = 0):
 
 def delete_photo_base(person):
     if person['image']:
-        os.remove(app.root_path + person['image'])
-        return True
-    else:
-        return False
+        try:
+            os.remove(app.root_path + person['image'])
+        except OSError:
+            pass
 
 
 @app.route('/')
@@ -252,11 +252,9 @@ def delete_photo():
         user_id = content['user_id']
         person_id = content['from_id']
         person = collection.find_one({'_id': person_id, 'tree_id': user_id})
-        if delete_photo_base(person):
-            collection.update_one({'_id': person_id, 'tree_id': user_id}, {'$set': {'image': ''}})
-            return jsonify({'persons': '1'})
-        else:
-            return jsonify({'Error': 'Фотография или персона не найдены.', 'persons': -1})
+        delete_photo_base(person)
+        collection.update_one({'_id': person_id, 'tree_id': user_id}, {'$set': {'image': ''}})
+        return jsonify({'Status': 'ok', 'persons': '1'})
     except (ValueError, TypeError):
         return jsonify({'Error': 'Удаление фотографии неуспешно.', 'persons': -1})
 

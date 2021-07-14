@@ -17,9 +17,9 @@ var sendRequest = function(){
 
 var getFriends = function(q){
 	VK.api("users.get", {'fields': 'photo_50'}, function(data) {
-        VK.api('friends.search', {'user_id': data.response[0].id, 'q': q, 'count': '10', 'v': '5.130', 'fields': 'city,domain,photo_50,photo_200_orig,sex'},
+		if (data.response){
+			VK.api('friends.search', {'user_id': data.response[0].id, 'q': q, 'count': '10', 'v': '5.130', 'fields': 'city,domain,photo_50,photo_200_orig,sex'},
         	function(data){
-        	    console.log(data);
         	    $('#full_search_results').html('');
         	    var items = data.response.items
         	    items.forEach((element) => {
@@ -28,6 +28,7 @@ var getFriends = function(q){
                   $('#full_search_results').append(result_item);
                 });
         	});
+		}
 	});
 	VK.api('friends.get', {'user_id': '549396892', 'count': '3', 'v': '5.130', 'fields': 'city,domain'},
 	    function(data){});

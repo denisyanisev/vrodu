@@ -2,21 +2,21 @@ var control;
 
 function add_vk_person(vk_id, first_name, last_name, vk_sex, photo, relation, confirmed){
     var Request = {
-    from_id: parseInt($("#full_id").val()),
-    first_name: first_name,
-    middle_name: '',
-    last_name: last_name,
-    description: '',
-    birth: '',
-    is_alive: true,
-    death: '',
-    sex: (vk_sex == 2) ? 'M' : 'F',
-    location: '',
-    relative_type: (relation) ? relation :  $("input[name=relative_type]:checked").val(),
-    vk_id: vk_id,
-    photo: photo,
-    tree_id: window.tree_id,
-    vk_confirm: (confirmed) ? 2 : 0
+        from_id: parseInt($("#full_id").val()),
+        first_name: first_name,
+        middle_name: '',
+        last_name: last_name,
+        description: '',
+        birth: '',
+        is_alive: true,
+        death: '',
+        sex: (vk_sex == 2) ? 'M' : 'F',
+        location: '',
+        relative_type: (relation) ? relation :  $("input[name=relative_type]:checked").val(),
+        vk_id: vk_id,
+        photo: photo,
+        tree_id: window.tree_id,
+        vk_confirm: (confirmed) ? 2 : 0
     };
     add_person_base(Request);
 }
@@ -36,7 +36,7 @@ function add_person_base(Request){
             }
             var cache = data, new_id = data['new_id'];
             if (Request.photo) {
-                fetch(photo).then(res => res.blob()).then(result => upload_photo(result, new_id, 'jpeg'));
+                fetch(Request.photo).then(res => res.blob()).then(result => upload_photo(result, new_id, 'jpeg'));
             }
             if (Request.from_id != undefined && Request.relative_type == 'parent') {
                 $.ajax({

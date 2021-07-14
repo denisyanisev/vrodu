@@ -1,14 +1,9 @@
 var startApp = function(user){
     window.user = user
     window.tree_id = user.id
-    $.ajax({
-        type: 'POST',
-        contentType: 'application/json; charset=utf-8',
-        url: '/update',
-        data: JSON.stringify({user_id: user.id}),
-        dataType: 'json',
-        success: function(data) {
-            var res = data['persons'].filter(person => (user.id == person['vk_id'] && user.id == person['tree_id']))
+    setDiagramOptions();
+    updateTree({tree_id: user.id, callback: function(data){
+        var res = data['persons'].filter(person => (user.id == person['vk_id'] && user.id == person['tree_id']))
             if (res.length == 0)
                 addMainPerson()
             $('#tree_list').append($('<li href="#" onclick="TreeSwitch(' + user.id  +  ')">Мое Дерево</li>'));
@@ -16,12 +11,9 @@ var startApp = function(user){
                 if (user.id != elem)
                     $('#tree_list').append($('<li href="#" onclick="TreeSwitch(' + elem + ')">Дерево ' + elem + '</li>'));
             });
-            setDiagramOptions();
-            setDiagramData(data['persons'])
             $('#draggable').css({left: (-parseInt($('#draggable').css('width'))+parseInt($(window).width()))/2, top: 30});
             $('#draggable').show();
-        }
-    });
+    }});
 }
 
 $(window).on("load", function(){

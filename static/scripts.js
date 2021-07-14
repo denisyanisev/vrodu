@@ -41,7 +41,7 @@ function TreeSwitch(tree_id){
 	    type: 'POST',
         contentType: 'application/json; charset=utf-8',
 	    url: '/update',
-	    data: JSON.stringify({user_id: user.id, tree_id: tree_id}),	
+	    data: JSON.stringify({user_id: window.user.id, tree_id: tree_id}),	
    	    dataType: 'json',
 	    success: function(data) {
 		    setDiagramData(data['persons']);
@@ -158,7 +158,7 @@ $(document).ready(function () {
     const modal = $('#dialog-confirm')[0];
     $('#dialog-confirm').on('hide.bs.modal', function(e){
         if (modal.confirm){
-            $.ajax({
+            $.when($.ajax({
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
                 url: '/remove',
@@ -168,16 +168,13 @@ $(document).ready(function () {
                 }),
                 dataType: 'json',
                 success: function(data) {
-                    if (data['persons'] != -1){
-                        control.setOption('cursorItem', null);
-                        setDiagramData(data['persons']);
-                    }
-                    else {
+                    if (data['persons'] == -1){
                         $('#failed_message').text(data['Error']);
                         $( "#dialog-message" ).modal();
                     }
-
                 }
+            })).then(function(){
+                updateTree({});
             });
             modal.confirm = false;
             modal.person_id = undefined;
@@ -260,7 +257,8 @@ $(document).ready(function () {
                     $('#photo-crop-btn').on('click', function(event){
                         $('#photo-crop').croppie('result', {type: 'blob', size: 'viewport', format: 'jpeg', quality: 1
                         }).then(function(result){
-                            upload_photo(result, parseInt($('#person_id').val()), 'jpeg')});
+                            uploadPhoto(result, parseInt($('#person_id').val()), 'jpeg', updateTree);
+                        });
                         $('#photo-crop-block').modal('hide');
                     });
                     $('#photo-crop-block').on('hide.bs.modal', function(event){
@@ -294,16 +292,13 @@ $(document).ready(function () {
 
     $('#photo_delete').click(function(event){
         $('#dialog-photo-confirm').modal('hide');
-        $.ajax({url : '/deletephoto',
+        var person_id = parseInt($('#full_id').val());
+        $.when($.ajax({url : '/deletephoto',
             type : 'POST',
-            data : JSON.stringify({user_id: window.user.id, from_id: parseInt($('#full_id').val())}),
+            data : JSON.stringify({user_id: window.user.id, from_id: person_id}),
             contentType: 'application/json; charset=utf-8',
-            success : function(data) {
-                if (data['persons'] != -1){
-                    setDiagramData(data['persons']);
-                    show_full_info(data['persons'].find(person => person.id===parseInt($('#full_id').val())));
-                }
-            }
+        })).then(function(){
+            updateTree({person_id: person_id});
         });
     });
 
@@ -351,7 +346,6 @@ $(document).ready(function () {
             maiden_name: $('#full_maiden_name').val(),
             full_desc: $('#full_full_desc').val(),
             nationality: $('#full_nationality').val(),
-            tree_id: window.tree_id
         };
         if (Request.location != '') {
             var myGeocoder = ymaps.geocode(Request.location);
@@ -387,7 +381,6 @@ $(document).ready(function () {
                 edit_person: true,
                 from_id: fromSpouseId,
                 spouses: fromSpouse.spouses,
-                tree_id: window.tree_id
             };
             change_person(Request, true, 1);
             
@@ -397,7 +390,6 @@ $(document).ready(function () {
                 edit_person: true,
                 from_id: targetSpouseId,
                 spouses: targetSpouse.spouses,
-                tree_id: window.tree_id
             }  
             change_person(Request, false);            
         }
@@ -449,7 +441,6 @@ $(document).ready(function () {
             edit_person: true,
             vk_confirm: 1,
             from_id: window.confirm_id,
-            tree_id: window.tree_id
         }
         change_person(Request);
         $('#confirm_vk').modal('hide');
@@ -461,7 +452,6 @@ $(document).ready(function () {
             edit_person: true,
             vk_confirm: 2,
             from_id: window.confirm_id,
-            tree_id: window.tree_id
         }
         change_person(Request);
         $('#confirm_vk').modal('hide');

@@ -142,7 +142,7 @@ def add_person():
                            'permissions': 777,
                            'vk_confirm': vk_confirm
                            })
-    return jsonify({'new_id': new_id, 'persons': make_persons(tree_id)})
+    return jsonify({'new_id': new_id, 'persons': '1'})
 
 
 @app.route('/change', methods=['POST'])
@@ -151,8 +151,6 @@ def change_person():
     edit_person = request_data.get('edit_person')
     request_data.pop('edit_person', False)
     person_id = request_data.pop('from_id')
-    request_data.pop('from_id', False)
-    tree_id = request_data.get('tree_id')
     collection = DBClient()['family']['persons']
     new_id = request_data.get('new_id')
     sex = request_data.get('sex')
@@ -162,7 +160,7 @@ def change_person():
             collection.update_one({'_id': int(person_id)}, {'$set': request_data})
         else:
             collection.update_one({'_id': int(person_id)}, {'$set': {parent_str: new_id}})
-        return jsonify({'Status': 'ok', 'persons': make_persons(tree_id)})
+        return jsonify({'Status': 'ok', 'persons': '1'})
     except (ValueError, TypeError):
         return jsonify({'Error': 'Нe удалось изменить персону.', 'persons': -1})
 
@@ -175,8 +173,8 @@ def link():
     link_type = query_args.get('link_type')
     from_id = query_args.get('person_id')
     target_id = query_args.get('link_id')
-    target_person = collection.find_one({'_id': int(query_args.get('link_id'))})
-    from_person = collection.find_one({'_id': int(query_args.get('person_id'))})
+    target_person = collection.find_one({'_id': int(query_args.get('link_id')), 'tree_id': user_id})
+    from_person = collection.find_one({'_id': int(query_args.get('person_id')), 'tree_id': user_id})
     target_name = ' '.join((target_person['first_name'], target_person['middle_name'], target_person['last_name']))
     from_name = ' '.join((from_person['first_name'], from_person['middle_name'], from_person['last_name']))
     if link_type == 'spouse':
@@ -186,7 +184,7 @@ def link():
             return jsonify({'Error': 'Между персонами уже есть брак.', 'persons': -1})
         collection.update_one({'_id': int(target_id)}, {'$push': {'spouses': from_id}})
         collection.update_one({'_id': int(from_id)}, {'$push': {'spouses': target_id}})
-        return jsonify({'Status': 'ok', 'persons': make_persons(user_id)})
+        return jsonify({'Status': 'ok', 'persons': '1'})
     else:
         if link_type == 'parent':
             from_name, target_name = target_name, from_name
@@ -209,7 +207,7 @@ def link():
                 collection.update_one({'_id': int(target_id)}, {'$set': {parent_f_str: from_id}})
         except (ValueError, TypeError):
             return jsonify({'Error': 'Не удалось связать персоны.', 'persons': -1})
-        return jsonify({'Status': 'ok', 'persons': make_persons(user_id)})
+        return jsonify({'Status': 'ok', 'persons': '1'})
 
 
 @app.route('/remove', methods=['POST'])
@@ -228,7 +226,7 @@ def remove():
         collection.delete_one({'_id': int(person_id)})
         collection.update_many({parent_str: person_id}, {'$set': {parent_str: ''}})
         collection.update_many({'spouses': person_id}, {'$pull': {'spouses': person_id}})
-        return jsonify({'Status': 'Персона удалена.', 'persons': make_persons(user_id)})
+        return jsonify({'Status': 'Персона удалена.', 'persons': '1'})
     except (ValueError, TypeError):
         return jsonify({'Error': 'Удаление персоны неуспешно.', 'persons': -1})
 
@@ -256,7 +254,7 @@ def delete_photo():
         person = collection.find_one({'_id': person_id, 'tree_id': user_id})
         if delete_photo_base(person):
             collection.update_one({'_id': person_id, 'tree_id': user_id}, {'$set': {'image': ''}})
-            return jsonify({'persons': make_persons(user_id)})
+            return jsonify({'persons': '1'})
         else:
             return jsonify({'Error': 'Фотография или персона не найдены.', 'persons': -1})
     except (ValueError, TypeError):
@@ -277,7 +275,7 @@ def upload_photo():
         delete_photo_base(person)
         file.save(app.root_path + path)
         collection.update_one({'_id': person_id, 'tree_id': user_id}, {'$set': {'image': path}})
-        return jsonify({'persons': make_persons(user_id)})
+        return jsonify({'persons': '1'})
     except (ValueError, TypeError):
         return jsonify({'Error': 'Загрузка фотографии неуспешна.', 'persons': -1})
 

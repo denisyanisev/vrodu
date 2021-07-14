@@ -22,7 +22,8 @@ function add_vk_person(vk_id, first_name, last_name, vk_sex, photo, relation, co
 }
 
 function add_person_base(Request){
-    $.ajax({
+    var new_id;
+    $.when($.ajax({
         type: 'POST',
         contentType: 'application/json; charset=utf-8',
         url: '/add',
@@ -34,64 +35,41 @@ function add_person_base(Request){
                 $("#dialog-message").modal();
                 return;
             }
-            var cache = data, new_id = data['new_id'];
-            if (Request.photo) {
-                fetch(Request.photo).then(res => res.blob()).then(result => upload_photo(result, new_id, 'jpeg'));
-            }
-            if (Request.from_id != undefined && Request.relative_type == 'parent') {
-                $.ajax({
-                    'type': 'POST',
-                    url: '/change',
-                    contentType: 'application/json;charset=UTF-8',
-                    data: JSON.stringify({
-                        from_id: Request.from_id,
-                        new_id: data['new_id'],
-                        sex: Request.sex,
-                        tree_id: window.tree_id
-                    }),
-                    success: function(data) {
-                        if (data['persons'] != -1){
-                            control.setOption('cursorItem', new_id);
-                            setDiagramData(data['persons']);
-                            show_full_info(data['persons'].find(person => person.id===new_id));
-                            centerOnPerson(new_id);
-                        }
-                        else {
-                            control.setOption('cursorItem', new_id);
-                            setDiagramData(cache['persons']);
-                            show_full_info(cache['persons'].find(person => person.id===new_id));
-                            centerOnPerson(new_id);
-                        }
-                    }
-                });
-            }
             else {
-                control.setOption('cursorItem', new_id);
-                setDiagramData(cache['persons']);
-                show_full_info(cache['persons'].find(person => person.id===new_id));
-                centerOnPerson(new_id);
+                new_id = data['new_id'];
+                if (Request.photo) {
+                    fetch(Request.photo).then(res => res.blob()).then(result => uploadPhoto(result, new_id, 'jpeg'));
+                }
+                if (Request.from_id != undefined && Request.relative_type == 'parent') {
+                    $.ajax({
+                        'type': 'POST',
+                        url: '/change',
+                        contentType: 'application/json;charset=UTF-8',
+                        data: JSON.stringify({
+                            from_id: Request.from_id,
+                            new_id: new_id,
+                            sex: Request.sex,
+                            tree_id: tree_id
+                        }),
+                    });
+                }
             }
+        }
+    })).then(function(){
+        if (new_id) {
+            updateTree({person_id: new_id});
+            centerOnPerson(new_id);
         }
     });
 }
 
-function change_person(Request, showFullInfo = true, tab = 0){
+function change_person(Request){
     $.ajax({
         type: 'POST',
         contentType: 'application/json; charset=utf-8',
         url: '/change',
         data: JSON.stringify(Request),
         dataType: 'json',
-        success: function(data) {
-            if (data['persons'] != -1){
-                updateDiagramData(data['persons']);
-                if (showFullInfo) show_full_info(data['persons'].find(person => person.id===Request.from_id), tab);
-            }
-            else {
-                $('#failed_message').text(data['Error']);
-                $("#dialog-message").modal();
-            }
-        }
     });
 }
 
@@ -111,7 +89,7 @@ function add_link_js(a, b){
     }
     else {
         flushFields();
-        $.ajax({
+        $.when($.ajax({
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
             url: '/link',
@@ -123,20 +101,33 @@ function add_link_js(a, b){
             }),
             dataType: 'json',
             success: function(data) {
-                if (data['persons'] != -1){
-                    setDiagramData(data['persons']);
-                    show_full_info(data['persons'].find(person => person.id===link_id))
-                }
-                else {
+                if (data['persons'] == -1){
                     $('#failed_message').text(data['Error']);
                     $( "#dialog-message" ).modal();
                 }
             }
+        })).then(function(){
+            updateTree({person_id: link_id});
         });
     }
 }
 
-function upload_photo(photo, from_id, ext){
+function updateTree({tree_id = window.tree_id, person_id = null, tab = 0, callback}){
+    $.ajax({
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8',
+        url: '/update',
+        data: JSON.stringify({user_id: window.user_id, tree_id: tree_id}),
+        dataType: 'json',
+        success: function(data) {
+            setDiagramData(data['persons']);
+            if (person_id) show_full_info(data['persons'].find(person => person.id===person_id, tab));
+            if (callback) callback(data);
+        },
+    });
+}
+
+function uploadPhoto(photo, from_id, ext, callback = null){
     var from_id = from_id,
         extension = ext,
         formData = new FormData();
@@ -146,15 +137,13 @@ function upload_photo(photo, from_id, ext){
     formData.append('ext', extension);
     formData.append('user_id', window.user.id);
 
-    $.ajax({url : '/uploadphoto',
+    $.when($.ajax({url : '/uploadphoto',
         type : 'POST',
         data : formData,
         processData: false,
         contentType: false,
-        success : function(data) {
-            setDiagramData(data['persons']);
-            show_full_info(data['persons'].find(person => person.id===from_id));
-        }
+    })).then(function(res){
+        if (callback) callback({person_id: from_id});
     });
 }
 

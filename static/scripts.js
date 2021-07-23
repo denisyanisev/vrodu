@@ -358,12 +358,14 @@ $(document).ready(function () {
                 Request.coordinate0 = coordinates[0];
                 Request.coordinate1 = coordinates[1];
                 change_person(Request);
+                updateTree({});
             });
         }
         else {
             Request.coordinate0 = '';
             Request.coordinate1 = '';
             change_person(Request);
+            updateTree({});
         }
         closeEdit();
     });
@@ -395,7 +397,8 @@ $(document).ready(function () {
                 from_id: targetSpouseId,
                 spouses: targetSpouse.spouses,
             }  
-            change_person(Request, false);            
+            change_person(Request, false); 
+            updateTree({});           
         }
         else {
             $('#failed_message').text('Не выбран брак для удаления');
@@ -447,6 +450,7 @@ $(document).ready(function () {
             from_id: window.confirm_id,
         }
         change_person(Request);
+        updateTree({});
         $('#confirm_vk').modal('hide');
         $('#confirm_vk').empty()
     });
@@ -458,6 +462,7 @@ $(document).ready(function () {
             from_id: window.confirm_id,
         }
         change_person(Request);
+        updateTree({});
         $('#confirm_vk').modal('hide');
         $('#confirm_vk').empty()
     });

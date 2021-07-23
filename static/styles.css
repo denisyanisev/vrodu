@@ -234,6 +234,23 @@ display: none;
     margin-top: 2px;
 }
 
+#full_search_results_single{
+    border-radius: 3px;
+    padding: 5px;
+    height: 99px;
+    overflow: auto;
+    background: #faf9f9;
+    margin-left: 2px;
+    margin-top: 3px;
+    display: none;
+}
+
+#full_search_results_single img{
+    float: left;
+    height: 25px;
+    margin: 10px;
+    margin-top: 2px;
+}
 .result_item {
     cursor: pointer;
     border-bottom: 1px solid var(--steel_gray_80);

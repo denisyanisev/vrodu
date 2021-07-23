@@ -88,7 +88,11 @@ function TreeSwitch(tree_id) {
 
 $(document).ready(function () {
     $('#vk_id_edit').on('input', function(){
-	parseVkID($(this).val());
+	    parseVkID($(this).val());
+    })
+
+    $('#vk_id_number').on('input', function(){
+	    parseVkID($(this).val());
     })
 
     $('#tree_list').menu();
@@ -279,6 +283,12 @@ $(document).ready(function () {
     });
 
     $('#vk_id').on('input', function () {
+        var q = $(this).val();
+        $('#full_search_results').show();
+        getFriends(q, '#full_search_results');
+    });
+
+    $('#vk_id_single').on('input', function () {
         var q = $(this).val();
         $('#full_search_results').show();
         getFriends(q);

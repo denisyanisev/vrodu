@@ -5,7 +5,6 @@ label {
 #draggable{
     width: min-content;
     padding: 5px;
-    border: 2px solid #b78846;
     background-color: #faf9f9;
     min-width: 800px;
     min-height: 600px;
@@ -13,7 +12,6 @@ label {
 }
 
 #diagram-container{
-    border: 2px solid #b78846;
     background-color: #faf9f9;
     min-height: inherit
 }
@@ -120,7 +118,7 @@ display: none;
 
 #full_info_block {
     right: 14px;
-    width: 385px;
+    width: 392px;
     height: 519px;
     background: #88aae9;
     top: 61px;
@@ -292,14 +290,14 @@ display: none;
     display: none;
     position: absolute;
     bottom: 6px;
-    right: 144px;
+    right: 153px;
 }
 
 #full_edit_save {
     display: none;
     position: absolute;
     bottom: 6px;
-    right: 239px;
+    right: 258px;
 }
 
 #bd_edit {

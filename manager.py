@@ -92,6 +92,7 @@ def add_person():
     death = query_args.get('death')
     sex = query_args.get('sex')
     from_id = query_args.get(from_id_str)
+    second_parent = query_args.get('second_parent', '')
     location = query_args.get('location')
     coordinate0 = query_args.get('coordinate0', '')
     coordinate1 = query_args.get('coordinate1', '')
@@ -106,10 +107,7 @@ def add_person():
     parent_f = ''
     if relative_type == 'child':
         person = collection.find_one({'_id': from_id})
-        if person['sex'] == 'M':
-            parent_m = from_id
-        else:
-            parent_f = from_id
+        parent_m, parent_f = (from_id, second_parent) if person['sex'] == 'M' else (second_parent, from_id)
     elif relative_type == 'parent':
         person = collection.find_one({'_id': from_id})
         person_name = ' '.join((person['first_name'], person['middle_name'], person['last_name'])).strip()

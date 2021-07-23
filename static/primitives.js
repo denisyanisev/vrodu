@@ -295,6 +295,10 @@ function BaseControl(element, options, taskManagerFactory, eventArgsFactory, tem
   function getOptions() {
     return _data.options;
   }
+  
+  function getPosition(cursorId){
+    return eventArgsFactory(_data, null, cursorId); 
+  }
   /**
    * This method returns configuration option by name.
    * 
@@ -519,6 +523,7 @@ function BaseControl(element, options, taskManagerFactory, eventArgsFactory, tem
       }
     }]]]]]));
   }
+
 
   function cleanLayout() {
     var controlPanel = _data.layout.controlPanel;
@@ -902,6 +907,7 @@ function BaseControl(element, options, taskManagerFactory, eventArgsFactory, tem
     getOptions: getOptions,
     setOption: setOption,
     getOption: getOption,
+    getPosition: getPosition,
     update: update
   };
 }
@@ -25635,7 +25641,7 @@ function ApplyLayoutChangesTask(getGraphics, setLayout, itemsSizesOptionTask, cu
         it is handy when it is needed to limit oversized diagram expansion
         or diagram is empty or so tiny that it is not clear that it exists at all
       */
-      viewportSize = new _graphics_structs_Size__WEBPACK_IMPORTED_MODULE_0__["default"](mousePanelSize.width + 25, mousePanelSize.height + 25);
+      viewportSize = new _graphics_structs_Size__WEBPACK_IMPORTED_MODULE_0__["default"](mousePanelSize.width + 5, mousePanelSize.height + 5);
       viewportSize.addThickness(frameThickness);
 
       if (titlesThickness.isPositive()) {
@@ -25738,7 +25744,7 @@ function ApplyLayoutChangesTask(getGraphics, setLayout, itemsSizesOptionTask, cu
   }
 
   function getOptimalPanelSize() {
-    return new _graphics_structs_Size__WEBPACK_IMPORTED_MODULE_0__["default"](_data.viewportSize.width - 25, _data.viewportSize.height - 25);
+    return new _graphics_structs_Size__WEBPACK_IMPORTED_MODULE_0__["default"](_data.viewportSize.width - 5, _data.viewportSize.height - 5);
   }
 
   function getScrollPanelSize() {

@@ -147,10 +147,8 @@ function updateTree({
             setDiagramData(data['persons']);
             if (person_id)
                 show_full_info(
-                    data['persons'].find(
-                        (person) => person.id === person_id,
-                        tab
-                    )
+                    data['persons'].find((person) => person.id === person_id),
+                    tab
                 );
             if (callback) callback(data);
         },
@@ -298,38 +296,38 @@ var setDiagramOptions = function () {
     options.hasSelectorCheckbox = primitives.Enabled.False;
     options.buttonsPanelSize = 36;
     options.hasButtons = primitives.Enabled.Auto;
-    options.onButtonsRender = function (data) {
-        var itemConfig = data.context;
-        var element = data.element;
-        element.innerHTML = '';
-        element.appendChild(
-            primitives.JsonML.toHTML([
-                'div',
-                {
-                    class: 'btn-group-vertical btn-group-sm',
-                    style: 'display: block;',
-                },
-                [
-                    'button',
-                    {
-                        type: 'button',
-                        'data-buttonname': 'delete',
-                        class: 'btn btn-light',
-                    },
-                    ['p', { class: 'fa fa-remove', style: 'font-size: 16px' }],
-                ],
-                [
-                    'button',
-                    {
-                        type: 'button',
-                        'data-buttonname': 'add',
-                        class: 'btn btn-light',
-                    },
-                    ['i', { class: 'fa fa-user-plus' }],
-                ],
-            ])
-        );
-    };
+    // options.onButtonsRender = function (data) {
+    //     var itemConfig = data.context;
+    //     var element = data.element;
+    //     element.innerHTML = '';
+    //     element.appendChild(
+    //         primitives.JsonML.toHTML([
+    //             'div',
+    //             {
+    //                 class: 'btn-group-vertical btn-group-sm',
+    //                 style: 'display: block;',
+    //             },
+    //             [
+    //                 'button',
+    //                 {
+    //                     type: 'button',
+    //                     'data-buttonname': 'delete',
+    //                     class: 'btn btn-light',
+    //                 },
+    //                 ['p', { class: 'fa fa-remove', style: 'font-size: 16px' }],
+    //             ],
+    //             [
+    //                 'button',
+    //                 {
+    //                     type: 'button',
+    //                     'data-buttonname': 'add',
+    //                     class: 'btn btn-light',
+    //                 },
+    //                 ['i', { class: 'fa fa-user-plus' }],
+    //             ],
+    //         ])
+    //     );
+    // };
     options.normalLevelShift = 20;
     options.lineLevelShift = 30;
     options.normalItemsInterval = 15;

@@ -1,3 +1,16 @@
+var parseVkID = function(id_string){
+    vk_id = id_string.match(/(?:id)([0-9]+)/)
+    if (vk_id)
+        vk_id = vk_id[1]
+    else
+        VK.api("users.get", {'user_ids': id_string}, function(data) {
+            vk_id = data.response[1];
+        })
+
+    console.log(vk_id)
+    return vk_id
+}
+
 var getUser = function(callback){
 		VK.api("users.get", {'fields': 'photo_50'}, function(data) {
 			callback(data.response[0]);

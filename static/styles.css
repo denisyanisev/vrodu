@@ -115,7 +115,7 @@ display: none;
 #full_info_block {
     right: 14px;
     width: 385px;
-    height: 506px;
+    height: 519px;
     background: #88aae9;
     top: 61px;
     position: fixed;
@@ -399,9 +399,13 @@ body {
 }
 
 #full_vk_link img {
-    width: 56px;
-    margin-left: -10px;
+    width: 50px;
+    margin-left: -13px;
     display: none
+}
+
+#full_vk_text {
+    font-size: 14px;
 }
 
 .bt-item-frame {
@@ -461,4 +465,11 @@ body {
 .bp-title {
     color: #200e0e;
     padding: 5px;
+}
+
+#vk_id_edit {
+    margin-top: 10px;
+    margin-right: 10px;
+    width: 90px;
+    display: none;
 }

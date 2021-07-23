@@ -87,6 +87,10 @@ function TreeSwitch(tree_id) {
 }
 
 $(document).ready(function () {
+    $('#vk_id_edit').on('input', function(){
+	parseVkID($(this).val());
+    })
+
     $('#tree_list').menu();
 
     $('#is_alive').click(function () {
@@ -397,7 +401,6 @@ $(document).ready(function () {
         $('.full_field').addClass('full_field_enabled');
         $('#bd_edit').show();
         $('#full_birth_death').hide();
-        //$('#vk_id_edit').val();
         $('#vk_id_edit').show();
     });
 
@@ -426,7 +429,7 @@ $(document).ready(function () {
             maiden_name: $('#full_maiden_name').val(),
             full_desc: $('#full_full_desc').val(),
             nationality: $('#full_nationality').val(),
-            vk_id: parseVkID($('#vk_id_edit').val()),
+            vk_id: parseInt($('#vk_id_edit').val())
         };
         if (Request.location != '') {
             var myGeocoder = ymaps.geocode(Request.location);

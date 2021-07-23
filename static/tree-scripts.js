@@ -241,6 +241,7 @@ function show_full_info(a, tab = 0) {
     $('#full_full_desc').val(a['full_desc'] ? a['full_desc'] : '');
     $('#full_nationality').val(a['nationality'] ? a['nationality'] : '');
     $('#full_location').val(a['location'] ? a['location'] : '');
+    $('#vk_id_edit').val(a['vk_id'] ? a['vk_id'] : '')
     if (a['vk_id']) {
         $('#full_vk_link').show();
         $('#full_vk_link').attr('href', 'https://vk.com/id' + a['vk_id']);

@@ -1,14 +1,23 @@
 var parseVkID = function(id_string){
+    var vk_id
     vk_id = id_string.match(/(?:id)([0-9]+)/)
     if (vk_id)
         vk_id = vk_id[1]
-    else
+    else 
         VK.api("users.get", {'user_ids': id_string}, function(data) {
-            vk_id = data.response[1];
-        })
-
-    console.log(vk_id)
-    return vk_id
+            if (data.error) {
+		alias = id_string.match(/(?:vk.com\/)([^\>]*)/)[1]
+		VK.api("users.get", {'user_ids': alias}, function(data) {
+		    console.log(data);
+		    vk_id = data.response[0];
+		    $('#vk_id_edit').val(vk_id.id);
+		})
+	    }
+	    else {
+	        vk_id = data.response[0];
+		$('#vk_id_edit').val(vk_id.id);
+	    }
+        });
 }
 
 var getUser = function(callback){

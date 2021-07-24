@@ -243,6 +243,7 @@ display: none;
     margin-left: 2px;
     margin-top: 3px;
     display: none;
+
 }
 
 #full_search_results_single img{
@@ -251,6 +252,11 @@ display: none;
     margin: 10px;
     margin-top: 2px;
 }
+
+#vk_id_single_number{
+    margin-top: 10px;
+}
+
 .result_item {
     cursor: pointer;
     border-bottom: 1px solid var(--steel_gray_80);
@@ -370,6 +376,12 @@ body {
 }
 
 .link_additional {
+    display: block;
+    color: #337ab7!important;
+    margin-top: 9px;
+}
+
+.vk_info {
     display: block;
     color: #337ab7!important;
     margin-top: 9px;

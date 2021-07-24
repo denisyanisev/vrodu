@@ -91,11 +91,15 @@ function TreeSwitch(tree_id) {
 $(document).ready(function () {
     $('#vk_id_edit').on('input', function(){
 	    parseVkID($(this).val());
-    })
+    });
 
     $('#vk_id_number').on('input', function(){
 	    parseVkID($(this).val());
-    })
+    });
+
+    $('#vk_id_single_number').on('input', function(){
+	    parseVkID($(this).val());
+    });
 
     $('#tree_list').menu();
 
@@ -160,6 +164,9 @@ $(document).ready(function () {
             nationality: $('#nationality').val(),
             tree_id: window.tree_id,
         };
+        if ($('#vk_id_single_number').val()) {
+            console.log($('#vk_id_single_number').val())
+        }
         $('#input_block_modal').modal('hide');
         if (Request.first_name == '') {
             $('#input_block_modal').modal('hide');

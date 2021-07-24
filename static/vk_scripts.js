@@ -43,6 +43,7 @@ var getFriends = function(q, dom_result){
 			VK.api('friends.search', {'user_id': data.response[0].id, 'q': q, 'count': '10', 'v': '5.130', 'fields': 'city,domain,photo_50,photo_200_orig,sex'},
         	function(data){
         	    $('#full_search_results').html('');
+		    $('#full_search_results_single').html('');
         	    var items = data.response.items
         	    items.forEach((element) => {
         	   		var add_vk = `add_vk_person(${element.id},'${element.first_name}','${element.last_name}','${element.sex}','${element.photo_200_orig}')`;

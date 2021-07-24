@@ -33,51 +33,49 @@ function add_vk_person(
 
 function add_person_base(Request) {
     var new_id;
-    $.when(
-        $.ajax({
-            type: 'POST',
-            contentType: 'application/json; charset=utf-8',
-            url: '/add',
-            data: JSON.stringify(Request),
-            dataType: 'json',
-            success: function (data) {
-                if (data['persons'] == -1) {
-                    $('#failed_message').text(data['Error']);
-                    $('#dialog-message').modal();
-                    return;
-                } else {
-                    new_id = data['new_id'];
-                    if (Request.photo) {
-                        fetch(Request.photo)
-                            .then((res) => res.blob())
-                            .then((result) =>
-                                uploadPhoto(result, new_id, 'jpeg')
-                            );
-                    }
-                    if (
-                        Request.from_id != undefined &&
-                        Request.relative_type == 'parent'
-                    ) {
-                        $.ajax({
-                            type: 'POST',
-                            url: '/change',
-                            contentType: 'application/json;charset=UTF-8',
-                            data: JSON.stringify({
-                                from_id: Request.from_id,
-                                new_id: new_id,
-                                sex: Request.sex,
-                                tree_id: tree_id,
-                            }),
-                        });
-                    }
+    $.ajax({
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8',
+        url: '/add',
+        data: JSON.stringify(Request),
+        dataType: 'json',
+        success: function (data) {
+            if (data['persons'] == -1) {
+                $('#failed_message').text(data['Error']);
+                $('#dialog-message').modal();
+                return;
+            } else {
+                new_id = data['new_id'];
+                var d1, d2;
+                if (
+                    Request.from_id != undefined &&
+                    Request.relative_type == 'parent'
+                ) {
+                    d1 = $.ajax({
+                        type: 'POST',
+                        url: '/change',
+                        contentType: 'application/json;charset=UTF-8',
+                        data: JSON.stringify({
+                            from_id: Request.from_id,
+                            new_id: new_id,
+                            sex: Request.sex,
+                            tree_id: tree_id,
+                        }),
+                    });
                 }
-            },
-        })
-    ).then(function () {
-        if (new_id) {
-            updateTree({ person_id: new_id });
-            centerOnPerson(new_id);
-        }
+                if (Request.photo) {
+                    d2 = fetch(Request.photo)
+                        .then((res) => res.blob())
+                        .then((result) => uploadPhoto(result, new_id, 'jpeg'));
+                }
+                $.when(d1, d2).done(function () {
+                    if (new_id) {
+                        updateTree({ person_id: new_id });
+                        centerOnPerson(new_id);
+                    }
+                });
+            }
+        },
     });
 }
 
@@ -159,22 +157,22 @@ function uploadPhoto(photo, from_id, ext, callback = null) {
     var from_id = from_id,
         extension = ext,
         formData = new FormData();
+    console.log('upload');
 
     formData.append('photo', photo);
     formData.append('from_id', from_id);
     formData.append('ext', extension);
     formData.append('user_id', window.user.id);
 
-    $.when(
-        $.ajax({
-            url: '/uploadphoto',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-        })
-    ).then(function (res) {
-        if (callback) callback({ person_id: from_id });
+    return $.ajax({
+        url: '/uploadphoto',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (res) {
+            if (callback) callback({ person_id: from_id });
+        },
     });
 }
 

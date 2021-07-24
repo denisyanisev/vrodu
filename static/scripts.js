@@ -90,7 +90,7 @@ function TreeSwitch(tree_id) {
 
 $(document).ready(function () {
     $('#vk_id_edit').on('input', function(){
-	    parseVkID($(this, '#vk_id_edit').val());
+	    parseVkID($(this).val(), '#vk_id_edit');
     });
 
 //    $('#vk_id_number').on('input', function(){
@@ -98,7 +98,7 @@ $(document).ready(function () {
 //    });
 
     $('#vk_id_single_number').on('input', function(){
-	    parseVkID($(this, '#vk_id_single_number').val());
+	    parseVkID($(this).val(), '#vk_id_single_number');
     });
 
     $('#tree_list').menu();

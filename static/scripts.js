@@ -33,6 +33,8 @@ function flushFields() {
     $('#is_alive').prop('checked', true);
     $('#death_block').hide();
     $('#full_search_results').html('');
+    $('#full_search_results_single').html('');
+    $('#full_search_results_single').hide();
     $('#additional_info').collapse('hide');
     $('#maiden_name').hide();
     $('#second_parent').children().not('option:first').remove();
@@ -285,12 +287,18 @@ $(document).ready(function () {
     $('#vk_id').on('input', function () {
         var q = $(this).val();
         $('#full_search_results').show();
+        console.log($(this).val())
+        if ($(this).val()=='')
+                $('#full_search_results').hide()
         getFriends(q, '#full_search_results');
     });
 
     $('#vk_id_single').on('input', function () {
         var q = $(this).val();
         $('#full_search_results_single').show();
+        console.log($(this).val())
+        if ($(this).val()=='')
+                $('#full_search_results_single').hide()
         getFriends(q, '#full_search_results_single');
     });
 

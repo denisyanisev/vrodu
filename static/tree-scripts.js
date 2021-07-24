@@ -251,6 +251,7 @@ function show_full_info(a, tab = 0) {
         if (a['vk_confirm'] == 2) $('#full_vk_text').html('(Верифицировано)');
     }
     $('#full_search_results').hide();
+    $('#full_search_results_single').hide();
     $('#vk_id').val('');
     if (photo.includes('male')) $('#full_photo_delete').hide();
     else $('#full_photo_delete').show();

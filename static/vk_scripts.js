@@ -1,4 +1,4 @@
-var parseVkID = function(id_string){
+var parseVkID = function(id_string, dom_element){
     var vk_id
     vk_id = id_string.match(/(?:id)([0-9]+)/)
     if (vk_id)
@@ -10,12 +10,12 @@ var parseVkID = function(id_string){
             VK.api("users.get", {'user_ids': alias}, function(data) {
                 console.log(data);
                 vk_id = data.response[0];
-                $('#vk_id_edit').val(vk_id.id);
+                $(dom_element).val(vk_id.id);
             })
 	    }
 	    else {
 	        vk_id = data.response[0];
-		    $('#vk_id_edit').val(vk_id.id);
+		    $(dom_element).val(vk_id.id);
 	    }
     });
 }

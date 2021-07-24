@@ -90,15 +90,15 @@ function TreeSwitch(tree_id) {
 
 $(document).ready(function () {
     $('#vk_id_edit').on('input', function(){
-	    parseVkID($(this).val());
+	    parseVkID($(this, '#vk_id_edit').val());
     });
 
-    $('#vk_id_number').on('input', function(){
-	    parseVkID($(this).val());
-    });
+//    $('#vk_id_number').on('input', function(){
+//	    parseVkID($(this).val());
+//    });
 
     $('#vk_id_single_number').on('input', function(){
-	    parseVkID($(this).val());
+	    parseVkID($(this, '#vk_id_single_number').val());
     });
 
     $('#tree_list').menu();
@@ -163,10 +163,9 @@ $(document).ready(function () {
             full_desc: $('#full_desc').val(),
             nationality: $('#nationality').val(),
             tree_id: window.tree_id,
+            vk_id: $('#vk_id_single_number').val() ? $('#vk_id_single_number').val() : null
         };
-        if ($('#vk_id_single_number').val()) {
-            console.log($('#vk_id_single_number').val())
-        }
+
         $('#input_block_modal').modal('hide');
         if (Request.first_name == '') {
             $('#input_block_modal').modal('hide');

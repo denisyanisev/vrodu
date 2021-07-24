@@ -290,8 +290,8 @@ $(document).ready(function () {
 
     $('#vk_id_single').on('input', function () {
         var q = $(this).val();
-        $('#full_search_results_sinle').show();
-        getFriends(q, '#full_search_results_sinle');
+        $('#full_search_results_single').show();
+        getFriends(q, '#full_search_results_single');
     });
 
     $('#full_info_block').tabs();

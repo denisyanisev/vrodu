@@ -163,7 +163,8 @@ $(document).ready(function () {
             full_desc: $('#full_desc').val(),
             nationality: $('#nationality').val(),
             tree_id: window.tree_id,
-            vk_id: $('#vk_id_single_number').val() ? $('#vk_id_single_number').val() : null
+            vk_id: $('#vk_id_single_number').val() ? $('#vk_id_single_number').val() : null,
+	    photo: $('#vk_photo_single').val()
         };
 
         $('#input_block_modal').modal('hide');

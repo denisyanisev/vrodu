@@ -64,14 +64,17 @@ function add_person_base(Request) {
                     });
                 }
                 if (Request.photo) {
-                    d2 = fetch(Request.photo)
+                    d2 = $.Deferred();
+                    fetch(Request.photo)
                         .then((res) => res.blob())
-                        .then((result) => uploadPhoto(result, new_id, 'jpeg'));
+                        .then((result) => uploadPhoto(result, new_id, 'jpeg'))
+                        .then((res) => d2.resolve());
                 }
-                $.when(d1, d2).done(function () {
+                $.when(d1, d2).then(function () {
                     if (new_id) {
                         updateTree({ person_id: new_id });
                         centerOnPerson(new_id);
+                        control.setOption('cursorItem', new_id);
                     }
                 });
             }
@@ -143,11 +146,12 @@ function updateTree({
         dataType: 'json',
         success: function (data) {
             setDiagramData(data['persons']);
-            if (person_id)
+            if (person_id){
                 show_full_info(
                     data['persons'].find((person) => person.id === person_id),
                     tab
                 );
+            }
             if (callback) callback(data);
         },
     });

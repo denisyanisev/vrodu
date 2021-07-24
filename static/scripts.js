@@ -98,7 +98,7 @@ $(document).ready(function () {
 //    });
 
     $('#vk_id_single_number').on('input', function(){
-	    parseVkID($(this).val(), '#vk_id_single_number');
+	    parseVkID($(this).val(), '#vk_id_single_number', true);
     });
 
     $('#tree_list').menu();

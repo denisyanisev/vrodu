@@ -1,10 +1,10 @@
-var parseVkID = function(id_string, dom_element){
+var parseVkID = function(id_string, dom_element, single){
     var vk_id
     vk_id = id_string.match(/(?:id)([0-9]+)/)
     if (vk_id)
         vk_id = vk_id[1]
     else 
-        VK.api("users.get", {'user_ids': id_string}, function(data) {
+        VK.api("users.get", {'user_ids': id_string, 'fields': 'city,domain,photo_50,photo_200_orig,sex'}, function(data) {
         if (data.error) {
             alias = id_string.match(/(?:vk.com\/)([^\>]*)/)[1]
             VK.api("users.get", {'user_ids': alias}, function(data) {
@@ -17,6 +17,13 @@ var parseVkID = function(id_string, dom_element){
 	        vk_id = data.response[0];
 		    $(dom_element).val(vk_id.id);
 	    }
+        if (single) {
+            vk_item = data.response[0]
+            $('#first_name').val(vk_item.first_name);
+            $('#last_name').val(vk_item.last_name);
+            $('input[name=sex]').val(vk_item.sex == 2 ? 'M' : 'F');
+            $('#vk_photo_single').val(vk_item.photo_200_orig);
+        }
     });
 }
 

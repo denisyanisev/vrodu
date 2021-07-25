@@ -12,10 +12,11 @@ var startApp = function (user) {
             if (res.length == 0)
                 addMainPerson()
 
-                $('#tree_list').append(
+                single_count = data['tree_list'][user.id] ? data['tree_list'][user.id] : 1
+	        $('#tree_list').append(
                     $('<li href="#" style="color: rgb(47,22,22)"  id="tree' + user.id + '" onclick="TreeSwitch(' +
                             user.id + ')">Личное Дерево' + ' ('
-                            + data['tree_list'][user.id] ? data['tree_list'][user.id] : 1 + ')' + '</li>')
+                            + single_count  + ')' + '</li>')
                 );
 	    tree_list = data['tree_list']
             for (key in tree_list) {

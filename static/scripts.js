@@ -42,6 +42,8 @@ function flushFields() {
 }
 
 function TreeSwitch(tree_id) {
+    $('#tree_list li').css({'color': '#8a6b6b'})
+    $('#tree' + tree_id).css({'color': '#2f1616'})
     window.tree_id = tree_id;
     $.ajax({
         type: 'POST',

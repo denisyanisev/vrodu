@@ -11,25 +11,27 @@ var startApp = function (user) {
             );
             if (res.length == 0)
                 addMainPerson()
+
                 $('#tree_list').append(
                     $(
-                        '<li href="#" onclick="TreeSwitch(' +
+                        '<li href="#" style="color: rgb(47,22,22)"  id="tree' + user.id + '" onclick="TreeSwitch(' +
                             user.id +
-                            ')">Мое Дерево</li>'
+                            ')">Мое Дерево' + ' (' +  data['tree_list'][user.id] + ')'  + '</li>'
                     )
                 );
-            data['tree_list'].forEach(function (elem) {
-                if (user.id != elem)
+	    tree_list = data['tree_list']
+            for (key in tree_list) {
+                if (user.id != key)
                     $('#tree_list').append(
                         $(
-                            '<li href="#" onclick="TreeSwitch(' +
-                                elem +
+                            '<li href="#" id="tree' + key + '" onclick="TreeSwitch(' +
+                                key +
                                 ')">Дерево ' +
-                                elem +
+                                key + ' (' + tree_list[key] + ')'  +
                                 '</li>'
                         )
                     );
-            });
+            }
             $('#draggable').css({
                 left:
                     (-parseInt($('#draggable').css('width')) +

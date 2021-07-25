@@ -506,3 +506,11 @@ body {
     width: 90px;
     display: none;
 }
+
+#tree_list li {
+    color: rgb(138, 107, 107)
+}
+
+#tree_list li:hover {
+    color: rgb(47, 22, 22)
+}

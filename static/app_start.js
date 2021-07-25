@@ -13,23 +13,16 @@ var startApp = function (user) {
                 addMainPerson()
 
                 $('#tree_list').append(
-                    $(
-                        '<li href="#" style="color: rgb(47,22,22)"  id="tree' + user.id + '" onclick="TreeSwitch(' +
-                            user.id +
-                            ')">Мое Дерево' + ' (' +  data['tree_list'][user.id] + ')'  + '</li>'
-                    )
+                    $('<li href="#" style="color: rgb(47,22,22)"  id="tree' + user.id + '" onclick="TreeSwitch(' +
+                            user.id + ')">Личное Дерево' + ' ('
+                            + data['tree_list'][user.id] ? data['tree_list'][user.id] : 1 + ')' + '</li>')
                 );
 	    tree_list = data['tree_list']
             for (key in tree_list) {
                 if (user.id != key)
                     $('#tree_list').append(
-                        $(
-                            '<li href="#" id="tree' + key + '" onclick="TreeSwitch(' +
-                                key +
-                                ')">Дерево ' +
-                                key + ' (' + tree_list[key] + ')'  +
-                                '</li>'
-                        )
+                        $('<li href="#" id="tree' + key + '" onclick="TreeSwitch(' + key + ')">Дерево '
+                        + key + ' (' + tree_list[key] + ')' +'</li>')
                     );
             }
             $('#draggable').css({

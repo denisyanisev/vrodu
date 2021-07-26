@@ -1,4 +1,5 @@
-var control;
+var control,
+    drug = false;
 
 function add_vk_person(
     vk_id,
@@ -71,11 +72,9 @@ function add_person_base(Request) {
                         .then((res) => d2.resolve());
                 }
                 $.when(d1, d2).then(function () {
-                    if (new_id) {
-                        updateTree({ person_id: new_id });
-                        centerOnPerson(new_id);
-                        control.setOption('cursorItem', new_id);
-                    }
+                    updateTree({ person_id: new_id });
+                    centerOnPerson(new_id);
+                    control.setOption('cursorItem', new_id);
                 });
             }
         },
@@ -146,7 +145,7 @@ function updateTree({
         dataType: 'json',
         success: function (data) {
             setDiagramData(data['persons']);
-            if (person_id){
+            if (person_id) {
                 show_full_info(
                     data['persons'].find((person) => person.id === person_id),
                     tab
@@ -161,7 +160,6 @@ function uploadPhoto(photo, from_id, ext, callback = null) {
     var from_id = from_id,
         extension = ext,
         formData = new FormData();
-    console.log('upload');
 
     formData.append('photo', photo);
     formData.append('from_id', from_id);
@@ -243,7 +241,7 @@ function show_full_info(a, tab = 0) {
     $('#full_full_desc').val(a['full_desc'] ? a['full_desc'] : '');
     $('#full_nationality').val(a['nationality'] ? a['nationality'] : '');
     $('#full_location').val(a['location'] ? a['location'] : '');
-    $('#vk_id_edit').val(a['vk_id'] ? a['vk_id'] : '')
+    $('#vk_id_edit').val(a['vk_id'] ? a['vk_id'] : '');
     if (a['vk_id']) {
         $('#full_vk_link').show();
         $('#full_vk_link').attr('href', 'https://vk.com/id' + a['vk_id']);
@@ -263,6 +261,7 @@ function show_full_info(a, tab = 0) {
     $('#full_info_block').tabs('option', 'active', tab);
 
     $('#person_id').val(a.id);
+    $('#full_close').off('click');
     $('#full_close').click(function () {
         $('#full_info_block').hide();
         closeEdit();
@@ -350,7 +349,12 @@ var setDiagramOptions = function () {
     options.autoSizeMinimum = new primitives.Size(myWidth, myHeight);
 
     options.onMouseClick = function (event, eventArgs) {
-        show_full_info(eventArgs.context);
+        if (!drug) 
+        {
+            show_full_info(eventArgs.context);
+            return true;
+        }
+        return false;
     };
     options.onCursorChanging = function (event, eventArgs) {};
     options.onCursorChanged = function (event, eventArgs) {
@@ -473,6 +477,9 @@ var centerOnPerson = function (personId) {
         });
     }
 };
+
+$('#draggable').on('mousedown', (event) => (drug = false));
+$('#draggable').on('mousemove', (event) => (drug = true));
 
 ymaps.ready(init);
 function init() {

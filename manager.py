@@ -105,6 +105,7 @@ def add_person():
     vk_confirm = query_args.get('vk_confirm')
     parent_m = ''
     parent_f = ''
+    spouses = []
     if relative_type == 'child':
         person = collection.find_one({'_id': from_id})
         parent_m, parent_f = (from_id, second_parent) if person['sex'] == 'M' else (second_parent, from_id)
@@ -115,14 +116,17 @@ def add_person():
             return jsonify({'Error': f'У {person_name} уже есть отец.', 'persons': -1})
         elif person[parent_f_str] and sex == 'F':
             return jsonify({'Error': f'У {person_name} уже есть мать.', 'persons': -1})
-
+        other_parent = person['parent_m'] or person['parent_f']
+        if other_parent:
+            collection.update_one({'_id': other_parent}, {'$addToSet': {'spouses': new_id}})
+            spouses = [other_parent]
     collection.insert_one({'_id': new_id,
                            'first_name': first_name,
                            'middle_name': middle_name,
                            'last_name': last_name,
                            'parent_m': parent_m,
                            'parent_f': parent_f,
-                           'spouses': [],
+                           'spouses': spouses,
                            'image': '',
                            'description': description,
                            'sex': sex,

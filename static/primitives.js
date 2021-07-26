@@ -701,9 +701,9 @@ function BaseControl(element, options, taskManagerFactory, eventArgsFactory, tem
       } else if (target.getAttribute("name") === "checkbox" || target.getAttribute("name") === "selectiontext") {//ignore jslint
       } else {
         eventArgs = getEventArgs(null, newCursorItemId);
-        trigger("onMouseClick", event, eventArgs);
+        var setTrigger = trigger("onMouseClick", event, eventArgs);
 
-        if (!eventArgs.cancel) {
+        if (setTrigger && !eventArgs.cancel) {
           if (cursorItemOptionTask.hasCursorEnabled()) {
             setCursorItem(event, newCursorItemId);
 
@@ -894,7 +894,7 @@ function BaseControl(element, options, taskManagerFactory, eventArgsFactory, tem
     var eventHandler = _data.options[eventHandlerName];
 
     if (eventHandler != null) {
-      eventHandler(event, eventArgs);
+      return eventHandler(event, eventArgs);
     }
   }
 

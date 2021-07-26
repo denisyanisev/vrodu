@@ -1,3 +1,5 @@
+var hovered = false;
+
 function draw_belts() {
     $('.bp-corner-all').each(function () {
         var alive = $(this).find('[name=alive]').val();
@@ -62,7 +64,6 @@ function TreeSwitch(tree_id) {
             );
             if (confirms.length > 0) {
                 confirm_person = confirms[0];
-                console.log(confirm_person.id);
                 centerOnPerson(confirm_person.id);
                 $('#confirmed_item').append(
                     '<span>' +
@@ -91,16 +92,16 @@ function TreeSwitch(tree_id) {
 }
 
 $(document).ready(function () {
-    $('#vk_id_edit').on('input', function(){
-	    parseVkID($(this).val(), '#vk_id_edit');
+    $('#vk_id_edit').on('input', function () {
+        parseVkID($(this).val(), '#vk_id_edit');
     });
 
-//    $('#vk_id_number').on('input', function(){
-//	    parseVkID($(this).val());
-//    });
+    //    $('#vk_id_number').on('input', function(){
+    //	    parseVkID($(this).val());
+    //    });
 
-    $('#vk_id_single_number').on('input', function(){
-	    parseVkID($(this).val(), '#vk_id_single_number', true);
+    $('#vk_id_single_number').on('input', function () {
+        parseVkID($(this).val(), '#vk_id_single_number', true);
     });
 
     $('#tree_list').menu();
@@ -165,8 +166,10 @@ $(document).ready(function () {
             full_desc: $('#full_desc').val(),
             nationality: $('#nationality').val(),
             tree_id: window.tree_id,
-            vk_id: $('#vk_id_single_number').val() ? $('#vk_id_single_number').val() : null,
-	    photo: $('#vk_photo_single').val()
+            vk_id: $('#vk_id_single_number').val()
+                ? $('#vk_id_single_number').val()
+                : null,
+            photo: $('#vk_photo_single').val(),
         };
 
         $('#input_block_modal').modal('hide');
@@ -202,6 +205,7 @@ $(document).ready(function () {
 
     $('#input_block_modal').on('hidden.bs.modal', function (e) {
         flushFields();
+        $('#parent').prop('checked', true);
     });
 
     $('#full_delete').click(function () {
@@ -246,7 +250,7 @@ $(document).ready(function () {
             modal.person_id = undefined;
         }
     });
-
+    
     $('#link_person_button').click(function () {
         var relative_type = $('input[name=relative_type]:checked').val();
         window.link = 'listening';
@@ -296,18 +300,14 @@ $(document).ready(function () {
     $('#vk_id').on('input', function () {
         var q = $(this).val();
         $('#full_search_results').show();
-        console.log($(this).val())
-        if ($(this).val()=='')
-                $('#full_search_results').hide()
+        if ($(this).val() == '') $('#full_search_results').hide();
         getFriends(q, '#full_search_results');
     });
 
     $('#vk_id_single').on('input', function () {
         var q = $(this).val();
         $('#full_search_results_single').show();
-        console.log($(this).val())
-        if ($(this).val()=='')
-                $('#full_search_results_single').hide()
+        if ($(this).val() == '') $('#full_search_results_single').hide();
         getFriends(q, '#full_search_results_single');
     });
 
@@ -456,7 +456,7 @@ $(document).ready(function () {
             maiden_name: $('#full_maiden_name').val(),
             full_desc: $('#full_full_desc').val(),
             nationality: $('#full_nationality').val(),
-            vk_id: parseInt($('#vk_id_edit').val())
+            vk_id: parseInt($('#vk_id_edit').val()),
         };
         if (Request.location != '') {
             var myGeocoder = ymaps.geocode(Request.location);
@@ -514,7 +514,7 @@ $(document).ready(function () {
                 spouses: targetSpouse.spouses,
             };
             change_person(Request, false);
-            updateTree({person_id: fromSpouseId, tab: 1});
+            updateTree({ person_id: fromSpouseId, tab: 1 });
         } else {
             $('#failed_message').text('Не выбран брак для удаления');
             $('#dialog-message').modal();

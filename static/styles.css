@@ -356,7 +356,7 @@ body {
     transform: rotate(270deg);
 }
 
-#link_map, #center_on_person {
+#link_map, #center_on_person, #link_info {
     position: absolute;
     top: 11px;
     left: 53px;
@@ -367,6 +367,11 @@ body {
 
 #center_on_person {
     left: 190px;
+}
+
+#link_info {
+    left: 650px;
+    margin-top: -3px;
 }
 
 .link_alert {

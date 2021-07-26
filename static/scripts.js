@@ -532,6 +532,10 @@ $(document).ready(function () {
         $('#map_modal').modal();
     });
 
+    $('#link_info').click(function () {
+        $('#block_info').modal();
+    });
+
     $('#center_on_person').click(function () {
         centerOnPerson(parseInt($('#person_id').val()));
     });

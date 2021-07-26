@@ -73,7 +73,8 @@ def fetch_persons():
     query_args = request.get_json(True)
     collection = DBClient()['family']['persons']
     user_id = query_args.get('user_id')
-    tree_list = {tree['tree_id']: len(list(collection.find({'tree_id': tree['tree_id']}))) for tree in collection.find({'vk_id': user_id})}
+    tree_list = {tree['tree_id']: len(list(collection.find({'tree_id': tree['tree_id']})))
+                 for tree in collection.find({'vk_id': user_id})}
     tree_id = query_args.get('tree_id', user_id if tree_list else 0)
     return jsonify({'persons': make_persons(tree_id), 'tree_list': tree_list})
 

@@ -72,8 +72,7 @@ function add_person_base(Request) {
                         .then((res) => d2.resolve());
                 }
                 $.when(d1, d2).then(function () {
-                    updateTree({ person_id: new_id });
-                    centerOnPerson(new_id);
+                    updateTree({ person_id: new_id }).then(() => centerOnPerson(new_id));
                     control.setOption('cursorItem', new_id);
                 });
             }
@@ -137,7 +136,7 @@ function updateTree({
     tab = 0,
     callback,
 }) {
-    $.ajax({
+    return $.ajax({
         type: 'POST',
         contentType: 'application/json; charset=utf-8',
         url: '/update',
@@ -457,8 +456,10 @@ var delete_person_base = function (person_id) {
 };
 
 var centerOnPerson = function (personId) {
+    console.log(personId);
     const position = control.getPosition(personId).position,
         scale = parseFloat($('#zoomSlider').val());
+    console.log(position);
 
     if (position) {
         const x = position.x * scale,

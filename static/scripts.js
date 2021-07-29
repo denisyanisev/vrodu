@@ -39,7 +39,7 @@ function flushFields() {
     $('#full_search_results_single').hide();
     $('#additional_info').collapse('hide');
     $('#maiden_name').hide();
-    $('#second_parent').children().not('option:first').remove();
+    $('#second_parent').children().not('option:last-child').remove();
     $('#second_parent').hide();
 }
 
@@ -131,15 +131,16 @@ $(document).ready(function () {
             control
                 .getOption('items')
                 .find((person) => person.id == person_id)
-                .spouses.forEach((id) => {
+                .spouses.reverse().forEach((id) => {
                     var person = control
                         .getOption('items')
                         .find((person) => person.id == id);
-                    $('#second_parent').append(
+                    $('#second_parent').prepend(
                         `<option person_id='${id}'>${person.title}</option>`
                     );
                     $('#second_parent').show();
                 });
+            $('#second_parent option:first-child').prop('selected', true);
         }
         $('#person_id').val(person_id);
         $('#input_block_modal').modal();

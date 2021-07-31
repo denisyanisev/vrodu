@@ -15,6 +15,7 @@
 
 {% block scripts %}
     <script type="text/javascript">
+    var locations;
     ymaps.ready(init);
     function init(){
         var myMap = new ymaps.Map("map", {
@@ -29,7 +30,7 @@
         });
         myMap.geoObjects.add(objectManager);
         locations = {{ locations | safe }};
-        if (locations.length){
+        if (Object.keys(locations).length){
             var myBounds = addLocations(myMap, locations);
             myMap.setBounds(ymaps.util.bounds.fromPoints(myBounds));
             if (myMap.getZoom() > 20){
@@ -37,14 +38,29 @@
             }
         }
     }
+
     function addLocations(map, locations){
         var A = [];
         for (a in locations){
-            var myPlacemark = new ymaps.Placemark(locations[a].coordinates, {iconCaption: locations[a].person});
+            var persons = locations[a], iCaption = persons[0].person, bContent = '';
+            if (persons.length > 1){
+                iCaption = '';
+                persons.forEach(element => {
+                    bContent += element.person + '<br/>';
+                    if (element.surname) 
+                        if (iCaption) iCaption += ', ' + element.surname;
+                        else iCaption = element.surname;
+                });
+                if (!iCaption)
+                    iCaption = 'Несколько персон';
+            }
+
+            var myPlacemark = new ymaps.Placemark(persons[0].coordinates,
+                {iconCaption: iCaption, balloonContent: bContent});
             map.geoObjects.add(myPlacemark);
-            A.push(locations[a].coordinates);
+            A.push(persons[0].coordinates);
         }
         return A;
     }
-    </script>
+</script>
 {% endblock scripts %}

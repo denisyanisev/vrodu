@@ -240,10 +240,15 @@ def get_map():
     if not user_id:
         user_id = 0
     collection = DBClient()['family']['persons']
-    locations = []
+    locations = dict()
     for person in collection.find({'tree_id': user_id, 'coordinate0': {'$exists': True, '$ne': ''}}):
         person_name = ' '.join((person['first_name'], person['middle_name'], person['last_name'])).strip()
-        locations.append({'person': person_name, 'coordinates': [person['coordinate0'], person['coordinate1']]})
+        key = str(person['coordinate0']) + str(person['coordinate1'])
+        locations[key] = locations.setdefault(key, []) + \
+            [{'person': person_name,
+              'coordinates': [person['coordinate0'],
+                              person['coordinate1']],
+              'surname': person['last_name']}]
     return render_template('map.html', locations=locations)
 
 

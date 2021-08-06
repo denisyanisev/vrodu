@@ -31,9 +31,7 @@ var startApp = function (user) {
                 top: 30,
             });
             $('#draggable').show();
-            user_tree_id = res[0]['id']
-            centerOnPerson(user_tree_id);
-            window.user_tree_id = user_tree_id
+            centerOnPerson(res[0]['id']);
         },
     });
 };

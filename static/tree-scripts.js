@@ -398,7 +398,7 @@ var getPersonsTemplates = function () {
             <center><div name="title" class=" bp-item bp-title"></div></center>
         </div>
         <div name="photoBorder" class="bp-item bp-photo-frame">
-            <img name="photo" style="width: 57px;">
+            <img name="photo" style="width: 57px; border-radius: 50%">
             <div name="death_belt"></div>
         </div>
         <div name="description" class="bp-item bp-description"></div>

@@ -34,6 +34,7 @@ var startApp = function (user) {
                 top: 30,
             });
             $('#draggable').show();
+            centerOnPerson(user.id);
         },
     });
 };

@@ -351,12 +351,14 @@ $(document).ready(function () {
                                 quality: 1,
                             })
                             .then(function (result) {
+                                var person_id = parseInt($('#person_id').val());
                                 uploadPhoto(
                                     result,
-                                    parseInt($('#person_id').val()),
+                                    person_id,
                                     'jpeg',
-                                    updateTree
-                                );
+                                ).then(function (){
+                                    updateTree({tree_id: window.user_id, person_id: person_id})
+                                });
                             });
                         $('#photo-crop-block').modal('hide');
                     });

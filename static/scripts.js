@@ -67,6 +67,7 @@ function TreeSwitch(tree_id) {
             if (confirms.length > 0) {
                 confirm_person = confirms[0];
                 centerOnPerson(confirm_person.id);
+                $('#confirmed_item').empty()
                 $('#confirmed_item').append(
                     '<span>' +
                         confirm_person.first_name +

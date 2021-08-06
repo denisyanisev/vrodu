@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 from flask_bootstrap import Bootstrap
 from db import DBClient
 import logging
+import random
 import os
 
 
@@ -277,7 +278,8 @@ def upload_photo():
         person_id = int(content['from_id'])
         person = collection.find_one({'_id': person_id, 'tree_id': user_id})
         ext = content['ext']
-        path = f'/static/photos/custom/{person_id}_image.{ext}'
+        hashed = (hash(file) % 10000 << 10) + random.randint(1, 999)
+        path = f'/static/photos/custom/{person_id}_image_{hashed}.{ext}'
         delete_photo_base(person)
         file.save(app.root_path + path)
         collection.update_one({'_id': person_id, 'tree_id': user_id}, {'$set': {'image': path}})

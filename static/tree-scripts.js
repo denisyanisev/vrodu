@@ -456,10 +456,8 @@ var delete_person_base = function (person_id) {
 };
 
 var centerOnPerson = function (personId) {
-    console.log(personId);
     const position = control.getPosition(personId).position,
         scale = parseFloat($('#zoomSlider').val());
-    console.log(position);
 
     if (position) {
         const x = position.x * scale,

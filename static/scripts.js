@@ -62,10 +62,12 @@ function TreeSwitch(tree_id) {
                     person['vk_confirm'] == 0 &&
                     person['vk_id'] == window.user.id
             );
-            centerOnPerson(window.user.id);
+            var res_user = data['persons'].find((person) => user.id == person['vk_id']);
+            centerOnPerson(res_user.id);
             if (confirms.length > 0) {
                 confirm_person = confirms[0];
                 centerOnPerson(confirm_person.id);
+                $('#confirmed_item').empty()
                 $('#confirmed_item').append(
                     '<span>' +
                         confirm_person.first_name +

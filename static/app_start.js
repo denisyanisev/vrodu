@@ -5,10 +5,7 @@ var startApp = function (user) {
     updateTree({
         tree_id: user.id,
         callback: function (data) {
-            var res = data['persons'].filter(
-                (person) =>
-                    user.id == person['vk_id'] && user.id == person['tree_id']
-            );
+            var res = data['persons'].filter((person) => user.id == person['vk_id'] && user.id == person['tree_id']);
             if (res.length == 0)
                 addMainPerson()
 
@@ -18,7 +15,7 @@ var startApp = function (user) {
                             user.id + ')">Личное Дерево' + ' ('
                             + single_count  + ')' + '</li>')
                 );
-	    tree_list = data['tree_list']
+	        tree_list = data['tree_list']
             for (key in tree_list) {
                 if (user.id != key)
                     $('#tree_list').append(
@@ -34,7 +31,7 @@ var startApp = function (user) {
                 top: 30,
             });
             $('#draggable').show();
-            centerOnPerson(user.id);
+            centerOnPerson(res[0]['id']);
         },
     });
 };

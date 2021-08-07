@@ -397,8 +397,8 @@ var getPersonsTemplates = function () {
         <div name="titleBackground" class="bp-item bp-corner-all bp-title-frame">
             <center><div name="title" class=" bp-item bp-title"></div></center>
         </div>
-        <div name="photoBorder" class="bp-item bp-photo-frame">
-            <img name="photo" style="width: 57px; border-radius: 50%">
+        <div name="photoBorder" class="bp-item bp-photo-frame" style="boarder-radius: 50%;">
+            <img name="photo" style="width: 57px;">
             <div name="death_belt"></div>
         </div>
         <div name="description" class="bp-item bp-description"></div>
@@ -469,9 +469,7 @@ var centerOnPerson = function (personId) {
                 -x -
                 offsetWidth -
                 80 +
-                ($(window).width() -
-                    parseInt($('#full_info_block').css('width'))) /
-                    2,
+                $(window).width() / 2,
             top: Math.min(30, -y - offsetHeight - 45 + $(window).height() / 2),
         });
     }

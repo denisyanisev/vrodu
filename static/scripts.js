@@ -430,6 +430,7 @@ $(document).ready(function () {
         $('#bd_edit').show();
         $('#full_birth_death').hide();
         $('#vk_id_edit').show();
+        $('#vk_id_edit').attr('hidden', false);
     });
 
     $('#full_is_alive_edit').click(function (event) {

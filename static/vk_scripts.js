@@ -4,10 +4,10 @@ var parseVkID = function(id_string, dom_element, single){
     if (vk_id)
         vk_id = vk_id[1]
     else 
-        VK.api("users.get", {'user_ids': id_string, 'fields': 'city,domain,photo_50,photo_200_orig,sex'}, function(data) {
+        VK.api("users.get", {'user_ids': id_string, 'fields': 'city,domain,photo_50,photo_200_orig,sex', 'v': '5.131'}, function(data) {
         if (data.error) {
             alias = id_string.match(/(?:vk.com\/)([^\>]*)/)[1]
-            VK.api("users.get", {'user_ids': alias, 'fields': 'city,domain,photo_50,photo_200_orig,sex'}, function(data) {
+            VK.api("users.get", {'user_ids': alias, 'fields': 'city,domain,photo_50,photo_200_orig,sex', 'v': '5.131'}, function(data) {
                 console.log(data);
                 vk_id = data.response[0];
                 $(dom_element).val(vk_id.id);
@@ -41,13 +41,13 @@ var parseVkID = function(id_string, dom_element, single){
 }
 
 var getUser = function(callback){
-		VK.api("users.get", {'fields': 'photo_50'}, function(data) {
+		VK.api("users.get", {'fields': 'photo_50', 'v': '5.131'}, function(data) {
 			callback(data.response[0]);
 			})
 	}
 
 var addMainPerson = function(){
-	VK.api("users.get", {'fields': 'city,domain,photo_50,photo_200_orig,sex'}, function(data) {
+	VK.api("users.get", {'fields': 'city,domain,photo_50,photo_200_orig,sex', 'v': '5.131'}, function(data) {
 		main_person = data.response[0]
 		add_vk_person(main_person.id, main_person.first_name, main_person.last_name, main_person.sex, main_person.photo_200_orig, 'new_person', 'confirmed')
 	});
@@ -58,9 +58,9 @@ var sendRequest = function(){
 	}
 
 var getFriends = function(q, dom_result){
-	VK.api("users.get", {'fields': 'photo_50'}, function(data) {
+	VK.api("users.get", {'fields': 'photo_50', 'v': '5.131'}, function(data) {
 		if (data.response){
-			VK.api('friends.search', {'user_id': data.response[0].id, 'q': q, 'count': '10', 'v': '5.130', 'fields': 'city,domain,photo_50,photo_200_orig,sex'},
+			VK.api('friends.search', {'user_id': data.response[0].id, 'q': q, 'count': '10', 'v': '5.131', 'fields': 'city,domain,photo_50,photo_200_orig,sex'},
         	function(data){
         	    $('#full_search_results').html('');
 		        $('#full_search_results_single').html('');
@@ -73,12 +73,12 @@ var getFriends = function(q, dom_result){
         	});
 		}
 	});
-	VK.api('friends.get', {'user_id': '549396892', 'count': '3', 'v': '5.130', 'fields': 'city,domain'},
+	VK.api('friends.get', {'user_id': '549396892', 'count': '3', 'v': '5.131', 'fields': 'city,domain'},
 	    function(data){});
 }
 
 var getAppFriends = function(){
-	VK.api('friends.getAppUsers', function(data){
+	VK.api('friends.getAppUsers', {'v': '5.131'}, function(data){
 		console.log(data);
 		});
 	}

@@ -7,7 +7,7 @@
 {% endblock metas %}
 
 {% block styles %}
-    {{ super() }}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <link href="{{ url_for('static', filename='primitives.latest.css') }}" media="screen" rel="stylesheet" type="text/css" />
     <link href="{{ url_for('static', filename='styles.css') }}" media="screen" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="{{ url_for('static', filename='jquery-ui.css') }}">
@@ -31,17 +31,89 @@
         <a href="#" onclick="sendRequest()" class="right-link">Отправить запрос</a>
     </div>
 
+    <!-- Offcanvas -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="full_info_block" aria-labell="Персона" data-bs-backdrop="false">
+        <div class="offcanvas-header">
+            <ul>
+                <li><a href="#full_info_tab">Персона</a></li>
+                <li><a href="#full_bio_tab">Биография</a></li>
+                <li><a href="#full_adding_tab">Добавить</a></li>
+            </ul>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <input id="full_id" value="" type="text" hidden/>
+            <div id="full_info_tab">
+                <div id="full_photo_block">
+                    <img id="full_photo" src=""/>
+                    <div id="full_death_belt" class="death_belt"></div>
+                    <div id="full_photo_delete" class="fa fa-remove"></div>
+                    <div id="full_photo_upload"> 
+                        <img id='full_photo_upload_img' src="/static/photos/PhotoUpload.png"/>
+                    </div>
+                </div>
+                <div id="full_name_block">
+                    <input id="full_last_name" class="full_field form-control" type="text" size="15" placeholder="Фамилия" disabled/>
+                    <input id="full_name" class="full_field form-control" type="text" size="15" placeholder="Имя" disabled/>
+                    <input id="full_middle_name" class="full_field form-control" type="text" size="15" placeholder="Отчество" disabled/>
+                </div>
+                <div style="clear: both"></div>
+                <div id="bd_edit">
+                    <input id="full_birth_edit" placeholder="Год" class="full_field full_field_enabled year-picker form-control" type="text">
+                    <span id="bd-"> - </span>
+                    <input id="full_death_edit" placeholder="Год" class="full_field_enabled year-picker form-control" type="text">
+                    <span>Жив(а)?</span>
+                    <input id="full_is_alive_edit" type="checkbox" checked/>
+                </div>
+                <input id="full_birth_death" type="text" class="full_field"  size="15" disabled />
+                <input id="full_description" placeholder="Краткое описание" class="full_field form-control" maxlength="24" type="text" disabled/>
+                <textarea id="full_full_desc" placeholder="Биография" class="full_field form-control" disabled></textarea>
+                <input id="full_nationality" placeholder="Национальность" class="full_field form-control" type="text" disabled/>
+                <input id="full_location" placeholder="Место рождения" class="full_field form-control" type="text" disabled/>
+                <input id="full_maiden_name" placeholder="Девичья фамилия" class="full_field form-control" type="text" disabled/>
+                <input id="vk_id_edit" placeholder="VK ID" class="full_field form-control" type="text" hidden><a id="full_vk_link" href="" target="_blank"><img src="{{ url_for('static', filename='images/vk.png') }}"></a>
+                <span id="full_vk_text"></span>
+                <button type="button" class="btn btn-success" id="full_edit_save">Сохранить</button>
+                <button type="button" class="btn btn-secondary" id="full_edit_cancel">Отменить</button>
+                <button type="button" class="btn btn-primary" id="full_edit" >Редактировать</button>
+                <button type="button" class="btn btn-danger" id="full_delete">Удалить персону</button>
+                <br /><br />
+            </div>
+            <div id="full_bio_tab">
+                <div style="font-size: 18px; margin-bottom: 5px;">Супруги</div>
+                <div id="full_spouses_block">
+                    <div id="full_spouses" class="list-group"></div>
+                    <button id="remove_spouse" class="btn btn-danger" type="button">Удалить брак</button>
+                </div>
+            </div>
+            <div id="full_adding_tab">
+                <div id="full_relations">
+                    <div id="add-person">
+                        <label>Родителя</label>
+                        <input type="radio" id="parent"  name="relative_type" value="parent" checked>
+                        <label>Ребенка</label>
+                        <input type="radio" id="child" name="relative_type" value="child"> <br />
+                        <button type="button" class="btn btn-primary" id="add_person_button">Добавить нового</button>
+                        <button type="button" class="btn btn-primary" id="link_person_button">Связать</button><br />
+                        <button type="button" class="btn btn-info" id="link_marriage_button">Связать супруга</button><br />
+                        <input type="text" id="vk_id" value="" placeholder="Добавить из ВК" class="flushable form-control"><br />
+                        <div id="full_search_results"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modals -->
     <div class="modal fade" id="input_block_modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
+        <div class="modal-dialog modal-dialog-scrollable modal-sm">
             <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="">Добавить новую персону</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="">Добавить новую персону</h5>
+                    <button type="button" class="btn-close" style="margin-top: -2px;" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body" style="padding-top: 0px;">
                     <input type="radio" id="new_person" name="relative_type" value="new_person">
                     <input id="person_id" value="" class="flushable" type="text" hidden />
                     <input id="link_id" value="" class="inactive flushable" type="text" hidden />
@@ -62,16 +134,14 @@
                     <label>Женский</label>
                     <input type="radio" id="female" name="sex" value="F"><br />
                     <input id="maiden_name" value="" placeholder="Девичья фамилия" class="flushable form-control add_field" type="text"/>
-                    <a class="link_additional" data-toggle="collapse" href="#additional_info" aria-expanded="false" aria-controls="collapseExample">
+                    <a class="link_additional" data-bs-toggle="collapse" href="#additional_info" aria-expanded="false" aria-controls="collapseExample">
                         Дополнительная информация >
                     </a>
                     <div class="collapse" id="additional_info">
-                        <div class="card card-body">
-                            <input id="location" value="" placeholder="Место рождения" class="flushable form-control add_field" type="text"/>
-                            <input id="description" value="" placeholder="Короткое описание" class="flushable form-control add_field" type="text"/>
-                            <textarea id="full_desc" placeholder="Биография" class="flushable form-control add_field"></textarea>
-                            <input id="nationality" value="" placeholder="Национальность" class="flushable form-control add_field" type="text"/>
-                        </div>
+                        <input id="location" value="" placeholder="Место рождения" class="flushable form-control add_field" type="text"/>
+                        <input id="description" value="" placeholder="Короткое описание" class="flushable form-control add_field" type="text"/>
+                        <textarea id="full_desc" placeholder="Биография" class="flushable form-control add_field"></textarea>
+                        <input id="nationality" value="" placeholder="Национальность" class="flushable form-control add_field" type="text"/>
                     </div>
               </div>
               <div class="modal-footer">
@@ -89,38 +159,32 @@
                     </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                 <button type="button" class="btn btn-primary" id="add_person">Добавить</button>
               </div>
             </div>
         </div>
-     </div>
+    </div>
 
-    <div class="modal fade" id="map_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal fade" id="map_modal" tabindex="-1" role="dialog" aria-labell="Карта родственников" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Карта родственников</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
               </div>
               <div class="modal-body">
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-              </div>
             </div>
         </div>
-     </div>
+    </div>
 
     <div class="modal fade" id="block_info" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel_1">Версия 1.0 Alpha</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>
               </div>
               <div class="modal-body">
@@ -139,26 +203,25 @@
                     </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal">Все понятно</button>
               </div>
             </div>
         </div>
-     </div>
+    </div>
 
     <div class="modal" id="dialog-confirm" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
                <div class="modal-header">
                   <h5 class="modal-title">Удалить персону?</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                   </button>
                </div>
                <div class="modal-body">
                   <span id="deleted_item"></span>
                </div>
                <div class="modal-footer">
-                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                    <button type="button" class="btn btn-primary" id="delete_person">Удалить</button>
                </div>
             </div>
@@ -170,12 +233,11 @@
             <div class="modal-content">
                <div class="modal-header">
                   <h5 class="modal-title">Удалить фотографию?</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                   </button>
                </div>
                <div class="modal-footer">
-                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                    <button type="button" class="btn btn-primary" id="photo_delete">Удалить</button>
                </div>
             </div>
@@ -187,7 +249,7 @@
             <div class="modal-content">
                <div class="modal-header">
                   <h5 class="modal-title">Это вы?</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                   </button>
                </div>
@@ -207,8 +269,7 @@
             <div class="modal-content">
                <div class="modal-header">
                   <h5 class="modal-title">Ошибка!</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                   </button>
                 </div>
                 <div class="modal-body">
@@ -223,109 +284,73 @@
             <div class="modal-content">
                <div class="modal-header">
                   <h5 class="modal-title">Выберите область фото</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="padding-bottom: 0px;">
                     <img id="photo-crop" src=""/>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
                     <button type="button" class="btn btn-primary" id="photo-crop-btn">Подтвердить</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <ul id="tree_list"></ul>
+    <!-- Body -->
+    <nav class="navbar navbar-light navbar-expand-sm position-absolute fixed-top" id="my_navbar" style="background-color: #deeff7;">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsable" aria-controls="collapsable" aria-label="Открыть меню">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a href="#" id="link_info"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-patch-question" viewBox="0 0 16 16">
+                <path d="M8.05 9.6c.336 0 .504-.24.554-.627.04-.534.198-.815.847-1.26.673-.475 1.049-1.09 1.049-1.986 0-1.325-.92-2.227-2.262-2.227-1.02 0-1.792.492-2.1 1.29A1.71 1.71 0 0 0 6 5.48c0 .393.203.64.545.64.272 0 .455-.147.564-.51.158-.592.525-.915 1.074-.915.61 0 1.03.446 1.03 1.084 0 .563-.208.885-.822 1.325-.619.433-.926.914-.926 1.64v.111c0 .428.208.745.585.745z"/>
+                <path d="m10.273 2.513-.921-.944.715-.698.622.637.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01.622-.636a2.89 2.89 0 0 1 4.134 0l-.715.698a1.89 1.89 0 0 0-2.704 0l-.92.944-1.32-.016a1.89 1.89 0 0 0-1.911 1.912l.016 1.318-.944.921a1.89 1.89 0 0 0 0 2.704l.944.92-.016 1.32a1.89 1.89 0 0 0 1.912 1.911l1.318-.016.921.944a1.89 1.89 0 0 0 2.704 0l.92-.944 1.32.016a1.89 1.89 0 0 0 1.911-1.912l-.016-1.318.944-.921a1.89 1.89 0 0 0 0-2.704l-.944-.92.016-1.32a1.89 1.89 0 0 0-1.912-1.911l-1.318.016z"/>
+                <path d="M7.001 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0z"/>
+            </svg></a>
+            <div class="collapse navbar-collapse" id="collapsable">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" id="add_single" active>Добавить персону</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" id="link_map"  data-toggle="modal">Открыть карту родственников</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" id="center_on_person">Показать себя</a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="container">
+                            <ul class="navbar-nav">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="tree_list_placeholder" role="button" data-bs-toggle="dropdown" aria-expanded="false"> Личное Дерево </a>
+                                    <ul class="dropdown-menu" aria-labelledby="tree_list_placeholder" id="tree_list_dropdown">
 
-    <div id="link-tip">
-        <div class="alert alert-danger link_alert" role="alert">Выберите персону, которую хотите связать</div>
-        <button id="cancel_link_button" class="btn btn-secondary btn-sm">Отмена</button>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="link-tip" class="alert alert-danger">
+        <span>Выберите персону</span>
+        <button id="cancel_link_button" class="btn btn-close btn-sm"></button>
     </div>
+    
+    <input type='range' class='form-range' min='0.5' max='1.5' value='1' step='0.1' autocomplete="off" id='zoomSlider' oninput='zoomDiagram()'>
 
-    <div id="add_single">+</div>
-    <a href="#" id="link_map"  data-toggle="modal">Показать на карте</a>
-    <a href="#" id="center_on_person">Фокус на персоне</a>
-    <a href="#" id="link_info"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-patch-question" viewBox="0 0 16 16">
-  <path d="M8.05 9.6c.336 0 .504-.24.554-.627.04-.534.198-.815.847-1.26.673-.475 1.049-1.09 1.049-1.986 0-1.325-.92-2.227-2.262-2.227-1.02 0-1.792.492-2.1 1.29A1.71 1.71 0 0 0 6 5.48c0 .393.203.64.545.64.272 0 .455-.147.564-.51.158-.592.525-.915 1.074-.915.61 0 1.03.446 1.03 1.084 0 .563-.208.885-.822 1.325-.619.433-.926.914-.926 1.64v.111c0 .428.208.745.585.745z"/>
-  <path d="m10.273 2.513-.921-.944.715-.698.622.637.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01.622-.636a2.89 2.89 0 0 1 4.134 0l-.715.698a1.89 1.89 0 0 0-2.704 0l-.92.944-1.32-.016a1.89 1.89 0 0 0-1.911 1.912l.016 1.318-.944.921a1.89 1.89 0 0 0 0 2.704l.944.92-.016 1.32a1.89 1.89 0 0 0 1.912 1.911l1.318-.016.921.944a1.89 1.89 0 0 0 2.704 0l.92-.944 1.32.016a1.89 1.89 0 0 0 1.911-1.912l-.016-1.318.944-.921a1.89 1.89 0 0 0 0-2.704l-.944-.92.016-1.32a1.89 1.89 0 0 0-1.912-1.911l-1.318.016z"/>
-  <path d="M7.001 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0z"/>
-</svg></a>
-    <input type='range' min='0.5' max='1.5' value='1' step='0.1' autocomplete="off" id='zoomSlider' oninput='zoomDiagram()'>
-
-    <div id="full_info_block" style='display: none'>
-        <input id="full_id" value="" type="text" hidden/>
-        <ul>
-            <li><a href="#full_info_tab">Персона</a></li>
-            <li><a href="#full_bio_tab">Биография</a></li>
-            <li><a href="#full_adding_tab">Добавить</a></li>
-        </ul>
-        <div id="full_info_tab">
-            <div id="full_photo_block">
-                <img id="full_photo" src=""/>
-                <div id="full_death_belt" class="death_belt"></div>
-                <div id="full_photo_delete" class="fa fa-remove"></div>
-                <div id="full_photo_upload"> 
-                    <img id='full_photo_upload_img' src="/static/photos/PhotoUpload.png"/>
-                </div>
-            </div>
-            <div id="full_name_block">
-                <input id="full_last_name" class="full_field form-control" type="text" size="15" placeholder="Фамилия" disabled/>
-                <input id="full_name" class="full_field form-control" type="text" size="15" placeholder="Имя" disabled/>
-                <input id="full_middle_name" class="full_field form-control" type="text" size="15" placeholder="Отчество" disabled/>
-            </div>
-            <div style="clear: both"></div>
-            <div id="bd_edit">
-                <input id="full_birth_edit" placeholder="Год" class="full_field full_field_enabled year-picker form-control" type="text">
-                <span id="bd-"> - </span>
-                <input id="full_death_edit" placeholder="Год" class="full_field_enabled year-picker form-control" type="text">
-                <span>Жив(а)?</span>
-                <input id="full_is_alive_edit" type="checkbox" checked/>
-            </div>
-            <input id="full_birth_death" type="text" class="full_field"  size="15" disabled />
-            <input id="full_description" placeholder="Краткое описание" class="full_field form-control" maxlength="24" type="text" disabled/>
-            <textarea id="full_full_desc" placeholder="Биография" class="full_field form-control" disabled></textarea>
-            <input id="full_nationality" placeholder="Национальность" class="full_field form-control" type="text" disabled/>
-            <input id="full_location" placeholder="Место рождения" class="full_field form-control" type="text" disabled/>
-            <input id="full_maiden_name" placeholder="Девичья фамилия" class="full_field form-control" type="text" disabled/>
-            <input id="vk_id_edit" placeholder="VK ID" class="full_field form-control" type="text" hidden><a id="full_vk_link" href="" target="_blank"><img src="{{ url_for('static', filename='images/vk.png') }}"></a>
-            <span id="full_vk_text"></span>
-            <button type="button" class="btn btn-success" id="full_edit_save">Сохранить</button>
-            <button type="button" class="btn btn-secondary" id="full_edit_cancel">Отменить</button>
-            <button type="button" class="btn btn-primary" id="full_edit" >Редактировать</button>
-            <button type="button" class="btn btn-danger" id="full_delete">Удалить персону</button>
-            <br /><br />
-        </div>
-        <div id="full_bio_tab">
-            <div style="font-size: 18px; margin-bottom: 5px;">Супруги</div>
-            <div id="full_spouses_block">
-                <div id="full_spouses" class="list-group"></div>
-                <button id="remove_spouse" class="btn btn-danger" type="button">Удалить брак</button>
-            </div>
-        </div>
-        <div id="full_adding_tab">
-            <div id="full_relations">
-                <div id="add-person">
-                    <label>Родителя</label>
-                    <input type="radio" id="parent"  name="relative_type" value="parent" checked>
-                    <label>Ребенка</label>
-                    <input type="radio" id="child" name="relative_type" value="child"> <br />
-                    <button type="button" class="btn btn-primary" id="add_person_button">Добавить нового</button>
-                    <button type="button" class="btn btn-primary" id="link_person_button">Связать</button><br />
-                    <button type="button" class="btn btn-info" id="link_marriage_button">Связать супруга</button><br />
-                    <input type="text" id="vk_id" value="" placeholder="Добавить из ВК" class="flushable form-control"><br />
-                    <div id="full_search_results"></div>
-                </div>
-            </div>
-        </div>
-        <div id="full_close" >X</div>
-    </div>
 {% endblock content %}
 
 {% block scripts %}
-    {{ super() }}
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script> -->
     <script type="text/javascript" src="//vk.com/js/api/xd_connection.js"></script>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=3e171cbb-7d54-47b4-98e5-21877d7eeb70&lang=ru_RU" type="text/javascript"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='jquery-ui-1.10.2.custom.min.js') }}"></script>

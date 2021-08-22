@@ -59,8 +59,8 @@ label {
 .death_belt {
     position: absolute;
     bottom: 13px;
-    left: 26px;
-    width: 40px;
+    left: 22px;
+    width: 47px;
     height: 5px;
     background: black;
     transform: rotate(315deg);
@@ -76,12 +76,21 @@ label {
 
 #link-tip{
     position: absolute;
-    top: 8px;
+    top: 50px;
     left: 202px;
+    padding: 5px;
     display: none;
 }
 
-#add_single{
+#link-tip span {
+    font-size: 16px;
+}
+
+nav#my_navbar{
+    padding: 0px;
+}
+
+/* #add_single{
     position: absolute;
     top: 10px;
     left: 10px;
@@ -91,7 +100,7 @@ label {
     height: 20px;
     text-align: center;
     background-color: #fff;
-}
+} */
 
 #new_person{
     display: none;
@@ -110,6 +119,25 @@ left: 500px;
 display: none;
 }
 
+div.selected-item {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    padding: 2px;
+    box-sizing: content-box;
+    width: 100%;
+    height: 100%;
+    border: 2px solid green;
+    border-radius: 5%;
+}
+
+div.placeholder.orgdiagram {
+    opacity: initial;
+    background-color: initial;
+    cursor: initial;
+    display: initial;
+}
+
 #surname_list {
   position: absolute;
   right: 200px;
@@ -117,28 +145,29 @@ display: none;
 }
 
 #full_info_block {
-    right: 14px;
-    width: 392px;
-    height: 519px;
-    background: #88aae9;
-    top: 61px;
-    position: fixed;
-    padding: 15px;
+    position: fixed!important;
+}
+
+#full_info_tab, #full_bio_tab, #full_adding_tab {
+    padding: 0px;
+    position: relative;
+    height: 100%;
 }
 
 #full_photo{
     position: absolute;
     top: 0px;
     bottom: 0px;
-    margin: auto;
     width: 100px;
+    height: 100px;
 }
 
 
 #full_edit {
+    cursor: pointer;
     position: absolute;
-    right: 144px;
-    bottom: 6px;
+    right: 155px;
+    bottom: 0px;
 }
 
 #full_photo_upload {
@@ -181,26 +210,26 @@ display: none;
 
 #full_name_block {
     font-weight: bold;
-    float: left;
-    margin-left: 18px;
+    margin-left: 110px;
+    padding-top: 1px;
 }
 
 #full_death_belt{   
-    width: 70px;
+    width: 79px;
     height: 8px;
-    top: 76px;
-    left: 44px;
+    top: 74px;
+    left: 37px;
 }
 
 #full_photo_block {
     width: 100px;
     height: 100px;
     box-sizing: content-box;
-    padding-right: 1px;
-    padding-bottom: 1px;
     float: left;
     overflow: hidden;
     position: relative;
+    padding-right: 1px;
+    padding-bottom: 1px;
 }
 
 #full_birth_death {
@@ -211,8 +240,8 @@ display: none;
 
 #full_delete {
     position: absolute;
-    bottom: 6px;
-    right: 4px;
+    bottom: 0px;
+    right: 0px;
     cursor: pointer;
 }
 
@@ -302,13 +331,17 @@ display: none;
 }
 
 #full_name_block input {
-    width: 193px;
     margin-top: 5px;
     height: 27px;
 }
 
+#full_name_block input:first-child {
+    margin-top: 4px;
+}
+
+
 #full_birth_edit, #full_death_edit{
-    width: 60px;
+    width: 65px;
     margin-top: 7px;
     display: inline;
 }
@@ -316,15 +349,15 @@ display: none;
 #full_edit_cancel {
     display: none;
     position: absolute;
-    bottom: 6px;
-    right: 153px;
+    bottom: 0px;
+    right: 155px;
 }
 
 #full_edit_save {
     display: none;
     position: absolute;
-    bottom: 6px;
-    right: 258px;
+    bottom: 0px;
+    right: 257px;
 }
 
 #bd_edit {
@@ -356,13 +389,14 @@ body {
     transform: rotate(270deg);
 }
 
-#link_map, #center_on_person, #link_info {
-    position: absolute;
+#link_info {
+    padding: 0px 5px;
+    /* position: absolute;
     top: 11px;
     left: 53px;
     background-color: #fff;
     border-radius: 5px;
-    line-height: 0.8;
+    line-height: 1.1; */
 }
 
 #center_on_person {
@@ -372,12 +406,6 @@ body {
 #link_info {
     left: 650px;
     margin-top: -3px;
-}
-
-.link_alert {
-    display: inline;
-    padding: 5px;
-    font-size: 13px;
 }
 
 #cancel_link_button {
@@ -412,9 +440,8 @@ body {
     font-weight: normal!important;
 }
 
-#map_modal .modal-body {
+#map_modal .modal-dialog, #map_modal .modal-content, #map_modal .modal-body {
     width: 550px;
-    height: 460px;
 }
 
 .modal-header .close {
@@ -480,6 +507,10 @@ body {
     background-color: #3b1818;
 }
 
+.bp-item {
+    overflow: initial;
+}
+
 .bp-photo-frame {
     top: 3px;
     left: 2px;
@@ -487,6 +518,11 @@ body {
     height: 57px;
     padding: 1px;
     float: left;
+    overflow: hidden;
+}
+
+.bp-photo-frame img {
+    border-radius: 50%;
 }
 
 .bp-description {
@@ -517,10 +553,7 @@ body {
     display: none;
 }
 
-#tree_list li {
-    color: rgb(138, 107, 107)
-}
-
-#tree_list li:hover {
-    color: rgb(47, 22, 22)
+a.disable-links {
+    pointer-events: none;
+    cursor: default;
 }

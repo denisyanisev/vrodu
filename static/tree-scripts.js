@@ -1,5 +1,15 @@
 var control,
-    drug = false;
+    drag = false,
+    oldContext,
+    full_info_block = new bootstrap.Offcanvas($('#full_info_block')[0], {keyboard: true, focus: true}),
+    dialog_message = new bootstrap.Modal($('#dialog-message')[0], {keyboard: true, focus: true}),
+    input_block_modal = new bootstrap.Modal($('#input_block_modal')[0], {keyboard: true, focus: true}),
+    dialog_confirm = new bootstrap.Modal($('#dialog-confirm')[0], {keyboard: true, focus: true}),
+    block_info = new bootstrap.Modal($('#block_info')[0], {keyboard: true, focus: true}),
+    map_modal = new bootstrap.Modal($('#map_modal')[0], {keyboard: true, focus: true}),
+    dialog_photo_confirm = new bootstrap.Modal($('#dialog-photo-confirm')[0], {keyboard: true, focus: true}),
+    confirm_vk = new bootstrap.Modal($('#confirm_vk')[0], {keyboard: true, focus: true}),
+    photo_crop_block = new bootstrap.Modal($('#photo-crop-block')[0], {keyboard: true, focus: true});
 
 function add_vk_person(
     vk_id,
@@ -43,7 +53,7 @@ function add_person_base(Request) {
         success: function (data) {
             if (data['persons'] == -1) {
                 $('#failed_message').text(data['Error']);
-                $('#dialog-message').modal();
+                dialog_message.show();
                 return;
             } else {
                 new_id = data['new_id'];
@@ -102,7 +112,7 @@ function add_link_js(a, b) {
     }
     if (link_id == person_id) {
         $('#failed_message').text('Привязка той же персоны!');
-        $('#dialog-message').modal();
+        dialog_message.show();
     } else {
         flushFields();
         $.when(
@@ -120,7 +130,7 @@ function add_link_js(a, b) {
                 success: function (data) {
                     if (data['persons'] == -1) {
                         $('#failed_message').text(data['Error']);
-                        $('#dialog-message').modal();
+                        dialog_message.show();
                     }
                 },
             })
@@ -132,7 +142,7 @@ function add_link_js(a, b) {
 
 function updateTree({
     tree_id = window.tree_id,
-    person_id = null,
+    person_id = -1,
     tab = 0,
     callback,
 }) {
@@ -144,7 +154,34 @@ function updateTree({
         dataType: 'json',
         success: function (data) {
             setDiagramData(data['persons']);
-            if (person_id) {
+
+            $('#tree_list_dropdown li a').off();
+            $('#tree_list_dropdown').empty();
+    
+            if (data['tree_list'].length) {
+                for (tree in data['tree_list']){
+                    $('#tree_list_dropdown').append(
+                        `<li><a class="dropdown-item" data-tree="${tree}" href="#">${tree}</a></li>`);
+                }
+                if (window.user.id === window.tree_id) $('#tree_list_placeholder').text('Личное дерево');
+                else $('#tree_list_placeholder').text('Дерево родственника');
+            } 
+            else {
+                $('#tree_list_dropdown').append(
+                    `<li><a class="dropdown-item" data-tree="${window.tree_id}" href="#">${window.tree_id}</a></li>`);
+                $('#tree_list_placeholder').text('Личное дерево');
+            }
+            
+            $('#tree_list_dropdown [data-tree=' + window.tree_id + ']').addClass(['active', 'disable-links']);
+            $('#tree_list_dropdown li a').on('click', function(){
+                window.tree_id = parseInt(this.dataset.tree);
+                updateTree({callback : function(){
+                    centerOnMe();
+                }});
+            });
+
+
+            if (typeof person_id !== "undefined" && person_id > -1) {
                 show_full_info(
                     data['persons'].find((person) => person.id === person_id),
                     tab
@@ -256,7 +293,7 @@ function show_full_info(a, tab = 0) {
     $('#vk_id').val('');
     if (photo.includes('male')) $('#full_photo_delete').hide();
     else $('#full_photo_delete').show();
-    $('#full_info_block').show();
+    full_info_block.show();
     $('#full_info_block').tabs('option', 'active', tab);
 
     $('#person_id').val(a.id);
@@ -298,49 +335,16 @@ var setDiagramOptions = function () {
     options.hasSelectorCheckbox = primitives.Enabled.False;
     options.buttonsPanelSize = 36;
     options.hasButtons = primitives.Enabled.Auto;
-    // options.onButtonsRender = function (data) {
-    //     var itemConfig = data.context;
-    //     var element = data.element;
-    //     element.innerHTML = '';
-    //     element.appendChild(
-    //         primitives.JsonML.toHTML([
-    //             'div',
-    //             {
-    //                 class: 'btn-group-vertical btn-group-sm',
-    //                 style: 'display: block;',
-    //             },
-    //             [
-    //                 'button',
-    //                 {
-    //                     type: 'button',
-    //                     'data-buttonname': 'delete',
-    //                     class: 'btn btn-light',
-    //                 },
-    //                 ['p', { class: 'fa fa-remove', style: 'font-size: 16px' }],
-    //             ],
-    //             [
-    //                 'button',
-    //                 {
-    //                     type: 'button',
-    //                     'data-buttonname': 'add',
-    //                     class: 'btn btn-light',
-    //                 },
-    //                 ['i', { class: 'fa fa-user-plus' }],
-    //             ],
-    //         ])
-    //     );
-    // };
     options.normalLevelShift = 20;
     options.lineLevelShift = 30;
     options.normalItemsInterval = 15;
     options.lineItemsInterval = 30;
     options.linesWidth = 1;
     options.linesColor = '#7C8993';
-    options.navigationMode = primitives.NavigationMode['CursorOnly'];
+    options.navigationMode = primitives.NavigationMode['HighlightOnly'];
     options.scale = 1;
     options.enablePanning = false;
 
-    // options.pageFitMode = primitives.PageFitMode.None;
     options.pageFitMode = primitives.PageFitMode.AutoSize;
     options.autoSizeMaximum = new primitives.Size(10000, 10000);
     const myWidth = 100,
@@ -348,30 +352,22 @@ var setDiagramOptions = function () {
     options.autoSizeMinimum = new primitives.Size(myWidth, myHeight);
 
     options.onMouseClick = function (event, eventArgs) {
-        if (!drug) 
-        {
+        if (!drag) {
+            if (window.link == 'listening') add_link_js(eventArgs.context, window.oldContext);
+            window.oldContext = eventArgs.context;
+
             show_full_info(eventArgs.context);
-            return true;
+
+            var item = event.target;
+            if (!$(item).hasClass('bt-item-frame')){
+                item = $(item).parents().filter('.bt-item-frame')[0];
+            }
+            $('div.selected-item').remove();
+            $(item).append('<div class="selected-item"></div>');
         }
-        return false;
     };
     options.onCursorChanging = function (event, eventArgs) {};
-    options.onCursorChanged = function (event, eventArgs) {
-        if (window.link == 'listening')
-            add_link_js(eventArgs.context, eventArgs.oldContext);
-    };
-    options.onButtonClick = function (event, eventArgs) {
-        switch (eventArgs.name) {
-            case 'delete':
-                delete_person_base(eventArgs.context.id);
-                break;
-            case 'add': {
-                $('#person_id').val(eventArgs.context.id);
-                $('#input_block_modal').modal();
-                break;
-            }
-        }
-    };
+    options.onCursorChanged = function (event, eventArgs) {};
     options.defaultTemplateName = 'personTemplate1';
     options.templates = [getPersonsTemplates()];
     options.onItemRender = onTemplateRender;
@@ -452,7 +448,7 @@ var delete_person_base = function (person_id) {
         .find((person) => person.id === person_id).title;
     $('#deleted_item').text(title);
     $('#dialog-confirm')[0].person_id = person_id;
-    $('#dialog-confirm').modal();
+    dialog_confirm.show();
 };
 
 var centerOnPerson = function (personId) {
@@ -468,15 +464,21 @@ var centerOnPerson = function (personId) {
             left:
                 -x -
                 offsetWidth -
-                80 +
+                100 +
                 $(window).width() / 2,
-            top: Math.min(30, -y - offsetHeight - 45 + $(window).height() / 2),
+            top: Math.min(50, -y - offsetHeight - 45 + $(window).height() / 2),
         });
     }
 };
 
-$('#draggable').on('mousedown', (event) => (drug = false));
-$('#draggable').on('mousemove', (event) => (drug = true));
+var centerOnMe = function () {
+    const items = control.getOption('items');
+    const person = items.find((person) => person.vk_id == window.user.id);
+    if (person) centerOnPerson(person.id);
+};
+
+$('#draggable').on('mousedown', (event) => (drag = false));
+$('#draggable').on('mousemove', (event) => (drag = true));
 
 ymaps.ready(init);
 function init() {

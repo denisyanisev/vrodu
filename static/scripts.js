@@ -55,7 +55,7 @@ function TreeSwitch(tree_id) {
         dataType: 'json',
         success: function (data) {
             setDiagramData(data['persons']);
-            $('#full_info_block').hide();
+            full_info_block.hide();;
             closeEdit();
             var confirms = data['persons'].filter(
                 (person) =>
@@ -88,7 +88,7 @@ function TreeSwitch(tree_id) {
                         '</a>'
                 );
                 window.confirm_id = confirm_person.id;
-                $('#confirm_vk').modal();
+                confirm_vk.show();
             }
         },
     });
@@ -125,7 +125,7 @@ $(document).ready(function () {
 
     $('#add_single').click(function () {
         $('#new_person').prop('checked', true);
-        $('#input_block_modal').modal();
+        input_block_modal.show();
     });
 
     $('#add_person_button').click(function () {
@@ -146,7 +146,7 @@ $(document).ready(function () {
             $('#second_parent option:first-child').prop('selected', true);
         }
         $('#person_id').val(person_id);
-        $('#input_block_modal').modal();
+        input_block_modal.show();
     });
 
     $('#add_person').click(function () {
@@ -176,11 +176,10 @@ $(document).ready(function () {
             photo: $('#vk_photo_single').val(),
         };
 
-        $('#input_block_modal').modal('hide');
+        input_block_modal.hide();
         if (Request.first_name == '') {
-            $('#input_block_modal').modal('hide');
             $('#failed_message').text('Не указано имя');
-            $('#dialog-message').modal();
+            dialog_message.show();
             return;
         }
         if (
@@ -218,8 +217,8 @@ $(document).ready(function () {
 
     $('#delete_person').click(function () {
         $('#dialog-confirm')[0].confirm = true;
-        $('#dialog-confirm').modal('hide');
-        $('#full_info_block').hide();
+        dialog_confirm.hide();
+        full_info_block.hide();;
         control.setOption('cursorItem', null);
     });
 
@@ -243,7 +242,7 @@ $(document).ready(function () {
                     success: function (data) {
                         if (data['persons'] == -1) {
                             $('#failed_message').text(data['Error']);
-                            $('#dialog-message').modal();
+                            dialog_message.show();
                         }
                     },
                 })
@@ -259,31 +258,25 @@ $(document).ready(function () {
         var relative_type = $('input[name=relative_type]:checked').val();
         window.link = 'listening';
         window.linkType = relative_type;
-        $('#full_info_block').hide();
+        full_info_block.hide();;
         $('#link-tip').show();
         var name = `${$('#full_last_name').val()} ${$('#full_name').val()} ${$(
             '#full_middle_name'
         ).val()}`;
         if (relative_type == 'parent') relative_type = 'родителя';
         else if (relative_type == 'child') relative_type = 'ребенка';
-        $('#link-tip')
-            .children()
-            .filter('div')
-            .text(`Выберите ${relative_type} для ${name}`);
+        $('#link-tip span').text(`Выберите ${relative_type} для ${name}`);
     });
 
     $('#link_marriage_button').click(function () {
         window.link = 'listening';
         window.linkType = 'spouse';
-        $('#full_info_block').hide();
+        full_info_block.hide();;
         $('#link-tip').show();
         var name = `${$('#full_last_name').val()} ${$('#full_name').val()} ${$(
             '#full_middle_name'
         ).val()}`;
-        $('#link-tip')
-            .children()
-            .filter('div')
-            .text(`Выберите супруга(у) для ${name}`);
+        $('#link-tip span').text(`Выберите супруга(у) для ${name}`);
     });
 
     $('#cancel_link_button').click(function () {
@@ -292,8 +285,8 @@ $(document).ready(function () {
 
     $(document).on('keydown', function (event) {
         if (event.key == 'Escape') {
-            $('#full_info_block').hide();
-            $('#dialog-message').modal('hide');
+            full_info_block.hide();;
+            dialog_message.hide();
             closeLink();
             closeEdit();
             control.setOption('cursorItem', null);
@@ -329,7 +322,6 @@ $(document).ready(function () {
                 var reader = new FileReader();
                 reader.onload = function (event) {
                     var photoUrl = reader.result;
-                    $('#photo-crop-block').modal();
                     $('#photo-crop').attr('src', photoUrl);
                     $('#photo-crop').croppie({
                         viewport: {
@@ -342,8 +334,11 @@ $(document).ready(function () {
                             height: 300,
                         },
                         mouseWheelZoom: true,
-                        //showZoomer: false,
+                        showZoomer: true,
                     });
+                    $('input.cr-slider').attr('style', 'display:block;');
+                    $('input.cr-slider').attr('class', 'form-range');
+                    photo_crop_block.show();
                     $('#photo-crop-btn').on('click', function (event) {
                         $('#photo-crop')
                             .croppie('result', {
@@ -362,7 +357,7 @@ $(document).ready(function () {
                                     updateTree({tree_id: window.user_id, person_id: person_id})
                                 });
                             });
-                        $('#photo-crop-block').modal('hide');
+                        photo_crop_block.hide();
                     });
                     $('#photo-crop-block').on(
                         'hide.bs.modal',
@@ -378,11 +373,11 @@ $(document).ready(function () {
                 $('#failed_message').text(
                     'Фотография должна быть формата PNG, JPEG или WEBP'
                 );
-                $('#dialog-message').modal();
+                dialog_message.show();
             }
         } else {
             $('#failed_message').text('Файл не должен превышать 10МБ!');
-            $('#dialog-message').modal();
+            dialog_message.show();
         }
     };
 
@@ -400,7 +395,7 @@ $(document).ready(function () {
     );
 
     $('#photo_delete').click(function (event) {
-        $('#dialog-photo-confirm').modal('hide');
+        dialog_photo_confirm.hide();
         var person_id = parseInt($('#full_id').val());
         $.when(
             $.ajax({
@@ -419,7 +414,7 @@ $(document).ready(function () {
 
     $('#full_photo_delete').click(function (event) {
         event.stopPropagation();
-        $('#dialog-photo-confirm').modal();
+        dialog_photo_confirm.show();
     });
 
     $('#full_edit').click(function () {
@@ -448,9 +443,10 @@ $(document).ready(function () {
     });
 
     $('#full_edit_save').click(function () {
+        var person_id = parseInt($('#full_id').val());
         var Request = {
             edit_person: true,
-            from_id: parseInt($('#full_id').val()),
+            from_id: person_id,
             first_name: $('#full_name').val(),
             middle_name: $('#full_middle_name').val(),
             last_name: $('#full_last_name').val(),
@@ -473,13 +469,13 @@ $(document).ready(function () {
                 Request.coordinate0 = coordinates[0];
                 Request.coordinate1 = coordinates[1];
                 change_person(Request);
-                updateTree({});
+                updateTree({person_id: parseInt($('#full_id').val())});
             });
         } else {
             Request.coordinate0 = '';
             Request.coordinate1 = '';
             change_person(Request);
-            updateTree({});
+            updateTree({person_id: person_id});
         }
         closeEdit();
     });
@@ -523,7 +519,7 @@ $(document).ready(function () {
             updateTree({ person_id: fromSpouseId, tab: 1 });
         } else {
             $('#failed_message').text('Не выбран брак для удаления');
-            $('#dialog-message').modal();
+            dialog_message.show();
         }
     });
 
@@ -535,15 +531,16 @@ $(document).ready(function () {
     });
 
     $('#link_map').click(function () {
-        $('#map_modal').modal();
+        map_modal.show();
     });
 
     $('#link_info').click(function () {
-        $('#block_info').modal();
+        block_info.show();
     });
 
     $('#center_on_person').click(function () {
-        centerOnPerson(parseInt($('#person_id').val()));
+        centerOnMe();
+        // show_full_info(person);
     });
 
     // document.onwheel = function (event){
@@ -562,8 +559,7 @@ $(document).ready(function () {
                 user_id: window.user.id,
             }),
             success: function (data) {
-                $('#map_modal .modal-body').empty();
-                $('#map_modal .modal-body').append(data);
+                $('#map_modal .modal-body').html(data);
             },
         });
     });
@@ -576,7 +572,7 @@ $(document).ready(function () {
         };
         change_person(Request);
         updateTree({});
-        $('#confirm_vk').modal('hide');
+        confirm_vk.hide();
         $('#confirm_vk').empty();
     });
 
@@ -588,7 +584,7 @@ $(document).ready(function () {
         };
         change_person(Request);
         updateTree({});
-        $('#confirm_vk').modal('hide');
+        confirm_vk.hide;
         $('#confirm_vk').empty();
     });
 

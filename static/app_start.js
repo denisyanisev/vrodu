@@ -3,35 +3,21 @@ var startApp = function (user) {
     window.tree_id = user.id;
     setDiagramOptions();
     updateTree({
-        tree_id: user.id,
         callback: function (data) {
             var res = data['persons'].filter((person) => user.id == person['vk_id'] && user.id == person['tree_id']);
-            if (res.length == 0)
+            if (res.length == 0) {
                 addMainPerson()
-
-                single_count = data['tree_list'][user.id] ? data['tree_list'][user.id] : 1
-	        $('#tree_list').append(
-                    $('<li href="#" style="color: rgb(47,22,22)"  id="tree' + user.id + '" onclick="TreeSwitch(' +
-                            user.id + ')">Личное Дерево' + ' ('
-                            + single_count  + ')' + '</li>')
-                );
-	        tree_list = data['tree_list']
-            for (key in tree_list) {
-                if (user.id != key)
-                    $('#tree_list').append(
-                        $('<li href="#" id="tree' + key + '" onclick="TreeSwitch(' + key + ')">Дерево '
-                        + key + ' (' + tree_list[key] + ')' +'</li>')
-                    );
+                updateTree({});
             }
             $('#draggable').css({
                 left:
                     (-parseInt($('#draggable').css('width')) +
                         parseInt($(window).width())) /
                     2,
-                top: 30,
+                top: 50,
             });
+            centerOnMe();
             $('#draggable').show();
-            centerOnPerson(res[0]['id']);
         },
     });
 };

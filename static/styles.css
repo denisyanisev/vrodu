@@ -376,6 +376,7 @@ div.placeholder.orgdiagram {
 body {
   overflow-y: hidden; /* Hide vertical scrollbar */
   overflow-x: hidden; /* Hide horizontal scrollbar */
+  user-select: none;
 }
 
 #zoomSlider{

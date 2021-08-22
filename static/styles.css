@@ -425,6 +425,10 @@ body {
     margin-top: 9px;
 }
 
+#vk_info {
+    width: 274px;
+}
+
 #maiden_name {
     display: none;
 }

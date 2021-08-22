@@ -276,7 +276,7 @@ $(document).ready(function () {
     $('#link_marriage_button').click(function () {
         window.link = 'listening';
         window.linkType = 'spouse';
-        full_info_block.hide();;
+        full_info_block.hide();
         $('#link-tip').show();
         var name = `${$('#full_last_name').val()} ${$('#full_name').val()} ${$(
             '#full_middle_name'
@@ -543,6 +543,17 @@ $(document).ready(function () {
     });
 
     $('#link_map').click(function () {
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            url: '/map',
+            data: JSON.stringify({
+                user_id: window.tree_id,
+            }),
+            success: function (data) {
+                $('#map_modal .modal-body').html(data);
+            },
+        });
         map_modal.show();
     });
 
@@ -561,20 +572,6 @@ $(document).ready(function () {
     //     $('#zoomSlider').val(change);
     //     zoomDiagram();
     // };
-
-    $('#map_modal').on('show.bs.modal', function (e) {
-        $.ajax({
-            type: 'POST',
-            contentType: 'application/json; charset=utf-8',
-            url: '/map',
-            data: JSON.stringify({
-                user_id: window.user.id,
-            }),
-            success: function (data) {
-                $('#map_modal .modal-body').html(data);
-            },
-        });
-    });
 
     $('#map_modal').on('hidden.bs.modal', function (e) {
         $('#map_modal .modal-body').empty();

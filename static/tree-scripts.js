@@ -52,7 +52,7 @@ function add_person_base(Request) {
         data: JSON.stringify(Request),
         dataType: 'json',
         success: function (data) {
-            if (data['persons'] == -1) {
+            if (data['persons'] != 1) {
                 $('#failed_message').text(data['Error']);
                 dialog_message.show();
                 return;
@@ -84,7 +84,10 @@ function add_person_base(Request) {
                 }
                 $.when(d1, d2).then(function () {
                     selectedItem = new_id;
-                    updateTree({ person_id: new_id }).then(() => centerOnPerson(new_id));
+                    updateTree({ person_id: new_id }).then(() => {
+                        window.oldContext = control.getOption('items').find((person) => person.id === new_id);
+                        centerOnPerson(new_id);
+                    });
                 });
             }
         },
@@ -159,7 +162,7 @@ function updateTree({
             $('#tree_list_dropdown li a').off();
             $('#tree_list_dropdown').empty();
     
-            if (data['tree_list']) {
+            if (Object.keys(data['tree_list']).length) {
                 for (tree in data['tree_list']){
                     $('#tree_list_dropdown').append(
                         `<li><a class="dropdown-item" data-tree="${tree}" href="#">Дерево родственника (id${tree})</a></li>`);
@@ -219,6 +222,7 @@ function uploadPhoto(photo, from_id, ext, callback = null) {
 
 // Show full info and edit person
 function show_full_info(a, tab = 0) {
+    console.log(a);
     closeEdit();
     var person_id = a.id;
     $('#full_id').val(person_id);

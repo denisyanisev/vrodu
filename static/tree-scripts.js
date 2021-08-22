@@ -483,7 +483,12 @@ var centerOnPerson = function (personId) {
 var centerOnMe = function () {
     const items = control.getOption('items');
     const person = items.find((person) => person.vk_id == window.user.id);
-    if (person) centerOnPerson(person.id);
+    if (person) {
+        $('div.selected-border').remove();
+        selectedItem = person.id;
+        $(`[data-person-id=${selectedItem}]`).append('<div class="selected-border"></div>');
+        centerOnPerson(person.id);
+    }
 };
 
 $('#draggable').on('mousedown', (event) => (drag = false));

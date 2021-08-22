@@ -16,8 +16,9 @@ var startApp = function (user) {
                     2,
                 top: 50,
             });
-            centerOnMe();
+            
             $('#draggable').show();
+            centerOnMe();
         },
     });
 };

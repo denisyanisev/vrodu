@@ -211,6 +211,11 @@ $(document).ready(function () {
         $('#parent').prop('checked', true);
     });
 
+    $('#full_info_block').on('hide.bs.offcanvas', function(e){
+        $('div.selected-border').remove();
+        selectedItem = -1;
+    });
+
     $('#full_delete').click(function () {
         delete_person_base(parseInt($('#full_id').val()));
     });
@@ -287,10 +292,16 @@ $(document).ready(function () {
         if (event.key == 'Escape') {
             full_info_block.hide();;
             dialog_message.hide();
+            block_info.hide();
+            input_block_modal.hide();
+            dialog_confirm.hide();
+            dialog_photo_confirm.hide();
+            photo_crop_block.hide();
             closeLink();
             closeEdit();
             control.setOption('cursorItem', null);
             control.update('Refresh');
+            selectedItem = -1;
         }
     });
 
@@ -551,7 +562,7 @@ $(document).ready(function () {
     //     zoomDiagram();
     // };
 
-    $('#map_modal').on('shown.bs.modal', function (e) {
+    $('#map_modal').on('show.bs.modal', function (e) {
         $.ajax({
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
@@ -563,6 +574,10 @@ $(document).ready(function () {
                 $('#map_modal .modal-body').html(data);
             },
         });
+    });
+
+    $('#map_modal').on('hidden.bs.modal', function (e) {
+        $('#map_modal .modal-body').empty();
     });
 
     $('#not_confirm_person').click(function () {

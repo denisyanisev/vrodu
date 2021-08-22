@@ -1,5 +1,6 @@
 var control,
     drag = false,
+    selectedItem,
     oldContext,
     full_info_block = new bootstrap.Offcanvas($('#full_info_block')[0], {keyboard: true, focus: true}),
     dialog_message = new bootstrap.Modal($('#dialog-message')[0], {keyboard: true, focus: true}),
@@ -82,8 +83,8 @@ function add_person_base(Request) {
                         .then((res) => d2.resolve());
                 }
                 $.when(d1, d2).then(function () {
+                    selectedItem = new_id;
                     updateTree({ person_id: new_id }).then(() => centerOnPerson(new_id));
-                    control.setOption('cursorItem', new_id);
                 });
             }
         },
@@ -154,11 +155,11 @@ function updateTree({
         dataType: 'json',
         success: function (data) {
             setDiagramData(data['persons']);
-
+            if (selectedItem > -1) $(`[data-person-id=${selectedItem}]`).append('<div class="selected-border"></div>');
             $('#tree_list_dropdown li a').off();
             $('#tree_list_dropdown').empty();
     
-            if (data['tree_list'].length) {
+            if (data['tree_list']) {
                 for (tree in data['tree_list']){
                     $('#tree_list_dropdown').append(
                         `<li><a class="dropdown-item" data-tree="${tree}" href="#">Дерево родственника (id${tree})</a></li>`);
@@ -328,6 +329,7 @@ var setDiagramData = function (persons) {
 var updateDiagramData = function (persons) {
     if (persons) control.setOption('items', persons);
     control.update('Recreate', true);
+    if (selectedItem > -1) $(`[data-person-id=${selectedItem}]`).append('<div class="selected-border"></div>');
     draw_belts();
 };
 
@@ -343,7 +345,7 @@ var setDiagramOptions = function () {
     options.lineItemsInterval = 30;
     options.linesWidth = 1;
     options.linesColor = '#7C8993';
-    options.navigationMode = primitives.NavigationMode['HighlightOnly'];
+    options.navigationMode = primitives.NavigationMode['Inactive'];
     options.scale = 1;
     options.enablePanning = false;
 
@@ -364,10 +366,11 @@ var setDiagramOptions = function () {
             if (!$(item).hasClass('bt-item-frame')){
                 item = $(item).parents().filter('.bt-item-frame')[0];
             }
-            $('div.selected-item').remove();
-            $(item).append('<div class="selected-item"></div>');
+            $('div.selected-border').remove();
+            $(item).append('<div class="selected-border"></div>');
+            selectedItem = eventArgs.context.id;
         }
-    };
+    };  
     options.onCursorChanging = function (event, eventArgs) {};
     options.onCursorChanged = function (event, eventArgs) {};
     options.defaultTemplateName = 'personTemplate1';
@@ -388,8 +391,6 @@ var getPersonsTemplates = function () {
     var result = new primitives.TemplateConfig();
     result.name = 'personTemplate1';
     result.itemSize = new primitives.Size(152, 83);
-    //result.minimizedItemSize = new primitives.Size(3, 3);
-    //result.highlightPadding = new primitives.Thickness(4, 4, 4, 4);
 
     result.itemTemplate = `<div class="bp-item bp-corner-all bt-item-frame">
         <div name="titleBackground" class="bp-item bp-corner-all bp-title-frame">
@@ -424,10 +425,11 @@ var onTemplateRender = function (event, data) {
             deathBelt = data.element.querySelector('div[name=death_belt]'),
             description = data.element.querySelector('.bp-description'),
             years = data.element.querySelector('.years');
+
         title.textContent = itemConfig.title;
         titleFrame.style.backgroundColor =
             data.context['sex'] == 'M' ? '#88aae9' : '#ffb1c7';
-
+        
         if (data.context['vk_confirm'] == 0 || data.context['vk_confirm'] == 1)
             data.element.style.backgroundColor = '#8ceae5';
         if (data.context['vk_confirm'] == 2) {
@@ -441,6 +443,7 @@ var onTemplateRender = function (event, data) {
         if (data.context.alive === false) deathBelt.classList.add('death_belt');
         description.textContent = itemConfig.description;
         years.textContent = itemConfig.years;
+        data.element.setAttribute('data-person-id', data.context.id);
     }
 };
 
@@ -496,6 +499,7 @@ var zoomDiagram = function () {
         minHeight = 600 * scale;
     control.setOption('scale', scale);
     control.update('Refresh');
+    if (selectedItem > -1) $(`[data-person-id=${selectedItem}]`).append('<div class="selected-border"></div>');
     $('#draggable').css({ 'min-width': minWidth, 'min-height': minHeight });
     var newWidth = parseInt($('#draggable').css('width')) / 2,
         newHeight = parseInt($('#draggable').css('height')) / 3;

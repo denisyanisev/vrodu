@@ -119,7 +119,7 @@ left: 500px;
 display: none;
 }
 
-div.selected-item {
+div.selected-border {
     position: absolute;
     top: -4px;
     left: -4px;

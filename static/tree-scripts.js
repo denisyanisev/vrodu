@@ -161,22 +161,21 @@ function updateTree({
             if (selectedItem > -1) $(`[data-person-id=${selectedItem}]`).append('<div class="selected-border"></div>');
             $('#tree_list_dropdown li a').off();
             $('#tree_list_dropdown').empty();
-    
+
             if (Object.keys(data['tree_list']).length) {
                 for (tree in data['tree_list'])
-		{
-		    console.log(data['tree_list'][tree])
-                    $('#tree_list_dropdown').append(
-                        `<li><a class="dropdown-item" data-tree="${tree}" href="#">Дерево родственника (${data['tree_list'][tree]})</a></li>`);
+		        {
+                    $('#tree_list_dropdown').append(`<li><a class="dropdown-item" data-tree="${tree}" href="#">
+                    Дерево ${window.user.last_name} & ${data['tree_list'][tree][1]}... (${data['tree_list'][tree][0]})</a></li>`);
                 }
-                $(`a.dropdown-item[data-tree=${window.user.id}]`).text(`Личное дерево (${data['tree_list'][window.user.id]})`);
+                $(`a.dropdown-item[data-tree=${window.user.id}]`).text(`Личное дерево (${data['tree_list'][window.user.id][0]})`);
 
                 if (window.user.id === window.tree_id) $('#tree_list_placeholder').text('Личное дерево');
-                else $('#tree_list_placeholder').text('Дерево родственника');
-            } 
+                else $('#tree_list_placeholder').text('Общее дерево');
+            }
             else {
                 $('#tree_list_dropdown').append(
-                    `<li><a class="dropdown-item" data-tree="${window.user.id}" href="#">Личное дерево (id${window.user.id})</a></li>`);
+                    `<li><a class="dropdown-item" data-tree="${window.user.id}" href="#">Личное дерево (${data['tree_list'][window.user.id]})</a></li>`);
                 $('#tree_list_placeholder').text('Личное дерево');
             }
             

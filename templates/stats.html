@@ -6,7 +6,7 @@
 </head>
 <body>
 <span>Всего персон: {{ all_persons }}</span><br />
-<span>VK персон: {{ vk_persons }</span><br /><br />
+<span>VK персон: {{ vk_persons }}</span><br /><br />
 <span>Уникальных персон: {{ vk_persons_verified|length }}</span><br />
 {% for key in vk_persons_verified %}
     {{ key[1] }}

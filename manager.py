@@ -75,12 +75,14 @@ def fetch_persons():
     collection = DBClient()['family']['persons']
     user_id = query_args.get('user_id')
     tree_list = {}
-    for tree_item in collection.find({'vk_id': user_id}):
+    user_collection = list(collection.find({'vk_id': user_id}))
+    for tree_item in user_collection:
         tree_collection = list(collection.find({'tree_id': tree_item['tree_id']}))
         name = list(filter(lambda e: e['vk_id'] == e['tree_id'] == tree_item['tree_id'], tree_collection))[0]
         tree_list.update({tree_item['tree_id']: (len(list(tree_collection)), name['last_name'])})
     tree_id = query_args.get('tree_id', user_id if tree_list else 0)
-    return jsonify({'persons': make_persons(tree_id), 'tree_list': tree_list})
+    notifications_tree = list(set([x['tree_id'] for x in list(filter(lambda e: e['vk_confirm'] == 0, user_collection))]))
+    return jsonify({'persons': make_persons(tree_id), 'tree_list': tree_list, 'notifications_list': notifications_tree})
 
 
 @app.route('/add', methods=['POST'])

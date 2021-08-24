@@ -562,3 +562,25 @@ a.disable-links {
     pointer-events: none;
     cursor: default;
 }
+
+.custom-badge{
+    color: #ffffff;
+    border-radius: 9px;
+    top: 6px;
+    margin-left: 18px;
+    position: absolute;
+    background: #a7b5ea;
+}
+
+.custom-badge-list {
+    color: #ffffff;
+    border-radius: 9px;
+    position: absolute;
+    background: #a7b5ea;
+    width: 16px;
+    height: 15px;
+    text-align: center;
+    line-height: 7px;
+    font-size: 9px;
+    line-height: 8px;
+}

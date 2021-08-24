@@ -172,6 +172,14 @@ function updateTree({
 
                 if (window.user.id === window.tree_id) $('#tree_list_placeholder').text('Личное дерево');
                 else $('#tree_list_placeholder').text('Общее дерево');
+
+                $('#tree_list_placeholder').append('<span class="badge badge-light custom-badge">' + data['notifications_list'].length + '</span>')
+                console.log(data['notifications_list'])
+                for (notification in data['notifications_list'])
+                {
+                    $('#tree_list_dropdown li a[data-tree="' + data['notifications_list'][notification] + '"]').append(
+                    '<span class="badge badge-light custom-badge-list">1</span>')
+                }
             }
             else {
                 $('#tree_list_dropdown').append(
@@ -286,14 +294,12 @@ function show_full_info(a, tab = 0) {
     $('#full_nationality').val(a['nationality'] ? a['nationality'] : '');
     $('#full_location').val(a['location'] ? a['location'] : '');
     $('#vk_id_edit').val(a['vk_id'] ? a['vk_id'] : '');
-    if (a['vk_id']) {
+    if (a['vk_id']!==null) {
         $('#full_vk_link').show();
         $('#full_vk_link').attr('href', 'https://vk.com/id' + a['vk_id']);
         $('#full_vk_link img').show();
-        if (a['vk_confirm'] == 0)
-            $('#full_vk_text').html('(Приглашение отправлено)');
-        if (a['vk_confirm'] == 1)
-            $('#full_vk_text').html('(Приглашение отклонено)');
+        if (a['vk_confirm'] == 0) $('#full_vk_text').html('(Приглашение отправлено)');
+        if (a['vk_confirm'] == 1) $('#full_vk_text').html('(Приглашение отклонено)');
         if (a['vk_confirm'] == 2) $('#full_vk_text').html('(Верифицировано)');
     }
     $('#full_search_results').hide();

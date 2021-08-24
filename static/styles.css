@@ -9,6 +9,7 @@ label {
     min-width: 800px;
     min-height: 600px;
     display: none;
+    transition: transform 1s;
 }
 
 #diagram-container{
@@ -146,6 +147,7 @@ div.placeholder.orgdiagram {
 
 #full_info_block {
     position: fixed!important;
+    transition: all 0.4s ease 0s;
 }
 
 #full_info_tab, #full_bio_tab, #full_adding_tab {
@@ -524,10 +526,6 @@ body {
     padding: 1px;
     float: left;
     overflow: hidden;
-}
-
-.bp-photo-frame img {
-    border-radius: 50%;
 }
 
 .bp-description {

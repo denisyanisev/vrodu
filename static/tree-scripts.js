@@ -247,7 +247,6 @@ function uploadPhoto(photo, from_id, ext, callback = null) {
 
 // Show full info and edit person
 function show_full_info(a, tab = 0) {
-    console.log(a);
     closeEdit();
     var person_id = a.id;
     $('#full_id').val(person_id);
@@ -310,7 +309,7 @@ function show_full_info(a, tab = 0) {
     $('#full_nationality').val(a['nationality'] ? a['nationality'] : '');
     $('#full_location').val(a['location'] ? a['location'] : '');
     $('#vk_id_edit').val(a['vk_id'] ? a['vk_id'] : '');
-    if (a['vk_id']!==null) {
+    if (a['vk_id']) {
         $('#full_vk_link').show();
         $('#full_vk_link').attr('href', 'https://vk.com/id' + a['vk_id']);
         $('#full_vk_link img').show();
@@ -490,16 +489,11 @@ var centerOnPerson = function (personId) {
     if (position) {
         const x = position.x * scale,
             y = position.y * scale,
-            offsetWidth = parseInt($('#diagram').css('margin-left')),
-            offsetHeight = parseInt($('#diagram').css('margin-top'));
-        $('#draggable').css({
-            left:
-                -x -
-                offsetWidth -
-                100 +
-                $(window).width() / 2,
-            top: Math.min(50, -y - offsetHeight - 45 + $(window).height() / 2),
-        });
+            offsetWidth = parseInt($('#diagram').css('margin-left')) + parseInt($('#draggable').css('left')),
+            offsetHeight = parseInt($('#diagram').css('margin-top')) + parseInt($('#draggable').css('top')),
+            left = $(window).width() / 2 - x - offsetWidth - 100,
+            top = $(window).height() / 2 - y - offsetHeight - 85;
+        $('#draggable').css('transform', `translate(${left}px, ${top}px)`);
     }
 };
 

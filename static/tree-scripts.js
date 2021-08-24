@@ -188,7 +188,7 @@ function updateTree({
                 $('#tree_list_placeholder').text('Личное дерево');
             }
 
-            var confirms = data['persons'].filter((person) => person['vk_confirm'] == 0 && person['vk_id'] == 0);
+            var confirms = data['persons'].filter((person) => person['vk_confirm'] == 0 && person['vk_id'] == window.user.id);	
             if (confirms.length > 0) {
                 confirm_person = confirms[0];
                 $('#confirmed_item').empty()

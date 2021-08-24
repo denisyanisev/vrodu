@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Statistic</title>
+</head>
+<body>
+<span>Всего персон: {{ all_persons }}</span><br />
+<span>VK персон: {{ vk_persons }</span><br /><br />
+<span>Уникальных персон: {{ vk_persons_verified|length }}</span><br />
+{% for key in vk_persons_verified %}
+    {{ key[1] }}
+    {{ key[2] }}
+    <a href="https://vk.com/id">{{ key[0] }}</a><br />
+{% endfor %}
+</body>
+</html>

@@ -293,10 +293,15 @@ def upload_photo():
         return jsonify({'Error': 'Загрузка фотографии неуспешна.', 'persons': -1})
 
 
-# @app.route('/stats')
-# def stats():
-#     collection = DBClient()['family']['persons']
-#     return render_template('index.html')
+@app.route('/stats')
+def stats():
+    collection = DBClient()['family']['persons']
+    all_persons = collection.estimated_document_count()
+    vk_persons = len(list(collection.find({'vk_id': {'$ne': None}})))
+    vk_persons_verified = list(collection.find({'vk_id': {'$ne': None}, 'vk_confirm': 2}))
+    vk_persons_verified = [(p['vk_id'], p['first_name'], p['last_name']) for p in vk_persons_verified]
+    return render_template('stats.html', all_persons=all_persons, vk_persons=vk_persons,
+                           vk_persons_verified=vk_persons_verified)
 
 
 if __name__ == '__main__':

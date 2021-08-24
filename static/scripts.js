@@ -43,21 +43,6 @@ function flushFields() {
     $('#second_parent').hide();
 }
 
-//function NotificationModal(tree_id) {
-//    $('#tree_list li').css({'color': '#8a6b6b'})
-//    $('#tree' + tree_id).css({'color': '#2f1616'})
-//    window.tree_id = tree_id;
-//    $.ajax({
-//        type: 'POST',
-//        contentType: 'application/json; charset=utf-8',
-//        url: '/update',
-//        data: JSON.stringify({ user_id: window.user.id, tree_id: tree_id }),
-//        dataType: 'json',
-//        success: function (data) {
-//
-//        },
-//    });
-//}
 
 $(document).ready(function () {
     $('#vk_id_edit').on('input', function () {
@@ -562,7 +547,7 @@ $(document).ready(function () {
         };
         change_person(Request);
         updateTree({});
-        confirm_vk.hide;
+        confirm_vk.hide();
         $('#confirm_vk').empty();
     });
 

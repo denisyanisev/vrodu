@@ -173,7 +173,9 @@ function updateTree({
                 if (window.user.id === window.tree_id) $('#tree_list_placeholder').text('Личное дерево');
                 else $('#tree_list_placeholder').text('Общее дерево');
 
+                if (data['notifications_list'].length)
                 $('#tree_list_placeholder').append('<span class="badge badge-light custom-badge">' + data['notifications_list'].length + '</span>')
+
                 for (notification in data['notifications_list'])
                 {
                     $('#tree_list_dropdown li a[data-tree="' + data['notifications_list'][notification] + '"]').append(
@@ -185,35 +187,27 @@ function updateTree({
                     `<li><a class="dropdown-item" data-tree="${window.user.id}" href="#">Личное дерево (${data['tree_list'][window.user.id]})</a></li>`);
                 $('#tree_list_placeholder').text('Личное дерево');
             }
-            
+
+            var confirms = data['persons'].filter((person) => person['vk_confirm'] == 0 && person['vk_id'] == 0);
+            if (confirms.length > 0) {
+                confirm_person = confirms[0];
+                $('#confirmed_item').empty()
+                $('#confirmed_item').append('<span>' + confirm_person.first_name + ' ' + confirm_person.last_name +
+                '</span><br />');
+                $('#confirmed_item').append('<img style="height: 100px" src="' + confirm_person.image + '"/><br />');
+                $('#confirmed_item').append('<span>ВК ID: </span><a href="vk.com/id' + confirm_person.vk_id + '">' +
+                confirm_person.vk_id + '</a>');
+                window.confirm_id = confirm_person.id;
+                confirm_vk.show();
+            }
+
             $('#tree_list_dropdown [data-tree=' + window.tree_id + ']').addClass(['active', 'disable-links']);
             $('#tree_list_dropdown li a').on('click', function(){
                 window.tree_id = parseInt(this.dataset.tree);
                 updateTree({callback : function(){
                     centerOnMe();
-                    //setDiagramData(data['persons']);
                     full_info_block.hide();
                     closeEdit();
-                    var confirms = data['persons'].filter(
-                        (person) =>
-                            person['vk_confirm'] == 0 &&
-                            person['vk_id'] == window.user.id
-                    );
-                    var res_user = data['persons'].find((person) => user.id == person['vk_id']);
-                    console.log(confirms)
-                    if (res_user.length > 0) {
-                        console.log('test')
-                        confirm_person = confirms[0];
-                        centerOnPerson(confirm_person.id);
-                        $('#confirmed_item').empty()
-                        $('#confirmed_item').append('<span>' + confirm_person.first_name + ' ' +
-                        confirm_person.last_name + '</span><br />');
-                        $('#confirmed_item').append('<img style="height: 100px" src="' + confirm_person.image + '"/><br />');
-                        $('#confirmed_item').append('<span>ВК ID: </span><a href="vk.com/id' + confirm_person.vk_id +
-                        '">' + confirm_person.vk_id + '</a>');
-                        window.confirm_id = confirm_person.id;
-                        confirm_vk.show();
-                    }
                 }});
             });
 

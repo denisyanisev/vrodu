@@ -298,10 +298,10 @@ def stats():
     collection = DBClient()['family']['persons']
     all_persons = collection.estimated_document_count()
     vk_persons = len(list(collection.find({'vk_id': {'$ne': None}})))
-    vk_persons_verified = list(collection.find({'vk_id': {'$ne': None}, 'vk_confirm': 2}))
-    vk_persons_verified = [(p['vk_id'], p['first_name'], p['last_name']) for p in vk_persons_verified]
+    vk_persons_verified = collection.find({'vk_id': {'$ne': None}, 'vk_confirm': 2})
+    uniq_vk_persons_verified = list(set([(p['vk_id'], p['first_name'], p['last_name']) for p in vk_persons_verified]))
     return render_template('stats.html', all_persons=all_persons, vk_persons=vk_persons,
-                           vk_persons_verified=vk_persons_verified)
+                           uniq_vk_persons_verified=uniq_vk_persons_verified)
 
 
 if __name__ == '__main__':

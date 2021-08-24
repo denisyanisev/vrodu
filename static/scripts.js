@@ -43,56 +43,21 @@ function flushFields() {
     $('#second_parent').hide();
 }
 
-function TreeSwitch(tree_id) {
-    $('#tree_list li').css({'color': '#8a6b6b'})
-    $('#tree' + tree_id).css({'color': '#2f1616'})
-    window.tree_id = tree_id;
-    $.ajax({
-        type: 'POST',
-        contentType: 'application/json; charset=utf-8',
-        url: '/update',
-        data: JSON.stringify({ user_id: window.user.id, tree_id: tree_id }),
-        dataType: 'json',
-        success: function (data) {
-            setDiagramData(data['persons']);
-            full_info_block.hide();;
-            closeEdit();
-            var confirms = data['persons'].filter(
-                (person) =>
-                    person['vk_confirm'] == 0 &&
-                    person['vk_id'] == window.user.id
-            );
-            var res_user = data['persons'].find((person) => user.id == person['vk_id']);
-            centerOnPerson(res_user.id);
-            if (confirms.length > 0) {
-                confirm_person = confirms[0];
-                centerOnPerson(confirm_person.id);
-                $('#confirmed_item').empty()
-                $('#confirmed_item').append(
-                    '<span>' +
-                        confirm_person.first_name +
-                        ' ' +
-                        confirm_person.last_name +
-                        '</span><br />'
-                );
-                $('#confirmed_item').append(
-                    '<img style="height: 100px" src="' +
-                        confirm_person.image +
-                        '"/><br />'
-                );
-                $('#confirmed_item').append(
-                    '<span>ВК ID: </span><a href="vk.com/id' +
-                        confirm_person.vk_id +
-                        '">' +
-                        confirm_person.vk_id +
-                        '</a>'
-                );
-                window.confirm_id = confirm_person.id;
-                confirm_vk.show();
-            }
-        },
-    });
-}
+//function NotificationModal(tree_id) {
+//    $('#tree_list li').css({'color': '#8a6b6b'})
+//    $('#tree' + tree_id).css({'color': '#2f1616'})
+//    window.tree_id = tree_id;
+//    $.ajax({
+//        type: 'POST',
+//        contentType: 'application/json; charset=utf-8',
+//        url: '/update',
+//        data: JSON.stringify({ user_id: window.user.id, tree_id: tree_id }),
+//        dataType: 'json',
+//        success: function (data) {
+//
+//        },
+//    });
+//}
 
 $(document).ready(function () {
     $('#vk_id_edit').on('input', function () {

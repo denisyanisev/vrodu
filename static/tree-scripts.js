@@ -174,7 +174,6 @@ function updateTree({
                 else $('#tree_list_placeholder').text('Общее дерево');
 
                 $('#tree_list_placeholder').append('<span class="badge badge-light custom-badge">' + data['notifications_list'].length + '</span>')
-                console.log(data['notifications_list'])
                 for (notification in data['notifications_list'])
                 {
                     $('#tree_list_dropdown li a[data-tree="' + data['notifications_list'][notification] + '"]').append(
@@ -192,6 +191,29 @@ function updateTree({
                 window.tree_id = parseInt(this.dataset.tree);
                 updateTree({callback : function(){
                     centerOnMe();
+                    //setDiagramData(data['persons']);
+                    full_info_block.hide();
+                    closeEdit();
+                    var confirms = data['persons'].filter(
+                        (person) =>
+                            person['vk_confirm'] == 0 &&
+                            person['vk_id'] == window.user.id
+                    );
+                    var res_user = data['persons'].find((person) => user.id == person['vk_id']);
+                    console.log(confirms)
+                    if (res_user.length > 0) {
+                        console.log('test')
+                        confirm_person = confirms[0];
+                        centerOnPerson(confirm_person.id);
+                        $('#confirmed_item').empty()
+                        $('#confirmed_item').append('<span>' + confirm_person.first_name + ' ' +
+                        confirm_person.last_name + '</span><br />');
+                        $('#confirmed_item').append('<img style="height: 100px" src="' + confirm_person.image + '"/><br />');
+                        $('#confirmed_item').append('<span>ВК ID: </span><a href="vk.com/id' + confirm_person.vk_id +
+                        '">' + confirm_person.vk_id + '</a>');
+                        window.confirm_id = confirm_person.id;
+                        confirm_vk.show();
+                    }
                 }});
             });
 

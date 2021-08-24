@@ -536,7 +536,6 @@ $(document).ready(function () {
         change_person(Request);
         updateTree({});
         confirm_vk.hide();
-        $('#confirm_vk').empty();
     });
 
     $('#confirm_person').click(function () {
@@ -548,7 +547,6 @@ $(document).ready(function () {
         change_person(Request);
         updateTree({});
         confirm_vk.hide();
-        $('#confirm_vk').empty();
     });
 
     $(function () {});

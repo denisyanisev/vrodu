@@ -1,4 +1,6 @@
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, render_template, request, jsonify
+from flask_httpauth import HTTPBasicAuth
 from flask_bootstrap import Bootstrap
 from db import DBClient
 import logging
@@ -14,6 +16,18 @@ relative_type_str = "relative_type"
 from_id_str = 'from_id'
 parent_m_str = 'parent_m'
 parent_f_str = 'parent_f'
+
+auth = HTTPBasicAuth()
+users = {
+    "admin": generate_password_hash("vrodupass*123"),
+}
+
+
+@auth.verify_password
+def verify_password(username, password):
+    if username in users and \
+            check_password_hash(users.get(username), password):
+        return username
 
 
 def make_direct_relatives(person_id):
@@ -294,6 +308,7 @@ def upload_photo():
 
 
 @app.route('/admin')
+@auth.login_required
 def stats():
     collection = DBClient()['family']['persons']
     all_persons = collection.estimated_document_count()

@@ -549,5 +549,22 @@ $(document).ready(function () {
         confirm_vk.hide();
     });
 
-    $(function () {});
+    (function(){
+        var lock = false;
+        $('#draggable').on('mousedown', (event) => {
+            drag = false;
+            lock = true;
+        });
+
+        $('#draggable').on('mousemove', (event) => {
+            if (lock) {
+                lock = false;
+                timer = window.setTimeout(function(){
+                    drag = true;
+                }, 80);
+            }
+        });
+    })();
+
+
 });

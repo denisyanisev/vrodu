@@ -21,6 +21,7 @@ function closeEdit() {
     $('#bd_edit').hide();
     $('#full_birth_death').show();
     $('#vk_id_edit').hide();
+    $('#vk_photo_temporary').val('');
 }
 
 function closeLink() {
@@ -416,8 +417,10 @@ $(document).ready(function () {
             maiden_name: $('#full_maiden_name').val(),
             full_desc: $('#full_full_desc').val(),
             nationality: $('#full_nationality').val(),
-            vk_id: parseInt($('#vk_id_edit').val()),
+            vk_id: parseInt($('#vk_id_edit').val())
         };
+        if ($('#vk_photo_temporary').val())
+            Request.image = $('#vk_photo_temporary').val();
         if (Request.location != '') {
             var myGeocoder = ymaps.geocode(Request.location);
             myGeocoder.then(function (data) {

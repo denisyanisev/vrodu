@@ -10,6 +10,7 @@ var parseVkID = function(id_string, dom_element, single){
             VK.api("users.get", {'user_ids': alias, 'fields': 'city,domain,photo_50,photo_200_orig,sex', 'v': '5.131'}, function(data) {
                 vk_id = data.response[0];
                 $(dom_element).val(vk_id.id);
+                $('#vk_photo_temporary').val(vk_id.photo_200_orig);
     		    if (single) {
                     $('#first_name').val(vk_id.first_name);
                     $('#last_name').val(vk_id.last_name);

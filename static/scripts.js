@@ -49,10 +49,6 @@ $(document).ready(function () {
         parseVkID($(this).val(), '#vk_id_edit');
     });
 
-    //    $('#vk_id_number').on('input', function(){
-    //	    parseVkID($(this).val());
-    //    });
-
     $('#vk_id_single_number').on('input', function () {
         parseVkID($(this).val(), '#vk_id_single_number', true);
     });

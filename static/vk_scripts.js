@@ -8,24 +8,24 @@ var parseVkID = function(id_string, dom_element, single){
         if (data.error) {
             alias = id_string.match(/(?:vk.com\/)([^\>]*)/)[1]
             VK.api("users.get", {'user_ids': alias, 'fields': 'city,domain,photo_50,photo_200_orig,sex', 'v': '5.131'}, function(data) {
-                console.log(data);
                 vk_id = data.response[0];
                 $(dom_element).val(vk_id.id);
-    		        if (single) {
-	            $('#first_name').val(vk_id.first_name);
-        	    $('#last_name').val(vk_id.last_name);
-	            $('input[name=sex]').val(vk_id.sex == 2 ? 'M' : 'F');
-			if (vk_id.sex == 2)
-	                    $('#male').prop('checked', true)        
-        		else
-	                $('#female').prop('checked', true)
-	            $('#vk_photo_single').val(vk_id.photo_200_orig);
-       		 }
+    		    if (single) {
+                    $('#first_name').val(vk_id.first_name);
+                    $('#last_name').val(vk_id.last_name);
+                    $('input[name=sex]').val(vk_id.sex == 2 ? 'M' : 'F');
+                    if (vk_id.sex == 2)
+                        $('#male').prop('checked', true)
+                    else
+                        $('#female').prop('checked', true)
+                    $('#vk_photo_single').val(vk_id.photo_200_orig);
+       		    }
 		 })
 	    }
 	    else {
 	        vk_id = data.response[0];
 		    $(dom_element).val(vk_id.id);
+		    $('#vk_photo_temporary').val(vk_id.photo_200_orig);
 	    }
         if (single) {
             $('#first_name').val(vk_id.first_name);

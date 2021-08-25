@@ -1,9 +1,25 @@
 var parseVkID = function(id_string, dom_element, single){
     var vk_id
     vk_id = id_string.match(/(?:id)([0-9]+)/)
-    if (vk_id)
+    if (vk_id){
         vk_id = vk_id[1]
-    else 
+        $(dom_element).val(vk_id);
+        VK.api("users.get", {'user_ids': id_string, 'fields': 'city,domain,photo_50,photo_200_orig,sex', 'v': '5.131'}, function(data) {
+            vk_resp = data.response[0];
+            $('#vk_photo_temporary').val(vk_resp.photo_200_orig);
+            if (single) {
+                $('#first_name').val(vk_resp.first_name);
+                $('#last_name').val(vk_resp.last_name);
+                $('input[name=sex]').val(vk_resp.sex == 2 ? 'M' : 'F');
+                if (vk_resp.sex == 2)
+                    $('#male').prop('checked', true)
+                else
+                    $('#female').prop('checked', true)
+                $('#vk_photo_single').val(vk_resp.photo_200_orig);
+            }
+		 })
+    }
+    else
         VK.api("users.get", {'user_ids': id_string, 'fields': 'city,domain,photo_50,photo_200_orig,sex', 'v': '5.131'}, function(data) {
         if (data.error) {
             alias = id_string.match(/(?:vk.com\/)([^\>]*)/)[1]

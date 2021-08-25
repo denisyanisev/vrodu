@@ -17,9 +17,10 @@ from_id_str = 'from_id'
 parent_m_str = 'parent_m'
 parent_f_str = 'parent_f'
 
+print(os.environ.get('PASSWORD'))
 auth = HTTPBasicAuth()
 users = {
-    "admin": generate_password_hash("vrodupass*123"),
+    "admin": generate_password_hash(os.environ.get('PASSWORD')),
 }
 
 

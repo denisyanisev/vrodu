@@ -4,7 +4,7 @@ var parseVkID = function(id_string, dom_element, single){
     if (vk_id){
         vk_id = vk_id[1]
         $(dom_element).val(vk_id);
-        VK.api("users.get", {'user_ids': id_string, 'fields': 'city,domain,photo_50,photo_200_orig,sex', 'v': '5.131'}, function(data) {
+        VK.api("users.get", {'user_ids': vk_id, 'fields': 'city,domain,photo_50,photo_200_orig,sex', 'v': '5.131'}, function(data) {
             vk_resp = data.response[0];
             $('#vk_photo_temporary').val(vk_resp.photo_200_orig);
             if (single) {

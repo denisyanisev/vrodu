@@ -492,17 +492,6 @@ $(document).ready(function () {
     });
 
     $('#link_map').click(function () {
-        $.ajax({
-            type: 'POST',
-            contentType: 'application/json; charset=utf-8',
-            url: '/map',
-            data: JSON.stringify({
-                user_id: window.tree_id,
-            }),
-            success: function (data) {
-                $('#map_modal .modal-body').html(data);
-            },
-        });
         map_modal.show();
     });
 
@@ -521,6 +510,20 @@ $(document).ready(function () {
     //     $('#zoomSlider').val(change);
     //     zoomDiagram();
     // };
+
+    $('#map_modal').on('shown.bs.modal', function (e) {
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            url: '/map',
+            data: JSON.stringify({
+                user_id: window.tree_id,
+            }),
+            success: function (data) {
+                $('#map_modal .modal-body').html(data);
+            },
+        });  
+    });
 
     $('#map_modal').on('hidden.bs.modal', function (e) {
         $('#map_modal .modal-body').empty();

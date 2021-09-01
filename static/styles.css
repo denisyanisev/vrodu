@@ -154,6 +154,7 @@ div.placeholder.orgdiagram {
     padding: 0px;
     position: relative;
     height: 100%;
+    font-size: 14px;
 }
 
 #full_photo{
@@ -364,6 +365,8 @@ div.placeholder.orgdiagram {
 
 #bd_edit {
     display: none;
+    display: inline-block;
+    width: 92%;
 }
 
 #link_marriage_button {
@@ -494,15 +497,11 @@ body {
 
 .ver_div {
     position: absolute;
-    bottom: 3px;
+    bottom: 0px;
     font-size: 17px;
     color: #4230d9;
     font-weight: bold;
-    border: 1px #4230d9 solid;
-    height: 15px;
-    border-radius: 18px;
-    line-height: 11px;
-    right: 3px;
+    margin-left: 55px;
 }
 
 .bp-title-frame {
@@ -581,4 +580,19 @@ a.disable-links {
     line-height: 7px;
     font-size: 9px;
     line-height: 8px;
+}
+
+.megaphone_link{
+    display: inline-block;
+    float: right;
+    margin-top: 11px;
+    margin-right: 10px;
+}
+
+#collapsable, #full_info_block ul {
+    font-size: 14px;
+}
+
+#a_megaphone{
+    display: none;
 }

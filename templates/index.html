@@ -14,6 +14,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet"  type='text/css'/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css" rel="stylesheet"  type='text/css'/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 {% endblock styles %}
 
 {% block content %}
@@ -66,6 +67,7 @@
                     <input id="full_is_alive_edit" type="checkbox" checked/>
                 </div>
                 <input id="full_birth_death" type="text" class="full_field"  size="15" disabled />
+                <a href="#" id="a_megaphone" class="megaphone_link"><i class="bi bi-megaphone-fill "></i></a>
                 <input id="full_description" placeholder="Краткое описание" class="full_field form-control" maxlength="24" type="text" disabled/>
                 <textarea id="full_full_desc" placeholder="Биография" class="full_field form-control" disabled></textarea>
                 <input id="full_nationality" placeholder="Национальность" class="full_field form-control" type="text" disabled/>
@@ -81,7 +83,7 @@
                 <br /><br />
             </div>
             <div id="full_bio_tab">
-                <div style="font-size: 18px; margin-bottom: 5px;">Супруги</div>
+                <div style="font-size: 14px; margin-bottom: 5px;">Супруги</div>
                 <div id="full_spouses_block">
                     <div id="full_spouses" class="list-group"></div>
                     <button id="remove_spouse" class="btn btn-danger" type="button">Удалить брак</button>
@@ -301,11 +303,7 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsable" aria-controls="collapsable" aria-label="Открыть меню">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a href="#" id="link_info"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-patch-question" viewBox="0 0 16 16">
-                <path d="M8.05 9.6c.336 0 .504-.24.554-.627.04-.534.198-.815.847-1.26.673-.475 1.049-1.09 1.049-1.986 0-1.325-.92-2.227-2.262-2.227-1.02 0-1.792.492-2.1 1.29A1.71 1.71 0 0 0 6 5.48c0 .393.203.64.545.64.272 0 .455-.147.564-.51.158-.592.525-.915 1.074-.915.61 0 1.03.446 1.03 1.084 0 .563-.208.885-.822 1.325-.619.433-.926.914-.926 1.64v.111c0 .428.208.745.585.745z"/>
-                <path d="m10.273 2.513-.921-.944.715-.698.622.637.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01.622-.636a2.89 2.89 0 0 1 4.134 0l-.715.698a1.89 1.89 0 0 0-2.704 0l-.92.944-1.32-.016a1.89 1.89 0 0 0-1.911 1.912l.016 1.318-.944.921a1.89 1.89 0 0 0 0 2.704l.944.92-.016 1.32a1.89 1.89 0 0 0 1.912 1.911l1.318-.016.921.944a1.89 1.89 0 0 0 2.704 0l.92-.944 1.32.016a1.89 1.89 0 0 0 1.911-1.912l-.016-1.318.944-.921a1.89 1.89 0 0 0 0-2.704l-.944-.92.016-1.32a1.89 1.89 0 0 0-1.912-1.911l-1.318.016z"/>
-                <path d="M7.001 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0z"/>
-            </svg></a>
+            <a href="#" id="link_info"><i class="bi bi-patch-question"></i></a>
             <div class="collapse navbar-collapse" id="collapsable">
                 <ul class="navbar-nav">
                     <li class="nav-item">

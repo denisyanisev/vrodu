@@ -309,6 +309,7 @@ function show_full_info(a, tab = 0) {
     $('#full_nationality').val(a['nationality'] ? a['nationality'] : '');
     $('#full_location').val(a['location'] ? a['location'] : '');
     $('#vk_id_edit').val(a['vk_id'] ? a['vk_id'] : '');
+    $('#a_megaphone').hide();
     if (a['vk_id']) {
         $('#full_vk_link').show();
         $('#full_vk_link').attr('href', 'https://vk.com/id' + a['vk_id']);
@@ -316,6 +317,8 @@ function show_full_info(a, tab = 0) {
         if (a['vk_confirm'] == 0) $('#full_vk_text').html('(Приглашение отправлено)');
         if (a['vk_confirm'] == 1) $('#full_vk_text').html('(Приглашение отклонено)');
         if (a['vk_confirm'] == 2) $('#full_vk_text').html('(Верифицировано)');
+        $('#a_megaphone').show();
+        $('#a_megaphone').attr('onclick', "VK.callMethod('showRequestBox'," + a['vk_id'] + ", 'Вас добавили в Родословное дерево. Присоединяйтесь!');")
     }
     $('#full_search_results').hide();
     $('#full_search_results_single').hide();
@@ -460,9 +463,8 @@ var onTemplateRender = function (event, data) {
             data.element.style.backgroundColor = '#8ceae5';
         if (data.context['vk_confirm'] == 2) {
             data.element.style.backgroundColor = '#8ceae5';
-            var ver_div = document.createElement('div');
-            ver_div.className = 'ver_div';
-            ver_div.textContent = '✔';
+            var ver_div = document.createElement('i');
+            ver_div.className = 'bi bi-check2-circle ver_div';
             data.element.append(ver_div);
         }
         photo.src = itemConfig.image;

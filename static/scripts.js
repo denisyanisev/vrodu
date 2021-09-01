@@ -46,6 +46,8 @@ function flushFields() {
 
 
 $(document).ready(function () {
+    $('#a_megaphone').tooltip()
+
     $('#vk_id_edit').on('input', function () {
         parseVkID($(this).val(), '#vk_id_edit');
     });

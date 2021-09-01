@@ -67,7 +67,7 @@
                     <input id="full_is_alive_edit" type="checkbox" checked/>
                 </div>
                 <input id="full_birth_death" type="text" class="full_field"  size="15" disabled />
-                <a href="#" id="a_megaphone" class="megaphone_link"><i class="bi bi-megaphone-fill "></i></a>
+                <a href="#" id="a_megaphone" class="megaphone_link" data-toggle="tooltip" data-placement="top" title="Отправить приглашение"><i class="bi bi-megaphone-fill"></i></a>
                 <input id="full_description" placeholder="Краткое описание" class="full_field form-control" maxlength="24" type="text" disabled/>
                 <textarea id="full_full_desc" placeholder="Биография" class="full_field form-control" disabled></textarea>
                 <input id="full_nationality" placeholder="Национальность" class="full_field form-control" type="text" disabled/>
@@ -345,8 +345,8 @@
     
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script> -->
+    <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
     <script type="text/javascript" src="//vk.com/js/api/xd_connection.js"></script>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=3e171cbb-7d54-47b4-98e5-21877d7eeb70&lang=ru_RU" type="text/javascript"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='jquery-ui-1.10.2.custom.min.js') }}"></script>

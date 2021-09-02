@@ -73,9 +73,13 @@ $(document).ready(function () {
                 success: function (data) {
                     $('#search_dropdown').show();
                     $('#search_dropdown').empty();
+
                     data['persons'].forEach((person) => {
-                        var res = '<li><a class="dropdown-item" href="#" onclick="centerOnPersonSearch(' + person['_id']
-                         + ')">' + person.first_name + ' ' + person.last_name + '</a></li>'
+                        var search_year = ''
+                        if (person.last_name == '')
+                            search_year = `(${person.birth}-${person.death})`
+                        var res = `<li><a class="dropdown-item" href="#" onclick="centerOnPersonSearch(${person['_id']})">
+                        ${person.first_name} ${person.last_name} ${person.middle_name} ${search_year}</a></li>`
                         $('#search_dropdown').append(res)
                     })
                     if (data['persons'] == -1) {

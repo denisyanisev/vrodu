@@ -18,7 +18,6 @@ from_id_str = 'from_id'
 parent_m_str = 'parent_m'
 parent_f_str = 'parent_f'
 
-print(os.environ.get('PASSWORD'))
 auth = HTTPBasicAuth()
 users = {
     "admin": generate_password_hash(os.environ.get('PASSWORD')),
@@ -333,7 +332,9 @@ def search_person():
                                              'tree_id': tree_id}))
         results_surname = list(collection.find({'last_name': {'$regex': re.compile(search_item, re.IGNORECASE)},
                                                 'tree_id': tree_id}))
-        return jsonify({'persons': results_name + results_surname})
+        results_maidenname = list(collection.find({'maiden_name': {'$regex': re.compile(search_item, re.IGNORECASE)},
+                                                'tree_id': tree_id}))
+        return jsonify({'persons': results_name + results_surname + results_maidenname})
     except (ValueError, TypeError):
         return jsonify({'Error': 'Ошибка поиска', 'persons': -1})
 

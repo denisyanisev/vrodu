@@ -169,7 +169,7 @@ div.placeholder.orgdiagram {
 #full_edit {
     cursor: pointer;
     position: absolute;
-    right: 155px;
+    right: 91px;
     bottom: 0px;
 }
 
@@ -314,7 +314,7 @@ div.placeholder.orgdiagram {
 }
 #full_spouses {
     max-height: 94px;
-    margin-bottom: 10px;
+    margin-bottom: 7px;
     overflow: auto;
 }
 
@@ -353,20 +353,20 @@ div.placeholder.orgdiagram {
     display: none;
     position: absolute;
     bottom: 0px;
-    right: 155px;
+    right: 91px;
 }
 
 #full_edit_save {
     display: none;
     position: absolute;
     bottom: 0px;
-    right: 257px;
+    right: 193px;
 }
 
 #bd_edit {
     display: none;
     display: inline-block;
-    width: 92%;
+    width: 210px;
 }
 
 #link_marriage_button {
@@ -480,7 +480,7 @@ body {
 
 #full_vk_link img {
     width: 50px;
-    margin-left: -13px;
+    margin-left: -8px;
     display: none
 }
 
@@ -589,6 +589,13 @@ a.disable-links {
     margin-right: 10px;
 }
 
+.location_link{
+    display: inline-block;
+    float: right;
+    margin-top: 11px;
+    margin-right: 10px;
+}
+
 #collapsable, #full_info_block ul {
     font-size: 14px;
 }
@@ -629,4 +636,20 @@ a.disable-links {
     right: 4px;
     top: 0px;
     font-size: 17px;
+}
+
+#spouses_span {
+    font-size: 14px;
+    margin-bottom: 3px;
+    margin-top: 7px;
+    display: none;
+}
+
+.offcanvas-end{
+    width: 333px!important;
+}
+
+#remove_spouse{
+    height: 28px;
+    line-height: 10px;
 }

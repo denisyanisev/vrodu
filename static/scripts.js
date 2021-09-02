@@ -47,6 +47,7 @@ function flushFields() {
 
 $(document).ready(function () {
     $('#a_megaphone').tooltip();
+    $('#a_location').tooltip();
 
     $("#search_clear").click(function(){
         $("#search_input").val('');

@@ -37,7 +37,7 @@
         <div class="offcanvas-header">
             <ul>
                 <li><a href="#full_info_tab">Персона</a></li>
-                <li><a href="#full_bio_tab">Биография</a></li>
+<!--                <li><a href="#full_bio_tab">Биография</a></li>-->
                 <li><a href="#full_adding_tab">Добавить</a></li>
             </ul>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -68,27 +68,28 @@
                 </div>
                 <input id="full_birth_death" type="text" class="full_field"  size="15" disabled />
                 <a href="#" id="a_megaphone" class="megaphone_link" data-toggle="tooltip" data-placement="top" title="Отправить приглашение"><i class="bi bi-megaphone-fill"></i></a>
+                <a href="#" id="a_location" class="location_link" data-toggle="tooltip" data-placement="top" title="Найти на древе"><i class="bi bi-geo-alt-fill"></i></a>
                 <input id="full_description" placeholder="Краткое описание" class="full_field form-control" maxlength="24" type="text" disabled/>
                 <textarea id="full_full_desc" placeholder="Биография" class="full_field form-control" disabled></textarea>
-                <input id="full_nationality" placeholder="Национальность" class="full_field form-control" type="text" disabled/>
+                <!--<input id="full_nationality" placeholder="Национальность" class="full_field form-control" type="text" disabled/>-->
                 <input id="full_location" placeholder="Место рождения" class="full_field form-control" type="text" disabled/>
                 <input id="full_maiden_name" placeholder="Девичья фамилия" class="full_field form-control" type="text" disabled/>
+                <div id="spouses_span">Супруги:</div>
+                <div id="full_spouses_block">
+                    <div id="full_spouses" class="list-group"></div>
+                    <button id="remove_spouse" class="btn btn-danger" type="button">Удалить брак</button>
+                </div>
                 <input id="vk_id_edit" placeholder="VK ID" class="full_field form-control" type="text" hidden><a id="full_vk_link" href="" target="_blank"><img src="{{ url_for('static', filename='images/vk.png') }}"></a>
                 <input id="vk_photo_temporary" type="text" hidden />
                 <span id="full_vk_text"></span>
                 <button type="button" class="btn btn-success" id="full_edit_save">Сохранить</button>
                 <button type="button" class="btn btn-secondary" id="full_edit_cancel">Отменить</button>
                 <button type="button" class="btn btn-primary" id="full_edit" >Редактировать</button>
-                <button type="button" class="btn btn-danger" id="full_delete">Удалить персону</button>
+                <button type="button" class="btn btn-danger" id="full_delete">Удалить</button>
                 <br /><br />
             </div>
-            <div id="full_bio_tab">
-                <div style="font-size: 14px; margin-bottom: 5px;">Супруги</div>
-                <div id="full_spouses_block">
-                    <div id="full_spouses" class="list-group"></div>
-                    <button id="remove_spouse" class="btn btn-danger" type="button">Удалить брак</button>
-                </div>
-            </div>
+<!--            <div id="full_bio_tab">-->
+<!--            </div>-->
             <div id="full_adding_tab">
                 <div id="full_relations">
                     <div id="add-person">

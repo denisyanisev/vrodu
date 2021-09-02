@@ -499,6 +499,15 @@ var centerOnPerson = function (personId) {
     }
 };
 
+var centerOnPersonSearch = function (personId) {
+    $('#search_input').val('');
+    $('#search_dropdown').empty();
+    $('#search_dropdown').hide();
+    $('div.selected-border').remove();
+    $(`[data-person-id=${personId}]`).append('<div class="selected-border"></div>');
+    centerOnPerson(personId);
+};
+
 var centerOnMe = function () {
     const items = control.getOption('items');
     const person = items.find((person) => person.vk_id == window.user.id);

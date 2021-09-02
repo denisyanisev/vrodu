@@ -6,6 +6,7 @@ from db import DBClient
 import logging
 import random
 import os
+import re
 
 
 app = Flask(__name__)
@@ -319,6 +320,22 @@ def stats():
     vk_persons_results = [(p[0], p[1], p[2], collection.find({'tree_id': p[0]}).count()) for p in vk_persons_verified]
     return render_template('stats.html', all_persons=all_persons, vk_persons=vk_persons,
                            vk_persons_results=vk_persons_results)
+
+
+@app.route('/search', methods=['POST'])
+def search_person():
+    query_args = request.get_json(True)
+    collection = DBClient()['family']['persons']
+    try:
+        search_item = query_args.get('search_item')
+        tree_id = query_args.get('tree_id')
+        results_name = list(collection.find({'first_name': {'$regex': re.compile(search_item, re.IGNORECASE)},
+                                             'tree_id': tree_id}))
+        results_surname = list(collection.find({'last_name': {'$regex': re.compile(search_item, re.IGNORECASE)},
+                                                'tree_id': tree_id}))
+        return jsonify({'persons': results_name + results_surname})
+    except (ValueError, TypeError):
+        return jsonify({'Error': 'Ошибка поиска', 'persons': -1})
 
 
 if __name__ == '__main__':

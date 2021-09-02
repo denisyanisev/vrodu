@@ -596,3 +596,37 @@ a.disable-links {
 #a_megaphone{
     display: none;
 }
+
+#search_input{
+    height: 30px;
+    margin-top: 3px;
+    font-size: 14px;
+}
+
+#search_dropdown{
+    font-size: 14px;
+}
+
+#searchclear {
+    position: absolute;
+    right: 5px;
+    top: 0;
+    bottom: 0;
+    height: 14px;
+    margin: auto;
+    font-size: 14px;
+    cursor: pointer;
+    color: #ccc;
+}
+
+#search_group{
+    width: 170px;
+    position: relative;
+}
+
+#search_clear{
+    position: absolute;
+    right: 4px;
+    top: 0px;
+    font-size: 17px;
+}

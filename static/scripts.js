@@ -46,7 +46,48 @@ function flushFields() {
 
 
 $(document).ready(function () {
-    $('#a_megaphone').tooltip()
+    $('#a_megaphone').tooltip();
+
+    $("#search_clear").click(function(){
+        $("#search_input").val('');
+        $('#search_dropdown').empty();
+        $('#search_dropdown').hide();
+    });
+
+    $('#search_input').on('input', function () {
+        var search_item = $(this).val();
+        if (search_item.length == 0){
+            $('#search_dropdown').empty();
+            $('#search_dropdown').hide();
+        }
+        if (search_item.length > 2) {
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                url: '/search',
+                data: JSON.stringify({
+                    search_item: search_item,
+                    tree_id: window.tree_id,
+                }),
+                dataType: 'json',
+                success: function (data) {
+                    $('#search_dropdown').show();
+                    $('#search_dropdown').empty();
+                    data['persons'].forEach((person) => {
+                        var res = '<li><a class="dropdown-item" href="#" onclick="centerOnPersonSearch(' + person['_id']
+                         + ')">' + person.first_name + ' ' + person.last_name + '</a></li>'
+                        $('#search_dropdown').append(res)
+                    })
+                    if (data['persons'] == -1) {
+                        $('#failed_message').text(data['Error']);
+                        dialog_message.show();
+                    }
+                    if (data['persons'].length == 0)
+                        $('#search_dropdown').append('<li class="dropdown-item">Не найдено</li>');
+                },
+            });
+        }
+    });
 
     $('#vk_id_edit').on('input', function () {
         parseVkID($(this).val(), '#vk_id_edit');

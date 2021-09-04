@@ -563,7 +563,7 @@ $(document).ready(function () {
             url: '/stats',
             data: JSON.stringify({
                 tree_id: window.tree_id,
-                user_id: window.user_id,
+                user_id: window.user.id,
             }),
             success: function (data) {
                 if (data['persons'] == -1) {

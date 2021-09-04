@@ -8,6 +8,7 @@ var control,
     dialog_confirm = new bootstrap.Modal($('#dialog-confirm')[0], {keyboard: true, focus: true}),
     block_info = new bootstrap.Modal($('#block_info')[0], {keyboard: true, focus: true}),
     map_modal = new bootstrap.Modal($('#map_modal')[0], {keyboard: true, focus: true}),
+    stats_modal = new bootstrap.Modal($('#stats_modal')[0], {keyboard: true, focus: true}),
     dialog_photo_confirm = new bootstrap.Modal($('#dialog-photo-confirm')[0], {keyboard: true, focus: true}),
     confirm_vk = new bootstrap.Modal($('#confirm_vk')[0], {keyboard: true, focus: true}),
     photo_crop_block = new bootstrap.Modal($('#photo-crop-block')[0], {keyboard: true, focus: true});

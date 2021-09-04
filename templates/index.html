@@ -167,7 +167,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="map_modal" tabindex="-1" role="dialog" aria-labell="Карта родственников" aria-hidden="true">
+    <div class="modal fade" id="map_modal" tabindex="-1" role="dialog" aria-label="Карта родственников" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -175,6 +175,24 @@
                 <button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
               </div>
               <div class="modal-body">
+              </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="stats_modal" tabindex="-1" role="dialog" aria-label="Статистика древа" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Статистика древа</h5>
+                <button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                  <span>Всего персон в дереве: </span><span id="stat_span_all"></span><br />
+                  <span>ВК персон: </span><span id="stat_span_vk"></span><br />
+                  <span>Принявших приглашение: </span><span id="stat_span_verified"></span><br />
+                  <span id="stat_fam"></span><span id="stat_span_fam"></span><br />
+                  <span>Фамилии в дереве: </span><span id="stat_span_families"></span><br />
               </div>
             </div>
         </div>
@@ -315,6 +333,9 @@
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link" id="center_on_person">Показать себя</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" id="show_stats" data-toggle="modal">Статистика</a>
                     </li>
                     <li class="nav-item">
                         <div class="container">

@@ -321,6 +321,29 @@ def stats():
                            vk_persons_results=vk_persons_results)
 
 
+@app.route('/stats', methods=['POST'])
+def local_stats():
+    query_args = request.get_json(True)
+    collection = DBClient()['family']['persons']
+    try:
+        tree_id = query_args.get('tree_id')
+        user_id = query_args.get('user_id')
+        all_persons = collection.find({'tree_id': tree_id})
+        all_persons_count = len(list(collection.find({'tree_id': tree_id})))
+        vk_persons = len(list(collection.find({'tree_id': tree_id, 'vk_id': {'$ne': None}})))
+        vk_persons_verified = len(list(collection.find({'tree_id': tree_id, 'vk_id': {'$ne': None}, 'vk_confirm': 2})))
+        last_name = list(collection.find({'user_id': user_id, 'tree_id': tree_id}))[0]['last_name']
+        last_name = last_name if last_name[-1] != 'а' else last_name[:-1]
+        my_families = len(list(collection.find({"$or": [{'last_name': {'$regex': re.compile(last_name, re.IGNORECASE)}}, {'maiden_name': {'$regex': re.compile(last_name, re.IGNORECASE)}}], 'tree_id': tree_id})))
+        all_persons_uniq = [p for p in all_persons if p['last_name']]
+        all_families = [p['last_name'] if p['last_name'] and p['last_name'][-1] != 'а' else p['last_name'][:-1] for p in all_persons_uniq]
+        all_families = ', '.join(list(set(all_families)))
+        return jsonify({'all_persons': all_persons_count, 'vk_persons': vk_persons, 'vk_persons_results': vk_persons_verified,
+                        'my_families': my_families, 'all_families': all_families})
+    except (ValueError, TypeError):
+        return jsonify({'Error': 'Ошибка сбора статистики', 'persons': -1})
+
+
 @app.route('/search', methods=['POST'])
 def search_person():
     query_args = request.get_json(True)

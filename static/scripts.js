@@ -573,7 +573,7 @@ $(document).ready(function () {
                 $('#stat_span_all').html(data['all_persons']);
                 $('#stat_span_vk').html(data['vk_persons']);
                 $('#stat_span_verified').html(data['vk_persons_results']);
-                $('#stat_fam').html('Всего с фамилией"' + window.user.last_name + '": ');
+                $('#stat_fam').html('Всего с фамилией "' + window.user.last_name + '": ');
                 $('#stat_span_fam').html(data['my_families']);
                 $('#stat_span_families').html(data['all_families']);
             },
@@ -604,20 +604,6 @@ $(document).ready(function () {
 
     $('#map_modal').on('hidden.bs.modal', function (e) {
         $('#map_modal .modal-body').empty();
-    });
-
-    $('#stats_modal').on('shown.bs.modal', function (e) {
-        $.ajax({
-            type: 'POST',
-            contentType: 'application/json; charset=utf-8',
-            url: '/map',
-            data: JSON.stringify({
-                user_id: window.tree_id,
-            }),
-            success: function (data) {
-                $('#map_modal .modal-body').html(data);
-            },
-        });
     });
 
     $('#not_confirm_person').click(function () {

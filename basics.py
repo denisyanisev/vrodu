@@ -1,11 +1,14 @@
 import os
 import logging
+import pathlib
 
 from python_gedcom_2.parser import Parser
 from python_gedcom_2.element.individual import IndividualElement
 from python_gedcom_2.element.family import FamilyElement
 from db import DBClient
-from manager import root_path
+
+
+root_path = pathlib.Path('.').resolve().as_posix()
 
 
 def make_direct_relatives(person_id: int):

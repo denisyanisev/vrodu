@@ -1,4 +1,3 @@
-import pathlib
 import random
 import re
 
@@ -10,7 +9,6 @@ from logger import config
 from logging.config import dictConfig
 from basics import *
 
-root_path = pathlib.Path('.').resolve().as_posix()
 logging.config.dictConfig(config(root_path))
 
 app = Flask(__name__)

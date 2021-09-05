@@ -9,17 +9,15 @@ from logger import config
 from logging.config import dictConfig
 from basics import *
 
-logging.config.dictConfig(config(root_path))
 
 app = Flask(__name__)
 Bootstrap(app)
 
-# logging.getLogger('werkzeug').setLevel(logging.WARNING)
-# app.logger.setLevel(logging.WARNING)
+logging.config.dictConfig(config(app.root_path))
 
 auth = HTTPBasicAuth()
 users = {
-    "admin": generate_password_hash("vrodupass*123"),
+    "admin": generate_password_hash(os.environ.get('PASSWORD')),
 }
 
 
@@ -173,7 +171,7 @@ def upload_photo():
         hashed = (hash(file) % 10000 << 10) + random.randint(1, 999)
         path = f'/static/photos/custom/{person_id}_image_{hashed}.{ext}'
         delete_photo_base(person_id)
-        file.save(root_path + path)
+        file.save(app.root_path + path)
         collection.update_one({'_id': person_id, 'tree_id': user_id}, {'$set': {'image': path}})
         return jsonify({'persons': '1'})
     except (ValueError, TypeError) as err:

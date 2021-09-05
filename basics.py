@@ -1,14 +1,10 @@
 import os
 import logging
-import pathlib
 
 from python_gedcom_2.parser import Parser
 from python_gedcom_2.element.individual import IndividualElement
 from python_gedcom_2.element.family import FamilyElement
 from db import DBClient
-
-
-root_path = pathlib.Path('.').resolve().as_posix()
 
 
 def make_direct_relatives(person_id: int):
@@ -154,7 +150,7 @@ def delete_photo_base(person_id: int):
     person = collection.find_one({'_id': person_id})
     if person.get('image', ''):
         try:
-            os.remove(root_path + person['image'])
+            os.remove('.' + person['image'])
             collection.update_one({'_id': person_id}, {'$set': {'image': ''}})
             return {'Status': 'Фотография удалена.', 'persons': '1'}
         except OSError as err:
@@ -201,8 +197,8 @@ def import_gedcom_base(tree_id, file):
             children = parser.get_family_members(families[pointer],
                                                  members_type='CHIL')
             if wife and husband:
-                persons[husband.get_pointer()]['data']['spouses'].append([persons[wife.get_pointer()]['id']])
-                persons[wife.get_pointer()]['data']['spouses'].append([persons[husband.get_pointer()]['id']])
+                persons[husband.get_pointer()]['data']['spouses'].append(persons[wife.get_pointer()]['id'])
+                persons[wife.get_pointer()]['data']['spouses'].append(persons[husband.get_pointer()]['id'])
             if wife:
                 for child in children:
                     persons[child.get_pointer()]['data']['parent_f'] = persons[wife.get_pointer()]['id']

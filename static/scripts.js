@@ -628,6 +628,23 @@ $(document).ready(function () {
         confirm_vk.hide();
     });
 
+    $('#remove_vk_link').click(function(){
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            url: '/unlink',
+            data: JSON.stringify({
+                tree_id: window.tree_id,
+                user_id: window.user.id
+            }),
+            success: function (data) {
+                console.log(data);
+                $('#remove_vk_link').hide();
+                $('#full_vk_link').hide();
+            },
+        })
+    });
+
     (function(){
         var lock = false;
         $('#draggable').on('mousedown', (event) => {

@@ -363,5 +363,15 @@ def search_person():
         return jsonify({'Error': 'Ошибка поиска', 'persons': -1})
 
 
+@app.route('/unlink', methods=['POST'])
+def unlink():
+    collection = DBClient()['family']['persons']
+    query_args = request.get_json(True)
+    vk_id = query_args.get('user_id')
+    tree_id = query_args.get('tree_id')
+    collection.update_one({'vk_id': vk_id, 'tree_id': tree_id}, {'$set': {'vk_confirm': 1}})
+    return jsonify({'Удалена ссылка для ': vk_id})
+
+
 if __name__ == '__main__':
     app.run(debug=True)

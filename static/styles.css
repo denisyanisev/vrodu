@@ -665,3 +665,7 @@ a.disable-links {
 #stat_span_all, #stat_span_vk, #stat_span_verified, #stat_span_fam, #stat_span_families{
     font-weight: bold;
 }
+
+#remove_vk_link {
+    display: none;
+}

@@ -316,14 +316,21 @@ function show_full_info(a, tab = 0) {
     $('#a_megaphone').hide();
     if (a['vk_id']) {
         $('#full_vk_link').show();
-        $('#full_vk_link').attr('href', 'https://vk.com/id' + a['vk_id']);
-        $('#full_vk_link img').show();
-//        if (a['vk_confirm'] == 0) $('#full_vk_text').html('(Приглашение отправлено)');
-//        if (a['vk_confirm'] == 1) $('#full_vk_text').html('(Приглашение отклонено)');
-//        if (a['vk_confirm'] == 2) $('#full_vk_text').html('(Верифицировано)');
+        if (a['vk_confirm'] == 1) {
+            $('#full_vk_link').attr('href', '');
+            $('#full_vk_link img').hide();
+        }
+        else {
+            $('#full_vk_link').attr('href', 'https://vk.com/id' + a['vk_id']);
+            $('#full_vk_link img').show();
+        }
         $('#a_megaphone').show();
         $('#a_megaphone').attr('onclick', "VK.callMethod('showRequestBox'," + a['vk_id'] + ", 'Вас добавили в Родословное дерево. Присоединяйтесь!');")
     }
+    if (a['vk_id'] == window.user.id && a['vk_confirm']!=1)
+        $('#remove_vk_link').show();
+    else
+        $('#remove_vk_link').hide();
     $('#a_location').attr('onclick', `centerOnPerson(${a['id']})`)
     $('#full_search_results').hide();
     $('#full_search_results_single').hide();

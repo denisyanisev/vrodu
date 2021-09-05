@@ -72,7 +72,6 @@ function add_person_base(Request) {
                             from_id: Request.from_id,
                             new_id: new_id,
                             sex: Request.sex,
-                            tree_id: tree_id,
                         }),
                     });
                 }
@@ -146,7 +145,7 @@ function add_link_js(a, b) {
 }
 
 function updateTree({
-    tree_id = window.tree_id,
+    tree_id = parseInt(window.tree_id),
     person_id = -1,
     tab = 0,
     callback,
@@ -242,6 +241,25 @@ function uploadPhoto(photo, from_id, ext, callback = null) {
         contentType: false,
         success: function (res) {
             if (callback) callback({ person_id: from_id });
+        },
+    });
+}
+
+function uploadGedcom(file_ged, tree_id, callback = null) {
+    var formData = new FormData();
+
+    formData.append('file_ged', file_ged);
+    formData.append('tree_id', tree_id);
+    formData.append('user_id', window.user.id);
+
+    return $.ajax({
+        url: '/import',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (res) {
+            if (callback) callback({});
         },
     });
 }
@@ -536,8 +554,7 @@ $('#draggable').on('mousemove', (event) => (drag = true));
 
 ymaps.ready(init);
 function init() {
-    var suggestView1 = new ymaps.SuggestView('location', { results: 4 });
-    var suggestView2 = new ymaps.SuggestView('full_location', { results: 4 });
+    var suggestView1 = new ymaps.SuggestView('location', { results: 4, offset: [0, 5] });
 }
 
 var zoomDiagram = function () {

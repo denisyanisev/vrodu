@@ -442,6 +442,10 @@ body {
     margin-top: 5px;
 }
 
+#import-gedcom img{
+    width: 19px;
+}
+
 #full_maiden_name {
     display: none;
 }

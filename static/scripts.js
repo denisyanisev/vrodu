@@ -1,4 +1,6 @@
 var hovered = false;
+var fullSuggestView;
+var inputGedcom; 
 
 function draw_belts() {
     $('.bp-corner-all').each(function () {
@@ -22,6 +24,7 @@ function closeEdit() {
     $('#full_birth_death').show();
     $('#vk_id_edit').hide();
     $('#vk_photo_temporary').val('');
+    if (fullSuggestView) fullSuggestView.destroy(); 
 }
 
 function closeLink() {
@@ -316,12 +319,30 @@ $(document).ready(function () {
 
     $('#full_info_block').tabs();
 
-    var input = document.createElement('input'),
+    inputGedcom = document.createElement('input');
+    var supportedTypes = ['.ged'];
+    inputGedcom.type = 'file';
+    inputGedcom.accept = supportedTypes.join(',');
+    inputGedcom.onchange = function (event) {
+        var gedcom_file = inputGedcom.files[0];
+        if (gedcom_file.size < 4096*1024) {
+                uploadGedcom(gedcom_file, parseInt(window.tree_id), updateTree);
+        } else {
+            $('#failed_message').text('Файл не должен превышать 4МБ!');
+            dialog_message.show();
+        }
+    };
+
+    $('#import-gedcom').click(function(){
+        inputGedcom.click()
+    });
+
+    var inputPhoto = document.createElement('input'),
         supportedTypes = ['image/png', 'image/jpeg', 'image/webp'];
-    input.type = 'file';
-    input.accept = supportedTypes.join(',');
-    input.onchange = function (event) {
-        var photo = input.files[0];
+    inputPhoto.type = 'file';
+    inputPhoto.accept = supportedTypes.join(',');
+    inputPhoto.onchange = function (event) {
+        var photo = inputPhoto.files[0];
 
         if (photo.size < 10484880) {
             if (supportedTypes.includes(photo.type)) {
@@ -360,7 +381,7 @@ $(document).ready(function () {
                                     person_id,
                                     'jpeg',
                                 ).then(function (){
-                                    updateTree({tree_id: window.user_id, person_id: person_id})
+                                    updateTree({tree_id: window.tree_id, person_id: person_id})
                                 });
                             });
                         photo_crop_block.hide();
@@ -388,7 +409,7 @@ $(document).ready(function () {
     };
 
     $('#full_photo_upload').click(function (event) {
-        input.click();
+        inputPhoto.click();
         $('#full_photo_upload').mouseleave();
     });
     $('#full_photo_upload').hover(
@@ -428,6 +449,7 @@ $(document).ready(function () {
         var last_name = $('#full_last_name').val();
         var maiden_name_pattern = ' (' + $('#full_maiden_name').val() + ')';
         var last_name_cleared = last_name.replace(maiden_name_pattern, '');
+        fullSuggestView = new ymaps.SuggestView('full_location', { results: 4, offset: [0, 5]});
         $('#full_last_name').val(last_name_cleared);
         $('#full_edit_cancel').show();
         $('#full_edit_save').show();
@@ -452,7 +474,6 @@ $(document).ready(function () {
     $('#full_edit_save').click(function () {
         var person_id = parseInt($('#full_id').val());
         var Request = {
-            edit_person: true,
             from_id: person_id,
             first_name: $('#full_name').val(),
             middle_name: $('#full_middle_name').val(),
@@ -510,7 +531,6 @@ $(document).ready(function () {
                 1
             );
             var Request = {
-                edit_person: true,
                 from_id: fromSpouseId,
                 spouses: fromSpouse.spouses,
             };
@@ -520,7 +540,6 @@ $(document).ready(function () {
                 targetSpouse.spouses.indexOf(fromSpouseId)
             );
             Request = {
-                edit_person: true,
                 from_id: targetSpouseId,
                 spouses: targetSpouse.spouses,
             };
@@ -608,7 +627,6 @@ $(document).ready(function () {
 
     $('#not_confirm_person').click(function () {
         var Request = {
-            edit_person: true,
             vk_confirm: 1,
             from_id: window.confirm_id,
         };
@@ -619,7 +637,6 @@ $(document).ready(function () {
 
     $('#confirm_person').click(function () {
         var Request = {
-            edit_person: true,
             vk_confirm: 2,
             from_id: window.confirm_id,
         };

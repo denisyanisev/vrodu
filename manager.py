@@ -73,6 +73,9 @@ def add_person():
     person_data['nationality'] = query_args.get('nationality', '').strip().lower()
     person_data['vk_confirm'] = query_args.get('vk_confirm')
 
+    exist_vk = collection.find_one({'vk_id': person_data['vk_id'], 'tree_id': person_data['tree_id']})
+    if not exist_vk:
+        return jsonify({'Error': f'Персона с ВК {exist_vk["vk_id"]} уже есть в дереве', 'persons': '-1'})
     sex = query_args.get('sex')
     relative_type = query_args.get('relative_type')
     second_parent = query_args.get('second_parent', '')

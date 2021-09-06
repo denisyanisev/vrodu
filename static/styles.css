@@ -612,6 +612,7 @@ a.disable-links {
     height: 30px;
     margin-top: 3px;
     font-size: 14px;
+    margin-left: 24px;
 }
 
 #search_dropdown{
@@ -620,7 +621,7 @@ a.disable-links {
 
 #searchclear {
     position: absolute;
-    right: 5px;
+    right: -18px;
     top: 0;
     bottom: 0;
     height: 14px;

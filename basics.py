@@ -66,8 +66,8 @@ def add_person_base(person_data: dict):
     """ Non empty line defaults """
     new_person['spouses'] = person_data.get('spouses', [])
     new_person['permissions'] = person_data.get('permissions', 777)
-    new_person['vk_confirm'] = None
-    new_person['vk_id'] = None
+    new_person['vk_confirm'] = person_data.get('permissions', None)
+    new_person['vk_id'] = person_data.get('permissions', None)
 
     collection.insert_one(new_person)
     return new_id

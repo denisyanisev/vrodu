@@ -7,21 +7,27 @@ var startApp = function (user) {
             var res = data['persons'].filter((person) => user.id == person['vk_id'] && user.id == person['tree_id']);
             if (res.length == 0) {
                 addMainPerson()
-                updateTree({});
+                updateTree({callback: function(data) {showDraggable()}});
             }
-            $('#draggable').css({
-                left:
-                    (-parseInt($('#draggable').css('width')) +
-                        parseInt($(window).width())) /
-                    2,
-                top: 50,
-            });
-            
-            $('#draggable').show();
-            centerOnMe();
+            else {
+                showDraggable();
+            }
         },
     });
 };
+
+function showDraggable(){
+    $('#draggable').css({
+        left:
+            (-parseInt($('#draggable').css('width')) +
+                parseInt($(window).width())) /
+            2,
+        top: 50,
+    });
+    
+    $('#draggable').show();
+    centerOnMe();
+}
 
 $(window).on('load', function () {
     try {

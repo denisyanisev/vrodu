@@ -390,9 +390,21 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link" id="import-gedcom">
-                            <img src='/static/images/yin_yang.png'/>
-                        </a>
+                        <div class="container">
+                            <ul class="navbar-nav">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="gedcom_link" role="button" data-bs-toggle="dropdown" aria-expanded="false">Экспорт/импорт</a>
+                                    <ul class="dropdown-menu" aria-labelledby="tree_list_placeholder" id="gedcom_list_dropdown">
+                                        <li>
+                                            <a href="#" class="dropdown-item" id="import-gedcom">Импорт GEDCOM</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="dropdown-item" id="export-gedcom">Экспорт GEDCOM</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
                 </ul>
             </div>

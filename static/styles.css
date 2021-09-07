@@ -612,7 +612,7 @@ a.disable-links {
     height: 30px;
     margin-top: 3px;
     font-size: 14px;
-    margin-left: 24px;
+    margin-left: 22px;
 }
 
 #search_dropdown{
@@ -638,7 +638,7 @@ a.disable-links {
 
 #search_clear{
     position: absolute;
-    right: 4px;
+    right: -20px;
     top: 0px;
     font-size: 17px;
 }
@@ -677,4 +677,12 @@ a.disable-links {
 
 .radio_adding_block{
     width: 100px;
+}
+
+#gedcom_link{
+    margin-left: 23px;
+}
+
+.dropdown-menu{
+    font-size: 14px;
 }

@@ -37,8 +37,8 @@
         <div class="offcanvas-header">
             <ul>
                 <li><a href="#full_info_tab">Персона</a></li>
-<!--                <li><a href="#full_bio_tab">Биография</a></li>-->
                 <li><a href="#full_adding_tab">Добавить</a></li>
+                <li><a href="#full_linking_tab">Связать</a></li>
             </ul>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
@@ -89,22 +89,54 @@
                 <button type="button" class="btn btn-danger" id="full_delete">Удалить</button>
                 <br /><br />
             </div>
-<!--            <div id="full_bio_tab">-->
-<!--            </div>-->
             <div id="full_adding_tab">
                 <div id="full_relations">
                     <div id="add-person">
-                        <label>Родителя</label>
-                        <input type="radio" id="parent"  name="relative_type" value="parent" checked>
-                        <label>Ребенка</label>
-                        <input type="radio" id="child" name="relative_type" value="child"> <br />
-                        <button type="button" class="btn btn-primary" id="add_person_button">Добавить нового</button>
-                        <button type="button" class="btn btn-primary" id="link_person_button">Связать</button><br />
-                        <button type="button" class="btn btn-info" id="link_marriage_button">Связать супруга</button><br />
+
+                        <div class="form-check radio_adding_block">
+                          <input class="form-check-input" type="radio" name="relative_type" id="parent" value="parent" checked>
+                          <label class="form-check-label" for="parent">
+                            Родителя
+                          </label>
+                        </div>
+                        <div class="form-check radio_adding_block">
+                          <input class="form-check-input" type="radio" name="relative_type" id="child"  value="child">
+                          <label class="form-check-label" for="child">
+                            Ребенка
+                          </label>
+                        </div>
+                        <div class="form-check radio_adding_block">
+                          <input class="form-check-input" type="radio" name="relative_type" id="spouse"  value="spouse">
+                          <label class="form-check-label" for="spouse">
+                            Супруга
+                          </label>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="add_person_button">Добавить</button><br /><br />
                         <input type="text" id="vk_id" value="" placeholder="Добавить из ВК" class="flushable form-control"><br />
                         <div id="full_search_results"></div>
                     </div>
                 </div>
+            </div>
+            <div id="full_linking_tab">
+                <div class="form-check radio_adding_block">
+                  <input class="form-check-input" type="radio" name="relative_type_1" id="parent_1" value="parent" checked>
+                  <label class="form-check-label" for="parent_1">
+                    Родителя
+                  </label>
+                </div>
+                <div class="form-check radio_adding_block">
+                  <input class="form-check-input" type="radio" name="relative_type_1" id="child_1"  value="child">
+                  <label class="form-check-label" for="child_1">
+                    Ребенка
+                  </label>
+                </div>
+                <div class="form-check radio_adding_block">
+                  <input class="form-check-input" type="radio" name="relative_type_1" id="spouse_1"  value="spouse">
+                  <label class="form-check-label" for="spouse_1">
+                    Супруга
+                  </label>
+                </div>
+                <button type="button" class="btn btn-primary" id="link_person_button">Связать</button><br />
             </div>
         </div>
     </div>
@@ -146,7 +178,7 @@
                         <input id="location" value="" placeholder="Место рождения" class="flushable form-control add_field" type="text"/>
                         <input id="description" value="" placeholder="Короткое описание" class="flushable form-control add_field" type="text"/>
                         <textarea id="full_desc" placeholder="Биография" class="flushable form-control add_field"></textarea>
-                        <input id="nationality" value="" placeholder="Национальность" class="flushable form-control add_field" type="text"/>
+                        <!--<input id="nationality" value="" placeholder="Национальность" class="flushable form-control add_field" type="text"/>-->
                     </div>
               </div>
               <div class="modal-footer">

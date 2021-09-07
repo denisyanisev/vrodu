@@ -150,7 +150,7 @@ div.placeholder.orgdiagram {
     transition: all 0.4s ease 0s;
 }
 
-#full_info_tab, #full_bio_tab, #full_adding_tab {
+#full_info_tab, #full_bio_tab, #full_adding_tab, #full_linking_tab {
     padding: 0px;
     position: relative;
     height: 100%;
@@ -651,7 +651,7 @@ a.disable-links {
 }
 
 .offcanvas-end{
-    width: 333px!important;
+    width: 343px!important;
 }
 
 .offcanvas-body{
@@ -673,4 +673,8 @@ a.disable-links {
 
 #remove_vk_link {
     display: none;
+}
+
+.radio_adding_block{
+    width: 100px;
 }

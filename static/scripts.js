@@ -258,28 +258,15 @@ $(document).ready(function () {
     });
     
     $('#link_person_button').click(function () {
-        var relative_type = $('input[name=relative_type]:checked').val();
+        var relative_type = $('input[name=relative_type_1]:checked').val();
         window.link = 'listening';
         window.linkType = relative_type;
-        full_info_block.hide();;
-        $('#link-tip').show();
-        var name = `${$('#full_last_name').val()} ${$('#full_name').val()} ${$(
-            '#full_middle_name'
-        ).val()}`;
-        if (relative_type == 'parent') relative_type = 'родителя';
-        else if (relative_type == 'child') relative_type = 'ребенка';
-        $('#link-tip span').text(`Выберите ${relative_type} для ${name}`);
-    });
-
-    $('#link_marriage_button').click(function () {
-        window.link = 'listening';
-        window.linkType = 'spouse';
         full_info_block.hide();
         $('#link-tip').show();
-        var name = `${$('#full_last_name').val()} ${$('#full_name').val()} ${$(
-            '#full_middle_name'
-        ).val()}`;
-        $('#link-tip span').text(`Выберите супруга(у) для ${name}`);
+        var name = `${$('#full_last_name').val()} ${$('#full_name').val()} ${$('#full_middle_name').val()}`;
+        if (relative_type == 'parent') $('#link-tip span').text(`Выберите родителя для ${name}`);
+        else if (relative_type == 'child') $('#link-tip span').text(`Выберите ребенка для ${name}`);
+        else if (relative_type == 'spouse') $('#link-tip span').text(`Выберите супруга(у) для ${name}`);
     });
 
     $('#cancel_link_button').click(function () {

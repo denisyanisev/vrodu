@@ -104,6 +104,8 @@ def add_person():
     new_id = add_person_base(person_data)
     if spouses:
         collection.update_one({'_id': other_parent}, {'$addToSet': {'spouses': new_id}})
+    if relative_type == 'spouse':
+        link_persons_base(person_data['tree_id'], new_id, from_id, 'spouse')
     return jsonify({'new_id': new_id, 'persons': '1'})
 
 

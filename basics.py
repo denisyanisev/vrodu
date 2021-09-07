@@ -84,11 +84,11 @@ def change_person_base(person_id: int, person_data: dict):
         return {'Error': 'Нe удалось изменить персону.', 'persons': -1}
 
 
-def link_persons_base(tree_id: int, from_id: int, target_id: int, link_type: str):
+def link_persons_base(from_id: int, target_id: int, link_type: str):
     """ link two persons together as spouses or relatives """
     collection = DBClient()['family']['persons']
-    target_person = collection.find_one({'_id': target_id, 'tree_id': tree_id})
-    from_person = collection.find_one({'_id': from_id, 'tree_id': tree_id})
+    target_person = collection.find_one({'_id': target_id})
+    from_person = collection.find_one({'_id': from_id})
     target_name = ' '.join((target_person['first_name'], target_person['middle_name'], target_person['last_name']))
     from_name = ' '.join((from_person['first_name'], from_person['middle_name'], from_person['last_name']))
     if link_type == 'spouse':

@@ -105,7 +105,7 @@ def add_person():
     if spouses:
         collection.update_one({'_id': other_parent}, {'$addToSet': {'spouses': new_id}})
     if relative_type == 'spouse':
-        link_persons_base(person_data['tree_id'], new_id, from_id, 'spouse')
+        link_persons_base(new_id, from_id, 'spouse')
     return jsonify({'new_id': new_id, 'persons': '1'})
 
 
@@ -124,11 +124,10 @@ def change_person():
 @app.route('/link', methods=['POST'])
 def link():
     query_args = request.get_json(True)
-    tree_id = query_args.get('user_id')
     link_type = query_args.get('link_type')
     from_id = query_args.get('person_id')
     target_id = query_args.get('link_id')
-    return jsonify(link_persons_base(tree_id, from_id, target_id, link_type))
+    return jsonify(link_persons_base(from_id, target_id, link_type))
 
 
 @app.route('/remove', methods=['POST'])

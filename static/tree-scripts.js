@@ -168,7 +168,9 @@ function updateTree({
                     $('#tree_list_dropdown').append(`<li><a class="dropdown-item" data-tree="${tree}" href="#">
                     Дерево ${window.user.last_name} & ${data['tree_list'][tree][1]}... (${data['tree_list'][tree][0]})</a></li>`);
                 }
-                $(`a.dropdown-item[data-tree=${window.user.id}]`).text(`Личное дерево (${data['tree_list'][window.user.id][0]})`);
+                if (window.user.id in data['tree_list']){
+                    $(`a.dropdown-item[data-tree=${window.user.id}]`).text(`Личное дерево (${data['tree_list'][window.user.id][0]})`);
+                }
 
                 if (window.user.id === window.tree_id) $('#tree_list_placeholder').text('Личное дерево');
                 else $('#tree_list_placeholder').text('Общее дерево');

@@ -66,16 +66,17 @@ def add_person():
     person_data['location'] = query_args.get('location')
     person_data['coordinate0'] = query_args.get('coordinate0', '')
     person_data['coordinate1'] = query_args.get('coordinate1', '')
-    person_data['vk_id'] = query_args.get('vk_id')
-    person_data['tree_id'] = query_args.get('tree_id')
+    person_data['vk_id'] = query_args.get('vk_id', '')
+    person_data['tree_id'] = query_args.get('tree_id', '')
     person_data['maiden_name'] = query_args.get('maiden_name', '')
     person_data['full_desc'] = query_args.get('full_desc', '')
     person_data['nationality'] = query_args.get('nationality', '').strip().lower()
     person_data['vk_confirm'] = query_args.get('vk_confirm')
 
-    exist_vk = collection.find_one({'vk_id': person_data['vk_id'], 'tree_id': person_data['tree_id']})
-    if not exist_vk:
-        return jsonify({'Error': f'Персона с ВК {exist_vk["vk_id"]} уже есть в дереве', 'persons': '-1'})
+    if person_data['vk_id']:
+        exist_vk = collection.find_one({'vk_id': person_data['vk_id'], 'tree_id': person_data['tree_id']})
+        if exist_vk:
+            return jsonify({'Error': f'Персона с ВК {person_data["vk_id"]} уже есть в дереве', 'persons': '-1'})
     sex = query_args.get('sex')
     relative_type = query_args.get('relative_type')
     second_parent = query_args.get('second_parent', '')

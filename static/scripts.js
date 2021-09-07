@@ -51,6 +51,10 @@ function flushFields() {
 $(document).ready(function () {
     $('#a_megaphone').tooltip();
     $('#a_location').tooltip();
+    $('#add_single').tooltip({'placement': 'bottom'});
+    $('#center_on_person').tooltip({'placement': 'bottom'});
+    $('#link_map').tooltip({'placement': 'bottom'});
+    $('#show_stats').tooltip({'placement': 'bottom'});
 
     $("#search_clear").click(function(){
         $("#search_input").val('');

@@ -355,7 +355,8 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsable" aria-controls="collapsable" aria-label="Открыть меню">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a href="#" id="link_info"><i class="bi bi-patch-question"></i></a>
+            <a href="#" id="link_info" data-toggle="tooltip" data-placement="top"
+                           title="Справка"><i class="bi bi-patch-question"></i></a>
             <div class="collapse navbar-collapse" id="collapsable">
                 <ul class="navbar-nav">
                     <li class="nav-item">
@@ -397,13 +398,13 @@
                         <div class="container">
                             <ul class="navbar-nav">
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="gedcom_link" role="button" data-bs-toggle="dropdown" aria-expanded="false">Экспорт/импорт</a>
+                                    <a class="nav-link dropdown-toggle" href="#" id="gedcom_link" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-cloud-arrow-down"></i></a>
                                     <ul class="dropdown-menu" aria-labelledby="tree_list_placeholder" id="gedcom_list_dropdown">
                                         <li>
                                             <a href="#" class="dropdown-item" id="import-gedcom">Импорт GEDCOM</a>
                                         </li>
                                         <li>
-                                            <a href="#" class="dropdown-item" id="export-gedcom">Экспорт GEDCOM</a>
+                                            <a href="#" class="dropdown-item disabled" id="export-gedcom">Экспорт GEDCOM в разработке</a>
                                         </li>
                                     </ul>
                                 </li>

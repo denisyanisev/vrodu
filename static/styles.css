@@ -687,7 +687,7 @@ a.disable-links {
     font-size: 14px;
 }
 
-#add_single, #link_info, #center_on_person, #show_stats{
+#add_single, #link_info, #center_on_person, #show_stats, #gedcom_link i{
     color: #0d6efd;
     font-size:18px;
 

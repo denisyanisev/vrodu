@@ -56,6 +56,7 @@ $(document).ready(function () {
     $('#center_on_person').tooltip({'placement': 'bottom'});
     $('#link_map').tooltip({'placement': 'bottom'});
     $('#show_stats').tooltip({'placement': 'bottom'});
+    $('#gedcom_link').tooltip({'placement': 'bottom'});
 
     $("#search_clear").click(function(){
         $("#search_input").val('');

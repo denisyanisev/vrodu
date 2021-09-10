@@ -169,10 +169,10 @@ function updateTree({
                     Дерево ${window.user.last_name} & ${data['tree_list'][tree][1]}... (${data['tree_list'][tree][0]})</a></li>`);
                 }
                 if (window.user.id in data['tree_list']){
-                    $(`a.dropdown-item[data-tree=${window.user.id}]`).text(`Личное дерево (${data['tree_list'][window.user.id][0]})`);
+                    $(`a.dropdown-item[data-tree=${window.user.id}]`).text(`Новое дерево (${data['tree_list'][window.user.id][0]})`);
                 }
 
-                if (window.user.id === window.tree_id) $('#tree_list_placeholder').text('Личное дерево');
+                if (window.user.id === window.tree_id) $('#tree_list_placeholder').text('Новое дерево');
                 else $('#tree_list_placeholder').text('Общее дерево');
 
                 if (data['notifications_list'].length)
@@ -186,8 +186,8 @@ function updateTree({
             }
             else {
                 $('#tree_list_dropdown').append(
-                    `<li><a class="dropdown-item" data-tree="${window.user.id}" href="#">Личное дерево (${data['tree_list'][window.user.id]})</a></li>`);
-                $('#tree_list_placeholder').text('Личное дерево');
+                    `<li><a class="dropdown-item" data-tree="${window.user.id}" href="#">Новое дерево (${data['tree_list'][window.user.id]})</a></li>`);
+                $('#tree_list_placeholder').text('Новое дерево');
             }
 
             var confirms = data['persons'].filter((person) => person['vk_confirm'] == 0 && person['vk_id'] == window.user.id);	

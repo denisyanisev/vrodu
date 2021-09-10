@@ -617,6 +617,7 @@ a.disable-links {
 
 #search_dropdown{
     font-size: 14px;
+    margin-left: 22px;
 }
 
 #searchclear {
@@ -641,6 +642,7 @@ a.disable-links {
     right: -20px;
     top: 0px;
     font-size: 17px;
+    cursor: pointer;
 }
 
 #spouses_span {

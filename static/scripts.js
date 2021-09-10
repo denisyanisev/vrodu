@@ -212,6 +212,7 @@ $(document).ready(function () {
     $('#input_block_modal').on('hidden.bs.modal', function (e) {
         flushFields();
         $('#parent').prop('checked', true);
+        $('#input_block_modal .modal-content').css('background', '#d2e4fe');
     });
 
     $('#full_info_block').on('hide.bs.offcanvas', function(e){
@@ -671,5 +672,12 @@ $(document).ready(function () {
         });
     })();
 
+    $('#female').click(function(){
+        $('#input_block_modal .modal-content').css('background', '#ffbbc4');
+    });
+
+    $('#male').click(function(){
+        $('#input_block_modal .modal-content').css('background', '#d2e4fe');
+    });
 
 });

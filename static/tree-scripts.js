@@ -55,9 +55,14 @@ function add_person_base(Request) {
         success: function (data) {
             if (data['persons'] != 1) {
                 $('#failed_message').text(data['Error']);
+		input_block_modal.hide();
                 dialog_message.show();
                 return;
             } else {
+		if (Request['vk_id']) {
+		    input_block_modal.hide();
+		    VK.callMethod('showRequestBox', Request['vk_id'], 'Вас добавили в Родословное дерево. Присоединяйтесь!');
+		}
                 new_id = data['new_id'];
                 var d1, d2;
                 if (

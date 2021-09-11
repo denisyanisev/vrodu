@@ -84,7 +84,7 @@ var getFriends = function(q, dom_result){
         	    var items = data.response.items
         	    items.forEach((element) => {
         	   		var add_vk = `add_vk_person(${element.id},'${element.first_name}','${element.last_name}','${element.sex}','${element.photo_200_orig}')`;
-                    var result_item = `<div class="result_item" id=${element.id} onclick="${add_vk}; alert('Персона добавлена!'); VK.callMethod('showRequestBox', ${element.id}, 'Вас добавили в Родословное дерево. Присоединяйтесь!');">` + '<img src=' + element.photo_50 + '>' + element.first_name + ' ' + element.last_name + '</div><div style="clear:both"></div>';
+                    var result_item = `<div class="result_item" id=${element.id} onclick="${add_vk};">` + '<img src=' + element.photo_50 + '>' + element.first_name + ' ' + element.last_name + '</div><div style="clear:both"></div>';
                     $(dom_result).append(result_item);
                 });
         	});

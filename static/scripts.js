@@ -56,7 +56,7 @@ $(document).ready(function () {
     $('#center_on_person').tooltip({'placement': 'bottom'});
     $('#link_map').tooltip({'placement': 'bottom'});
     $('#show_stats').tooltip({'placement': 'bottom'});
-    $('#gedcom_link').tooltip({'placement': 'bottom'});
+    $('#gedcom_link').tooltip({'placement': 'right'});
 
     $("#search_clear").click(function(){
         $("#search_input").val('');
@@ -239,6 +239,9 @@ $(document).ready(function () {
     const modal = $('#dialog-confirm')[0];
     $('#dialog-confirm').on('hide.bs.modal', function (e) {
         if (modal.confirm) {
+            vk_id_del = control.getOption('items').find((person) => person.id == modal.person_id)['vk_id'];
+            if (vk_id_del == window.tree_id) alert('Нельзя удалить корневую персону')
+            else
             $.when(
                 $.ajax({
                     type: 'POST',

@@ -410,8 +410,9 @@ body {
 }
 
 #link_info {
-    left: 650px;
-    margin-top: -3px;
+    margin-top: 5px;
+    display: block;
+    margin-left: -16px;
 }
 
 #cancel_link_button {

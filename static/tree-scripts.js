@@ -278,6 +278,7 @@ function show_full_info(a, tab = 0) {
     $('#full_id').val(person_id);
     var photo = a.image;
     $('#full_photo').attr('src', photo);
+    $('#full_photo').css('top', (100 - parseInt($('#full_photo').css('height')))/2);
     $('#full_birth_edit').val(a.birth);
     $('#full_death_edit').val(a.death);
     if (a.alive === false) {

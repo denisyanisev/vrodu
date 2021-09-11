@@ -162,7 +162,6 @@ div.placeholder.orgdiagram {
     top: 0px;
     bottom: 0px;
     width: 100px;
-    height: 100px;
 }
 
 
@@ -706,6 +705,7 @@ a.disable-links {
 
 #input_block_modal .modal-content{
     background: #d2e4fe;
+    transition: all 0.3s ease-in;
 }
 
 #input_block_modal .modal-footer{

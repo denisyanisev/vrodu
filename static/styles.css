@@ -712,3 +712,8 @@ a.disable-links {
 #input_block_modal .modal-footer{
     border-top: 1px solid #92c2f2;
 }
+
+#link_vk img {
+    margin-left: -9px;
+    margin-top: 5px;
+}

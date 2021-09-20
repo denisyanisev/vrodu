@@ -241,13 +241,19 @@
                 <div class="modal-body">
                     <nav>
                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Добавление персон</button>
+                            <button class="nav-link active" id="nav-about-tab" data-bs-toggle="tab" data-bs-target="#nav-about" type="button" role="tab" aria-controls="nav-about" aria-selected="true">О приложении</button>
+                            <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Добавление персон</button>
                             <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">VK интеграция</button>
                             <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Пользовательское соглашение</button>
                         </div>
                     </nav>
                     <div class="tab-content" id="nav-tabContent">
-                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <div class="tab-pane fade show active" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
+                            <br />Первое приложение для создания генеалогических деревьев, интегрированное с ВКонтакте. В нем вы можете не только построить свою родословную, но и добавить родственников, у которых есть аккаунт ВК, в ваше древо. В свою очередь они могут дополнить его - таким образом вы соберете наиболее полную информацию о своих предках
+                            <br /><a href="https://vk.com/topic-207187997_48177897" target="_blank">Инструкцию</a> по использованию смотрите в нашей группе Вконтакте <a href="https://vk.com/vkgenealogy" target="_blank">vk.com/vkgenealogy</a> или в текущей Справке
+                            <center><img src="{{ url_for('static', filename='images/orig.png') }}" width="150"/></center>
+                        </div>
+                        <div class="tab-pane fade" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                             <br /><img src="{{ url_for('static', filename='images/vk_instr.png') }}" width="100%"/><br /><br />
                             <span>Чтобы добавить родителя, супруга или ребенка персоны перейдите на вкладку Добавить и выберите соответствующий пункт.<br/>
                                  Любые персоны можно связывать как детей, родителей или супругов (в том числе и бывших) на вкладке Связать</span>
@@ -452,6 +458,13 @@
                         <div class="container">
                             <a href="#" id="link_info" data-toggle="tooltip" data-placement="top" title="Справка">
                                 <i class="bi bi-patch-question"></i></a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="container">
+                            <a href="#" id="link_vk" data-toggle="tooltip" data-placement="top" title="Группа Вконтакте">
+                                <i><img src="/static/images/vk.png" height="30"/></i>
+                            </a>
                         </div>
                     </li>
                 </ul>

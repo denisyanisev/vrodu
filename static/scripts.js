@@ -57,6 +57,7 @@ $(document).ready(function () {
     $('#link_map').tooltip({'placement': 'bottom'});
     $('#show_stats').tooltip({'placement': 'bottom'});
     $('#gedcom_link').tooltip({'placement': 'right'});
+    $('#link_vk').tooltip({'placement': 'right'});
 
     $("#search_clear").click(function(){
         $("#search_input").val('');

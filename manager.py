@@ -208,7 +208,7 @@ def stats():
         vk_person = collection.find_one({'vk_id': vk})
         vk_persons_results.append([vk, vk_person['first_name'], vk_person['last_name'], collection.find({'tree_id': vk}).count()])
     return render_template('stats.html', all_persons=all_persons, vk_persons=vk_persons,
-                           vk_persons_results=vk_persons_results)
+                           vk_persons_results=sorted(vk_persons_results, key=lambda person: person[3], reverse=True))
 
 
 @app.route('/stats', methods=['POST'])

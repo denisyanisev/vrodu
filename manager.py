@@ -202,8 +202,11 @@ def stats():
     all_persons = collection.estimated_document_count()
     vk_persons = collection.find({'vk_id': {'$ne': None}}).count()
     vk_persons_verified = collection.find({'vk_id': {'$ne': None}, 'vk_confirm': 2})
-    vk_persons_verified = list(set([(p['vk_id'], p['first_name'], p['last_name']) for p in vk_persons_verified]))
-    vk_persons_results = [(p[0], p[1], p[2], collection.find({'tree_id': p[0]}).count()) for p in vk_persons_verified]
+    vk_persons_ids = list(set([p['vk_id'] for p in vk_persons_verified]))
+    vk_persons_results = []
+    for vk in vk_persons_ids:
+        vk_person = collection.find_one({'vk_id': vk})
+        vk_persons_results.append([vk, vk_person['first_name'], vk_person['last_name'], collection.find({'tree_id': vk}).count()])
     return render_template('stats.html', all_persons=all_persons, vk_persons=vk_persons,
                            vk_persons_results=vk_persons_results)
 

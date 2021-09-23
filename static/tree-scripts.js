@@ -337,7 +337,8 @@ function show_full_info(a, tab = 0) {
     $('#full_description').val(a['description'] ? a['description'] : '');
     $('#full_full_desc').val(a['full_desc'] ? a['full_desc'] : '');
     $('#full_nationality').val(a['nationality'] ? a['nationality'] : '');
-    $('#full_location').val(a['location'] ? a['location'] : '');
+    var locations = a['location'].split(",")
+    $('#full_location').val(a['location'] ? locations[locations.length-1].trim()  + ', ' + locations[locations.length-2].trim()  : '');
     $('#vk_id_edit').val(a['vk_id'] ? a['vk_id'] : '');
     $('#a_megaphone').hide();
     if (a['vk_id']) {

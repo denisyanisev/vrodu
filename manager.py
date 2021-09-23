@@ -201,7 +201,7 @@ def stats():
     collection = DBClient()['family']['persons']
     all_persons = collection.estimated_document_count()
     vk_persons = collection.find({'vk_id': {'$ne': None}}).count()
-    vk_persons_verified = collection.find({'vk_id': {'$ne': None}, 'vk_confirm': 2})
+    vk_persons_verified = collection.find({'vk_id': {'$ne': None}})
     vk_persons_ids = list(set([p['vk_id'] for p in vk_persons_verified]))
     vk_persons_results = []
     for vk in vk_persons_ids:

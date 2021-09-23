@@ -229,9 +229,9 @@ def local_stats():
                                                             '$regex': re.compile(last_name, re.IGNORECASE)}}],
                                                 'tree_id': tree_id})))
         all_persons_uniq = [p for p in all_persons if p['last_name']]
-        all_families = [p['last_name'] if p['last_name'] and p['last_name'][-1] != 'а' else p['last_name'][:-1] for p in
-                        all_persons_uniq]
-        all_families = ', '.join(list(set(all_families)))
+        all_families = [p['last_name'].lower() if p['last_name'] and p['last_name'][-1] != 'а'
+                        else p['last_name'][:-1].lower() for p in all_persons_uniq]
+        all_families = ', '.join(map(lambda item: item.title(), list(set(all_families))))
         return jsonify(
             {'all_persons': all_persons_count, 'vk_persons': vk_persons, 'vk_persons_results': vk_persons_verified,
              'my_families': my_families, 'all_families': all_families})

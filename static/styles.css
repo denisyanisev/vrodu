@@ -661,7 +661,7 @@ a.disable-links {
 }
 
 .ui-tabs .ui-tabs-nav li{
-    margin: -12px .2em 0 0!important;
+    margin: -12px 0em 0 0!important;
 }
 
 #remove_spouse{
@@ -717,3 +717,16 @@ a.disable-links {
     margin-left: -9px;
     margin-top: 5px;
 }
+
+.ui-tabs .ui-tabs-nav .ui-tabs-anchor{
+    padding: .4em 0.6em!important;
+}
+
+#full_info_family {
+    padding: 0px!important;
+}
+
+#full_children_block, #full_spouses_block {
+    font-size: 14px;
+}
+

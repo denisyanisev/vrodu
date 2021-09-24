@@ -306,6 +306,25 @@ function show_full_info(a, tab = 0) {
     }
     $('#full_spouses').empty();
     $('#remove_spouse').hide();
+    $('#full_children').empty();
+    $('#remove_children').hide();
+
+    var children = control.getOption('items').filter((person) => person.parents.includes(a.id));
+    if (children.length) {
+        $('#children_span').show();
+        children.forEach((person) => {
+            $('#full_children').append(
+                '<a href="#" person-id=' +
+                    person.id +
+                    ' class="list-group-item">' +
+                    person.title +
+                    '</a>'
+            );
+        });
+    }
+    else
+        $('#children_span').hide();
+
     if (a.spouses.length) {
         var items = control.getOption('items');
         $('#spouses_span').show();

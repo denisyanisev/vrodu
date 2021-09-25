@@ -397,6 +397,10 @@ function show_full_info(a, tab = 0) {
     });
 }
 
+function full_photo_loaded(){
+    $('#full_photo').css('top', (100 - parseInt($('#full_photo').css('height')))/2);
+}
+
 var setDiagramData = function (persons) {
     control.setOption('items', persons);
     control.update('Recreate', true);

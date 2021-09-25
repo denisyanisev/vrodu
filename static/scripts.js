@@ -51,13 +51,13 @@ function flushFields() {
 $(document).ready(function () {
     $('#a_megaphone').tooltip();
     $('#a_location').tooltip();
-    $('#link_info').tooltip({'placement': 'bottom'});
-    $('#add_single').tooltip({'placement': 'bottom'});
-    $('#center_on_person').tooltip({'placement': 'bottom'});
-    $('#link_map').tooltip({'placement': 'bottom'});
-    $('#show_stats').tooltip({'placement': 'bottom'});
-    $('#gedcom_link').tooltip({'placement': 'right'});
-    $('#link_vk').tooltip({'placement': 'right'});
+    $('#link_info').tooltip({'placement': 'bottom', 'trigger': 'hover'});
+    $('#add_single').tooltip({'placement': 'bottom', 'trigger': 'hover'});
+    $('#center_on_person').tooltip({'placement': 'bottom', 'trigger': 'hover'});
+    $('#link_map').tooltip({'placement': 'bottom', 'trigger': 'hover'});
+    $('#show_stats').tooltip({'placement': 'bottom', 'trigger': 'hover'});
+    $('#gedcom_link').tooltip({'placement': 'right', 'trigger': 'hover'});
+    $('#link_vk').tooltip({'placement': 'bottom', 'offset': [0, 10], 'trigger': 'hover'});
 
     $("#search_clear").click(function(){
         $("#search_input").val('');
@@ -215,10 +215,6 @@ $(document).ready(function () {
         flushFields();
         $('#parent').prop('checked', true);
         $('#input_block_modal .modal-content').css('background', '#d2e4fe');
-    });
-
-    $('#full_info_block').on('shown.bs.offcanvas', function(e){
-        $('#full_photo').css('top', (100 - parseInt($('#full_photo').css('height')))/2);
     });
 
     $('#full_info_block').on('hide.bs.offcanvas', function(e){

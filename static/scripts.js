@@ -488,24 +488,28 @@ $(document).ready(function () {
         };
         if ($('#vk_photo_temporary').val())
             Request.image = $('#vk_photo_temporary').val();
-        if (Request.location != '') {
-            var myGeocoder = ymaps.geocode(Request.location);
-            myGeocoder.then(function (data) {
-                var coordinates = data.geoObjects
-                    .get(0)
-                    .geometry.getCoordinates();
-                Request.coordinate0 = coordinates[0];
-                Request.coordinate1 = coordinates[1];
+        if ($('#vk_id_edit').val() == '')
+            alert('ID вконтакте не должно быть пустым')
+        else {
+            if (Request.location != '') {
+                var myGeocoder = ymaps.geocode(Request.location);
+                myGeocoder.then(function (data) {
+                    var coordinates = data.geoObjects
+                        .get(0)
+                        .geometry.getCoordinates();
+                    Request.coordinate0 = coordinates[0];
+                    Request.coordinate1 = coordinates[1];
+                    change_person(Request);
+                    updateTree({person_id: parseInt($('#full_id').val())});
+                });
+            } else {
+                Request.coordinate0 = '';
+                Request.coordinate1 = '';
                 change_person(Request);
-                updateTree({person_id: parseInt($('#full_id').val())});
-            });
-        } else {
-            Request.coordinate0 = '';
-            Request.coordinate1 = '';
-            change_person(Request);
-            updateTree({person_id: person_id});
+                updateTree({person_id: person_id});
+            }
+            closeEdit();
         }
-        closeEdit();
     });
 
     $('#full_edit_cancel').click(function () {

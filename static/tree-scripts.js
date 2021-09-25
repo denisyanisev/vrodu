@@ -4,7 +4,7 @@ var control,
     oldContext,
     full_info_block = new bootstrap.Offcanvas($('#full_info_block')[0], {keyboard: true, focus: true}),
     dialog_message = new bootstrap.Modal($('#dialog-message')[0], {keyboard: true, focus: true}),
-    input_block_modal = new bootstrap.Modal($('#input_block_modal')[0], {keyboard: true, focus: true}),
+    input_block_modal = new bootstrap.Modal($('#input_block_modal')[0], {keyboard: false, focus: true, backdrop: 'static'}),
     dialog_confirm = new bootstrap.Modal($('#dialog-confirm')[0], {keyboard: true, focus: true}),
     block_info = new bootstrap.Modal($('#block_info')[0], {keyboard: true, focus: true}),
     map_modal = new bootstrap.Modal($('#map_modal')[0], {keyboard: true, focus: true}),
@@ -314,11 +314,8 @@ function show_full_info(a, tab = 0) {
         $('#children_span').show();
         children.forEach((person) => {
             $('#full_children').append(
-                '<a href="#" person-id=' +
-                    person.id +
-                    ' class="list-group-item">' +
-                    person.title +
-                    '</a>'
+                '<a href="#" onclick="centerOnPersonSearch(' + person.id + ')" person-id=' + person.id +
+                ' class="list-group-item">' + person.title + '</a>'
             );
         });
     }

@@ -217,6 +217,10 @@ $(document).ready(function () {
         $('#input_block_modal .modal-content').css('background', '#d2e4fe');
     });
 
+    $('#full_info_block').on('shown.bs.offcanvas', function(e){
+        $('#full_photo').css('top', (100 - parseInt($('#full_photo').css('height')))/2);
+    });
+
     $('#full_info_block').on('hide.bs.offcanvas', function(e){
         $('div.selected-border').remove();
         selectedItem = -1;

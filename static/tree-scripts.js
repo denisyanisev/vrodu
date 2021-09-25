@@ -278,7 +278,6 @@ function show_full_info(a, tab = 0) {
     $('#full_id').val(person_id);
     var photo = a.image;
     $('#full_photo').attr('src', photo);
-    $('#full_photo').css('top', (100 - parseInt($('#full_photo').css('height')))/2);
     $('#full_birth_edit').val(a.birth);
     $('#full_death_edit').val(a.death);
     if (a.alive === false) {
@@ -384,7 +383,6 @@ function show_full_info(a, tab = 0) {
     else $('#full_photo_delete').show();
     full_info_block.show();
     $('#full_info_block').tabs('option', 'active', tab);
-
     $('#person_id').val(a.id);
     $('#full_close').off('click');
     $('#full_close').click(function () {
@@ -397,6 +395,10 @@ var setDiagramData = function (persons) {
     control.setOption('items', persons);
     control.update('Recreate', true);
     draw_belts();
+    setDragBoards();
+};
+
+var setDragBoards = function() {
     var treeWidth = parseInt($('#draggable').css('width')),
         treeHeight = parseInt($('#draggable').css('height')),
         windowWidth = parseInt($(window).width()),
@@ -410,7 +412,7 @@ var setDiagramData = function (persons) {
             windowHeight - 50,
         ],
     });
-};
+}
 
 var updateDiagramData = function (persons) {
     if (persons) control.setOption('items', persons);
@@ -427,7 +429,7 @@ var setDiagramOptions = function () {
     options.hasButtons = primitives.Enabled.Auto;
     options.normalLevelShift = 20;
     options.lineLevelShift = 30;
-    options.normalItemsInterval = 15;
+    options.normalItemsInterval = 20;
     options.lineItemsInterval = 30;
     options.linesWidth = 1;
     options.linesColor = '#7C8993';
@@ -436,7 +438,7 @@ var setDiagramOptions = function () {
     options.enablePanning = false;
 
     options.pageFitMode = primitives.PageFitMode.AutoSize;
-    options.autoSizeMaximum = new primitives.Size(10000, 10000);
+    options.autoSizeMaximum = new primitives.Size(100000, 100000);
     const myWidth = 100,
         myHeight = 100;
     options.autoSizeMinimum = new primitives.Size(myWidth, myHeight);
@@ -600,4 +602,5 @@ var zoomDiagram = function () {
         left: parseInt($('#draggable').css('left')) + width - newWidth,
         top: parseInt($('#draggable').css('top')) + height - newHeight,
     });
+    setDragBoards();
 };

@@ -147,6 +147,7 @@ div.placeholder.orgdiagram {
 
 #full_info_block {
     position: fixed!important;
+    width: 344px!important;
     transition: all 0.4s ease 0s;
 }
 

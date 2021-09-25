@@ -404,10 +404,10 @@ var setDiagramData = function (persons) {
     $('#draggable').draggable({
         scroll: false,
         containment: [
-            -0.85 * treeWidth,
-            -0.85 * treeHeight,
-            windowWidth - 0.15 * treeWidth,
-            windowHeight - 0.15 * treeHeight,
+            50 - treeWidth,
+            100 - treeHeight,
+            windowWidth - 50,
+            windowHeight - 50,
         ],
     });
 };

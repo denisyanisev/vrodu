@@ -311,6 +311,7 @@ div.placeholder.orgdiagram {
     background: transparent;
     border: none;
 }
+
 #full_spouses {
     max-height: 94px;
     margin-bottom: 7px;
@@ -318,6 +319,17 @@ div.placeholder.orgdiagram {
 }
 
 #full_spouses a {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#full_children {
+    max-height: 94px;
+    margin-bottom: 7px;
+    overflow: auto;
+}
+
+#full_children a {
     padding-top: 5px;
     padding-bottom: 5px;
 }
@@ -664,7 +676,7 @@ a.disable-links {
     margin: -12px 0em 0 0!important;
 }
 
-#remove_spouse{
+#remove_spouse, #remove_children {
     height: 28px;
     line-height: 10px;
 }

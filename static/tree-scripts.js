@@ -320,6 +320,12 @@ function show_full_info(a, tab = 0) {
             );
             $(`[data-person-id=${person.id}]`).css({'border': '2px solid #33d1e1'})
         });
+        $('#remove_children').show();
+        $('#full_children a').click(function (event) {
+            event.preventDefault();
+            $('#full_children a').removeClass('active');
+            $(this).addClass('active');
+        });
     }
     else
         $('#children_span').hide();

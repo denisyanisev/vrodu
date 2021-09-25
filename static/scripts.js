@@ -550,6 +550,29 @@ $(document).ready(function () {
         }
     });
 
+    $('#remove_children').click((event) => {
+        var childrenSelected = $('#full_children').children('.active');
+        if (childrenSelected.length) {
+            var targetChildrenId = parseInt(childrenSelected.attr('person-id')),
+            ParentId = parseInt($('#full_id').val());
+            var targetChildren = control.getOption('items').find((person) => person.id === targetChildrenId)
+            var parent_index = targetChildren.parents.indexOf(ParentId)
+            var Request = { from_id: targetChildrenId }
+            if (parent_index == 0)
+                Request.parent_m = ''
+            else if (parent_index == 1)
+                Request.parent_f = ''
+            else
+                $('#failed_message').text('Ошибка удаления связей');
+
+            change_person(Request);
+            updateTree({ person_id: ParentId, tab: 1 });
+        } else {
+            $('#failed_message').text('Не выбрана связь для удаления');
+            dialog_message.show();
+        }
+    });
+
     $('.year-picker').datepicker({
         format: 'yyyy',
         viewMode: 'years',

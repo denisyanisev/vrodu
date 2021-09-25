@@ -308,6 +308,7 @@ function show_full_info(a, tab = 0) {
     $('#remove_spouse').hide();
     $('#full_children').empty();
     $('#remove_children').hide();
+    $('.bt-item-frame').css({'border': 'none'})
 
     var children = control.getOption('items').filter((person) => person.parents.includes(a.id));
     if (children.length) {
@@ -317,6 +318,7 @@ function show_full_info(a, tab = 0) {
                 '<a href="#" onclick="centerOnPersonSearch(' + person.id + ')" person-id=' + person.id +
                 ' class="list-group-item">' + person.title + '</a>'
             );
+            $(`[data-person-id=${person.id}]`).css({'border': '2px solid #33d1e1'})
         });
     }
     else

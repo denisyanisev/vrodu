@@ -12,6 +12,7 @@ from basics import *
 
 app = Flask(__name__)
 Bootstrap(app)
+app_root = app.root_path
 
 logging.config.dictConfig(config(app.root_path))
 
@@ -135,7 +136,7 @@ def link():
 def remove():
     query_args = request.get_json(True)
     person_id = query_args.get('person_id')
-    return jsonify(remove_person_base(person_id))
+    return jsonify(remove_person_base(person_id, app_root))
 
 
 @app.route('/map', methods=['POST'])
@@ -161,7 +162,7 @@ def get_map():
 def delete_photo():
     content = request.get_json(True)
     person_id = content['from_id']
-    return jsonify(delete_photo_base(person_id))
+    return jsonify(delete_photo_base(person_id, app_root))
 
 
 @app.route('/uploadphoto', methods=['POST'])
@@ -175,7 +176,7 @@ def upload_photo():
         ext = content['ext']
         hashed = (hash(file) % 10000 << 10) + random.randint(1, 999)
         path = f'/static/photos/custom/{person_id}_image_{hashed}.{ext}'
-        delete_photo_base(person_id)
+        delete_photo_base(person_id, app_root)
         file.save(app.root_path + path)
         collection.update_one({'_id': person_id, 'tree_id': user_id}, {'$set': {'image': path}})
         return jsonify({'persons': '1'})
@@ -206,7 +207,8 @@ def stats():
     vk_persons_results = []
     for vk in vk_persons_ids:
         vk_person = collection.find_one({'vk_id': vk})
-        vk_persons_results.append([vk, vk_person['first_name'], vk_person['last_name'], collection.find({'tree_id': vk}).count()])
+        vk_persons_results.append([vk, vk_person['first_name'], vk_person['last_name'],
+                                   collection.find({'tree_id': vk}).count()])
     return render_template('stats.html', all_persons=all_persons, vk_persons=vk_persons,
                            vk_persons_results=sorted(vk_persons_results, key=lambda person: person[3], reverse=True))
 

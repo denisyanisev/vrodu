@@ -150,7 +150,8 @@ def delete_photo_base(person_id: int):
     person = collection.find_one({'_id': person_id})
     if person.get('image', ''):
         try:
-            os.remove('.' + person['image'])
+            if not ('userapi' in person['image']):
+                os.remove('.' + person['image'])
             collection.update_one({'_id': person_id}, {'$set': {'image': ''}})
             return {'Status': 'Фотография удалена.', 'persons': '1'}
         except OSError as err:

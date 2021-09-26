@@ -325,7 +325,7 @@ div.placeholder.orgdiagram {
 }
 
 #full_children {
-    max-height: 94px;
+    max-height: 274px;
     margin-bottom: 7px;
     overflow: auto;
 }
@@ -453,6 +453,10 @@ body {
 
 #full_location, #full_full_desc, #full_description, #full_nationality, #full_maiden_name{
     margin-top: 5px;
+}
+
+#full_full_desc {
+    height: 70px;
 }
 
 #import-gedcom img{

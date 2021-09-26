@@ -17,7 +17,7 @@ logging.config.dictConfig(config(app.root_path))
 
 auth = HTTPBasicAuth()
 users = {
-    "admin": generate_password_hash(os.environ.get('PASSWORD')),
+    "admin": generate_password_hash(''),
 }
 
 

@@ -229,7 +229,7 @@ $(document).ready(function () {
     $('#delete_person').click(function () {
         $('#dialog-confirm')[0].confirm = true;
         dialog_confirm.hide();
-        full_info_block.hide();;
+        full_info_block.hide();
         control.setOption('cursorItem', null);
     });
 
@@ -712,5 +712,10 @@ $(document).ready(function () {
     $('#male').click(function(){
         $('#input_block_modal .modal-content').css('background', '#d2e4fe');
     });
+
+    $('#search_input').click(function(){
+        full_info_block.hide();
+        $(this).focus();
+    })
 
 });

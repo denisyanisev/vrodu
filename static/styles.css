@@ -500,7 +500,7 @@ body {
 }
 
 #full_vk_link img {
-    width: 50px;
+    width: 47px;
     margin-left: -8px;
     display: none
 }
@@ -572,7 +572,7 @@ body {
 #vk_id_edit {
     margin-top: 10px;
     margin-right: 10px;
-    width: 90px;
+    width: 140px;
     display: none;
 }
 
@@ -745,5 +745,21 @@ a.disable-links {
 
 #full_children_block, #full_spouses_block {
     font-size: 14px;
+}
+
+#arrow_tree {
+    display: none;
+    width: 30px;
+    position: absolute;
+    margin-left: 100px;
+}
+
+#arrow_text {
+    display: none;
+    width: 200px;
+    position: absolute;
+    margin-left: 125px;
+    margin-top: 9px;
+    color: #82a4ba;
 }
 

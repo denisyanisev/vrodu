@@ -180,8 +180,11 @@ function updateTree({
                 if (window.user.id === window.tree_id) $('#tree_list_placeholder').text('Новое дерево');
                 else $('#tree_list_placeholder').text('Общее дерево');
 
-                if (data['notifications_list'].length)
-                $('#tree_list_placeholder').append('<span class="badge badge-light custom-badge">' + data['notifications_list'].length + '</span>')
+                if (data['notifications_list'].length) {
+                    $('#tree_list_placeholder').append('<span class=badge badge-light custom-badge">' + data['notifications_list'].length + '</span>')
+                    $('#arrow_tree').show();
+                    $('#arrow_text').show();
+                }
 
                 for (notification in data['notifications_list'])
                 {
@@ -335,11 +338,8 @@ function show_full_info(a, tab = 0) {
         a.spouses.forEach((person_id) => {
             const person = items.find((person) => person.id === person_id);
             $('#full_spouses').append(
-                '<a href="#" person-id=' +
-                    person.id +
-                    ' class="list-group-item">' +
-                    person.title +
-                    '</a>'
+                '<a href="#" onclick="centerOnPersonSearch(' + person.id + ')" person-id=' + person.id +
+                ' class="list-group-item">' + person.title + '</a>'
             );
         });
         $('#remove_spouse').show();

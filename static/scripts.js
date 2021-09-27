@@ -652,6 +652,8 @@ $(document).ready(function () {
             vk_confirm: 1,
             from_id: window.confirm_id,
         };
+        $('#arrow_tree').hide();
+        $('#arrow_text').hide();
         change_person(Request);
         updateTree({});
         confirm_vk.hide();
@@ -662,6 +664,8 @@ $(document).ready(function () {
             vk_confirm: 2,
             from_id: window.confirm_id,
         };
+        $('#arrow_tree').hide();
+        $('#arrow_text').hide();
         change_person(Request);
         updateTree({});
         confirm_vk.hide();

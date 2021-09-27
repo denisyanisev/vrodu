@@ -125,7 +125,7 @@ def link_persons_base(from_id: int, target_id: int, link_type: str):
         return {'Status': 'ok', 'persons': '1'}
 
 
-def remove_person_base(person_id: int):
+def remove_person_base(person_id: int, app_root: str):
     """ remove a person """
     collection = DBClient()['family']['persons']
     person = collection.find_one({'_id': person_id})
@@ -134,7 +134,7 @@ def remove_person_base(person_id: int):
     try:
         sex = person['sex']
         parent_str = 'parent_m' if sex == 'M' else 'parent_f'
-        delete_photo_base(person_id)
+        delete_photo_base(person_id, app_root)
         collection.delete_one({'_id': int(person_id)})
         collection.update_many({parent_str: person_id}, {'$set': {parent_str: ''}})
         collection.update_many({'spouses': person_id}, {'$pull': {'spouses': person_id}})
@@ -144,15 +144,15 @@ def remove_person_base(person_id: int):
         return {'Error': 'Удаление персоны неуспешно.', 'persons': -1}
 
 
-def delete_photo_base(person_id: int):
+def delete_photo_base(person_id: int, app_root: str):
     """ delete person's photo """
     collection = DBClient()['family']['persons']
     person = collection.find_one({'_id': person_id})
     if person.get('image', ''):
         try:
-            if not ('userapi' in person['image']):
-                os.remove('.' + person['image'])
             collection.update_one({'_id': person_id}, {'$set': {'image': ''}})
+            if not ('userapi' in person['image']):
+                os.remove(app_root + person['image'])
             return {'Status': 'Фотография удалена.', 'persons': '1'}
         except OSError as err:
             logging.error(err)

@@ -181,7 +181,7 @@ function updateTree({
                 else $('#tree_list_placeholder').text('Общее дерево');
 
                 if (data['notifications_list'].length) {
-                    $('#tree_list_placeholder').append('<span class=badge badge-light custom-badge">' + data['notifications_list'].length + '</span>')
+                    $('#tree_list_placeholder').append('<span class="badge badge-light custom-badge">' + data['notifications_list'].length + '</span>')
                     $('#arrow_tree').show();
                     $('#arrow_text').show();
                 }

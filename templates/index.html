@@ -548,34 +548,35 @@
 
       var oReq = new XMLHttpRequest();
 
-        oReq.open("GET", "https://scriptina.ru/static/airal.ttf", false);
+        oReq.open("GET", "https://scriptina.ru/static/arial.ttf", true);
         oReq.responseType = "arraybuffer";
 
         oReq.onload = function(oEvent) {
             var arrayBuffer = oReq.response; // Note: not oReq.responseText
 
             if (arrayBuffer) {
-                PdfExporter.doc.registerFont('OpenSans', arrayBuffer)
+                PdfExporter.doc.registerFont('arial', arrayBuffer);
+                var stream = doc.font('arial').pipe(pdfkitsamples.blobStream());
+                  doc.font('arial').fontSize(11).text('Первая Test', 30, 30);
+                  sample_pdf.draw(doc, 50, 100);
+
+                  doc.restore();
+                  doc.end();
+
+                  if (typeof stream !== 'undefined') {
+                    stream.on('finish', function () {
+                      var string = stream.toBlob('application/pdf');
+                      window.saveAs(string, 'sample.pdf');
+                    });
+                  } else {
+                    alert('Error: Failed to create file stream.');
+                  }
             }
         };
 
         oReq.send(null);
 
-      var stream = doc.font('OpenSans').pipe(pdfkitsamples.blobStream());
-      doc.font('OpenSans').fontSize(11).text('Первая Test', 30, 30);
-      sample_pdf.draw(doc, 50, 100);
 
-      doc.restore();
-      doc.end();
-
-      if (typeof stream !== 'undefined') {
-        stream.on('finish', function () {
-          var string = stream.toBlob('application/pdf');
-          window.saveAs(string, 'sample.pdf');
-        });
-      } else {
-        alert('Error: Failed to create file stream.');
-      }
     }
     </script>
 

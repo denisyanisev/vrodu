@@ -424,10 +424,10 @@
                         <a href="#" class="nav-link" id="show_stats"
                            title="Статистика"><i class="bi bi-bar-chart"></i></a>
                     </li>
-                    <li class="nav-item">
-                        <a href="#" onclick="Download()" class="nav-link" id="print_tree"
-                           title="Распечатать"><i class="bi bi-printer"></i></a>
-                    </li>
+<!--                    <li class="nav-item">-->
+<!--                        <a href="#" onclick="Download()" class="nav-link" id="print_tree"-->
+<!--                           title="Распечатать"><i class="bi bi-printer"></i></a>-->
+<!--                    </li>-->
                     <li class="nav-item">
                         <div class="container">
                             <ul class="navbar-nav">
@@ -512,72 +512,5 @@
     <script type="text/javascript" src="{{ url_for('static', filename='scripts.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='vk_scripts.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='app_start.js') }}"></script>
-
-    <script>
-     function Download() {
-      // create a document and pipe to a blob
-
-
-      items = control.getOption('items');
-      var newItems = [];
-      for (var index = 0; index < items.length; index += 1) {
-        var item = items[index];
-        const imageName = (item.image.match(/.*(.+?)\.png/m) || [])[1];
-        var parents;
-        if (item.parents[0] !="" && item.parents[1] != "")
-            parents = [item.parents[0], item.parents[1]]
-        else if (item.parents[0] != "")
-            parents = item.parents[0]
-        else if (item.parents[1] != "")
-            parents = item.parents[1]
-        else
-            parents = null
-        newItems.push({
-          id: item.id,
-          parent: parents,
-          title: item.title,
-          description: "VP, Public Sector",
-          image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAA8CAIAAACrV36WAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGnSURBVGhD7dnBbQJBDAVQk1o2QjlQwKYGzpSwKQfq4IxICRTB9jLZHCJFwWv7/7EiDt6zmX2yPYMHNq01eb7n5flI36JiIXWpbFW2kAwgsdVblS0kA0hs9db/ZWs+vW/Wno9PxPE3dhls6Od+HI1XT1d64Sb8R5utEulwdbA8VY+LZ/kqkfF456pBHxDz5Xxze/p2vsxukBbAshTVOE0PO4B2cUlWKrgUTKsrV0eut3RVU/cm5aKKqPXVbjuIDPtDUh2JImq1+jmjkupIFNFStXadHncWXkecpb3393me4oJZnionXyjLV6W4QFZEleHCWNG+0eKggQJiRVV6vhAXwoqrul0AC1H1uuIsTLUyukYH1jBL7WJ8lgq6oqwkVXSQDrLSVEFXjJWoirlCrFRVyBVhJasirgCr65tEv7a5A5jL0tcN7vNl9OVcHqtXRbocVr+Kc9k3H/3qPL69Ise7dh0SsS+2JmtFddgvdy/gGbY7Jdp2GRcyrlu1BfUjxtiPRm/lqVbGHOMHnU39zQm0I/UbBLA+GVosJHGVrcoWkgEktnoLydYXkF/LiXG21MwAAAAASUVORK5CYII="
-        })
-      }
-      console.log(newItems);
-      var sample_pdf = primitives.OrgDiagramPdfkit({items: newItems, cursorItem: null, hasSelectorCheckbox: primitives.Enabled.False });
-      var sampleSize = sample_pdf.getSize();
-      console.log(sampleSize)
-      var doc = new pdfkitsamples.PDFDocument({ size: [sampleSize.width + 100, sampleSize.height + 150] });
-
-      var oReq = new XMLHttpRequest();
-
-        oReq.open("GET", "https://scriptina.ru/static/arial.ttf", true);
-        oReq.responseType = "arraybuffer";
-
-        oReq.onload = function(oEvent) {
-            var arrayBuffer = oReq.response; // Note: not oReq.responseText
-
-            if (arrayBuffer) {
-                PdfExporter.doc.registerFont('arial', arrayBuffer);
-                var stream = doc.font('arial').pipe(pdfkitsamples.blobStream());
-                  doc.font('arial').fontSize(11).text('Первая Test', 30, 30);
-                  sample_pdf.draw(doc, 50, 100);
-
-                  doc.restore();
-                  doc.end();
-
-                  if (typeof stream !== 'undefined') {
-                    stream.on('finish', function () {
-                      var string = stream.toBlob('application/pdf');
-                      window.saveAs(string, 'sample.pdf');
-                    });
-                  } else {
-                    alert('Error: Failed to create file stream.');
-                  }
-            }
-        };
-
-        oReq.send(null);
-
-
-    }
-    </script>
 
 {% endblock scripts %}

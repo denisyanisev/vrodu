@@ -632,7 +632,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
-            url: '/map',
+            url: '/globalmap',
             data: JSON.stringify({
                 user_id: window.tree_id,
             }),
@@ -719,3 +719,4 @@ $(document).ready(function () {
     })
 
 });
+

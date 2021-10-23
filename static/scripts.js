@@ -632,7 +632,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
-            url: '/globalmap',
+            url: '/map',
             data: JSON.stringify({
                 user_id: window.tree_id,
             }),

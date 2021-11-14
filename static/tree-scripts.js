@@ -597,20 +597,35 @@ function init() {
 }
 
 var zoomDiagram = function () {
-    var width = parseInt($('#draggable').css('width')) / 2,
-        height = parseInt($('#draggable').css('height')) / 3,
-        scale = parseFloat($('#zoomSlider').val()),
-        minWidth = 800 * scale,
-        minHeight = 600 * scale;
-    control.setOption('scale', scale);
+    const viewportWidth = parseInt($(window).width())/2,
+        viewportHeight = parseInt($(window).height())/2,
+        scaleNew = parseFloat($('#zoomSlider').val()),
+        scaleOld = parseFloat(control.getOption('scale')),
+        leftOffset = parseInt($('#draggable').css('left')),
+        topOffset = parseInt($('#draggable').css('top')),
+        minWidth = Math.floor(800 * scaleNew),
+        minHeight = Math.floor(600 * scaleNew),
+        dragWidth = parseInt($('#draggable').css('width')),
+        dragHeight = parseInt($('#draggable').css('height'));
+        
+    
+    control.setOption('scale', scaleNew);
     control.update('Refresh');
     if (selectedItem > -1) $(`[data-person-id=${selectedItem}]`).append('<div class="selected-border"></div>');
     $('#draggable').css({ 'min-width': minWidth, 'min-height': minHeight });
-    var newWidth = parseInt($('#draggable').css('width')) / 2,
-        newHeight = parseInt($('#draggable').css('height')) / 3;
+
+    if (leftOffset + dragWidth < viewportWidth) new_left = dragWidth + leftOffset - dragWidth * scaleNew/scaleOld;
+    else if (leftOffset > viewportWidth) new_left = leftOffset;
+    else new_left = viewportWidth - (viewportWidth - leftOffset) * scaleNew/scaleOld;
+
+    if (topOffset + dragHeight < viewportHeight) new_top = dragHeight + topOffset - dragHeight * scaleNew/scaleOld;
+    else if (topOffset > viewportHeight) new_top = topOffset;
+    else new_top = viewportHeight - (viewportHeight - topOffset) * scaleNew/scaleOld;
+
+
     $('#draggable').css({
-        left: parseInt($('#draggable').css('left')) + width - newWidth,
-        top: parseInt($('#draggable').css('top')) + height - newHeight,
+        left: new_left,
+        top: new_top
     });
     setDragBoards();
 };
